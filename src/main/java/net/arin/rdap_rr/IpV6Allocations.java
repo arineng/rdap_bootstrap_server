@@ -109,7 +109,11 @@ public class IpV6Allocations extends DefaultHandler
     public String getUrl( long prefix )
     {
         Map.Entry<Long,String> entry = allocations.floorEntry( prefix );
-        return entry.getValue();
+        if( entry != null )
+        {
+            return entry.getValue();
+        }
+        return null;
     }
 
     public String getUrl( IPv6Address addr )

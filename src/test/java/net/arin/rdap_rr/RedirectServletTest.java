@@ -36,4 +36,23 @@ public class RedirectServletTest
         assertEquals( "://rdap.lacnic.net", servlet.makeIpBase( "/ip/2800:0000::/12" ) );
         assertEquals( "://rdap.iana.net", servlet.makeIpBase( "/ip/2001:0000::1" ) );
     }
+
+    @Test
+    public void testMakeDomainBase() throws Exception
+    {
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/domain/example.XN--0ZWM56D" ) );
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/domain/example.XN--0ZWM56D." ) );
+        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/domain/example.COM" ) );
+        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/domain/example.COM." ) );
+        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.0.0.3.in-addr.arpa." ) );
+        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.0.0.3.in-addr.arpa" ) );
+        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.3.in-addr.arpa" ) );
+        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/3.in-addr.arpa" ) );
+        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.2.6.2.ip6.arpa" ) );
+        assertEquals( "://rdap.afrinic.net", servlet.makeDomainBase( "/domain/0.c.2.ip6.arpa" ) );
+        assertEquals( "://rdap.lacnic.net", servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ) );
+    }
 }
