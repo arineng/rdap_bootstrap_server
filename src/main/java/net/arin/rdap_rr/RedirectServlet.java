@@ -3,6 +3,9 @@
  */
 package net.arin.rdap_rr;
 
+import com.googlecode.ipv6.IPv6Address;
+import com.googlecode.ipv6.IPv6Network;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,8 +51,23 @@ public class RedirectServlet extends HttpServlet
         }
         else if( pathInfo.startsWith( "/ip/" ) )
         {
-            String url = makeRedirectUrl( req, "//rdap.iana.org" );
-            resp.sendRedirect( url );
+            try
+            {
+                String base = makeIpBase( pathInfo );
+                if( base == null )
+                {
+                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                }
+                else
+                {
+                    String url = makeRedirectUrl( req, "//rdap.iana.org" );
+                    resp.sendRedirect( url );
+                }
+            }
+            catch ( Exception e )
+            {
+                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+            }
         }
         else if( pathInfo.startsWith( "/autnum/" ) )
         {
@@ -85,7 +103,30 @@ public class RedirectServlet extends HttpServlet
 
     public long makeAutNumLong( String pathInfo )
     {
-        long autnum = Long.parseLong( pathInfo.split( "/" )[ 2 ] );
+        long autnum = Long.parseLong( pathInfo.split( "/" )[2] );
         return autnum;
+    }
+
+    public String makeIpBase( String pathInfo )
+    {
+        //strip leading "/ip/"
+        pathInfo = pathInfo.substring( 4 );
+        if( pathInfo.indexOf( ":" ) == -1 ) //is not ipv6
+        {
+            String firstOctet = pathInfo.split( "\\." )[ 0 ];
+            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ) );
+        }
+        //else
+        IPv6Address addr = null;
+        if( pathInfo.indexOf( "/" ) == -1 )
+        {
+            addr = IPv6Address.fromString( pathInfo );
+        }
+        else
+        {
+            IPv6Network net = IPv6Network.fromString( pathInfo );
+            addr = net.getFirst();
+        }
+        return ipV6Allocations.getUrl( addr );
     }
 }
