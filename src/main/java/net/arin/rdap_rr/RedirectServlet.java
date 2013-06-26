@@ -53,8 +53,24 @@ public class RedirectServlet extends HttpServlet
         }
         else if( pathInfo.startsWith( "/autnum/" ) )
         {
-            String url = makeRedirectUrl( req, "//rdap.iana.org" );
-            resp.sendRedirect( url );
+            try
+            {
+                long autnum = makeAutNumLong( pathInfo );
+                String base = asAllocations.getUrl( autnum );
+                if( base == null )
+                {
+                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                }
+                else
+                {
+                    String url = makeRedirectUrl( req, base );
+                    resp.sendRedirect( url );
+                }
+            }
+            catch ( Exception e )
+            {
+                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+            }
         }
         else
         {
@@ -64,6 +80,12 @@ public class RedirectServlet extends HttpServlet
 
     private String makeRedirectUrl( HttpServletRequest req, String base )
     {
-        return req.getScheme() + "base" + req.getPathInfo();
+        return req.getScheme() + base + req.getPathInfo();
+    }
+
+    public long makeAutNumLong( String pathInfo )
+    {
+        long autnum = Long.parseLong( pathInfo.split( "/" )[ 2 ] );
+        return autnum;
     }
 }
