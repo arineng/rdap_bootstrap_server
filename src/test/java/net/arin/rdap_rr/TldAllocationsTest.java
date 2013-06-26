@@ -18,11 +18,11 @@ public class TldAllocationsTest
         TldAllocations tldAllocations = new TldAllocations();
         tldAllocations.loadData();
 
-        assertEquals( "http://rdap.XN--0ZWM56D", tldAllocations.getUrl( "XN--0ZWM56D" ) );
-        assertEquals( "http://rdap.COM", tldAllocations.getUrl( "COM" ) );
-        assertEquals( "http://rdap.AERO", tldAllocations.getUrl( "AERO" ) );
-        assertEquals( "http://rdap.DE", tldAllocations.getUrl( "DE" ) );
-        assertEquals( "http://rdap.DE", tldAllocations.getUrl( "de" ) );
-        assertEquals( "http://rdap.AERO", tldAllocations.getUrl( "aero" ) );
+        assertEquals( "://rdap.XN--0ZWM56D", tldAllocations.getUrl( "XN--0ZWM56D" ) );
+        assertEquals( "://rdap.COM", tldAllocations.getUrl( "COM" ) );
+        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "AERO" ) );
+        assertEquals( "://rdap.DE", tldAllocations.getUrl( "DE" ) );
+        assertEquals( "://rdap.DE", tldAllocations.getUrl( "de" ) );
+        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "aero" ) );
     }
 }

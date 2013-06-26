@@ -76,31 +76,31 @@ public class IpV6Allocations extends DefaultHandler
             String value = "(unknown)";
             if( record.description.equals( "ARIN" ) )
             {
-                value = "http://rdap.arin.net";
+                value = "://rdap.arin.net";
             }
             else if( record.description.equals( "RIPE NCC" ) )
             {
-                value = "http://rdap.ripe.net";
+                value = "://rdap.ripe.net";
             }
             else if( record.description.equals( "APNIC" ) )
             {
-                value = "http://rdap.apnic.net";
+                value = "://rdap.apnic.net";
             }
             else if( record.description.equals( "LACNIC" ) )
             {
-                value = "http://rdap.lacnic.net";
+                value = "://rdap.lacnic.net";
             }
             else if( record.description.equals( "AFRINIC" ) )
             {
-                value = "http://rdap.afrinic.net";
+                value = "://rdap.afrinic.net";
             }
             else if( record.description.startsWith( "IANA" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             else if( record.status.equals( "RESERVED" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             allocations.put( key, value );
         }

@@ -25,7 +25,7 @@ public class TldAllocations
         while( (line = reader.readLine()) != null )
         {
             String key = line.trim();
-            String value = "http://rdap." + key;
+            String value = "://rdap." + key;
             allocations.put( key, value );
         }
     }

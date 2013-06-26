@@ -68,55 +68,55 @@ public class IpV4Allocations extends DefaultHandler
             String value = "(unknown)";
             if( record.designation.equals( "ARIN" ) )
             {
-                value = "http://rdap.arin.net";
+                value = "://rdap.arin.net";
             }
             else if( record.designation.equals( "Administered by ARIN" ) )
             {
-                value = "http://rdap.arin.net";
+                value = "://rdap.arin.net";
             }
             else if( record.designation.equals( "RIPE NCC" ) )
             {
-                value = "http://rdap.ripe.net";
+                value = "://rdap.ripe.net";
             }
             else if( record.designation.equals( "Administered by RIPE NCC" ) )
             {
-                value = "http://rdap.ripe.net";
+                value = "://rdap.ripe.net";
             }
             else if( record.designation.equals( "APNIC" ) )
             {
-                value = "http://rdap.apnic.net";
+                value = "://rdap.apnic.net";
             }
             else if( record.designation.equals( "Administered by APNIC" ) )
             {
-                value = "http://rdap.apnic.net";
+                value = "://rdap.apnic.net";
             }
             else if( record.designation.equals( "LACNIC" ) )
             {
-                value = "http://rdap.lacnic.net";
+                value = "://rdap.lacnic.net";
             }
             else if( record.designation.equals( "Administered by LACNIC" ) )
             {
-                value = "http://rdap.lacnic.net";
+                value = "://rdap.lacnic.net";
             }
             else if( record.designation.equals( "AFRINIC" ) )
             {
-                value = "http://rdap.afrinic.net";
+                value = "://rdap.afrinic.net";
             }
             else if( record.designation.equals( "Administered by AFRINIC" ) )
             {
-                value = "http://rdap.afrinic.net";
+                value = "://rdap.afrinic.net";
             }
             else if( record.designation.startsWith( "IANA" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             else if( record.status.equals( "LEGACY" ) )
             {
-                value = "http://rdap.arin.net";
+                value = "://rdap.arin.net";
             }
             else if( record.status.equals( "RESERVED" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             allocations.put( key, value );
         }

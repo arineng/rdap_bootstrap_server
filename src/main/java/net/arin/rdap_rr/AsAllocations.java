@@ -65,35 +65,35 @@ public class AsAllocations extends DefaultHandler
             String value = "(unknown)";
             if( record.description.equals( "Assigned by ARIN" ) )
             {
-                value = "http://rdap.arin.net";
+                value = "://rdap.arin.net";
             }
             else if( record.description.equals( "Assigned by RIPE NCC" ) )
             {
-                value = "http://rdap.ripe.net";
+                value = "://rdap.ripe.net";
             }
             else if( record.description.equals( "Assigned by APNIC" ) )
             {
-                value = "http://rdap.apnic.net";
+                value = "://rdap.apnic.net";
             }
             else if( record.description.equals( "Assigned by LACNIC" ) )
             {
-                value = "http://rdap.lacnic.net";
+                value = "://rdap.lacnic.net";
             }
             else if( record.description.equals( "Assigned by AFRINIC" ) )
             {
-                value = "http://rdap.afrinic.net";
+                value = "://rdap.afrinic.net";
             }
             else if( record.description.equals( "Reserved" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             else if( record.description.equals( "Unallocated" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             else if( record.description.equals( "AS_TRANS" ) )
             {
-                value = "http://rdap.iana.net";
+                value = "://rdap.iana.net";
             }
             if( !allocations.containsKey( key ) )
             {
