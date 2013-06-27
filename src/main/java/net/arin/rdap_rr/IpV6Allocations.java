@@ -48,7 +48,7 @@ public class IpV6Allocations extends DefaultHandler
     @Override
     public void characters( char[] chars, int start, int length ) throws SAXException
     {
-        tempChars = new String( chars, start, length );
+        tempChars = tempChars + new String( chars, start, length );
     }
 
     @Override

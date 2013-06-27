@@ -1,0 +1,6 @@
+<jboss-web>
+    <!--
+    ~ Copyright (c) 2013. American Registry for Internet Numbers
+    -->
+    <context-root>rdaproot</context-root>
+</jboss-web>

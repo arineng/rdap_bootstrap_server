@@ -56,7 +56,7 @@ public class RedirectServlet extends HttpServlet
                 }
                 else
                 {
-                    String url = makeRedirectUrl( req, "//rdap.iana.org" );
+                    String url = makeRedirectUrl( req, base );
                     resp.sendRedirect( url );
                 }
             }
@@ -76,7 +76,7 @@ public class RedirectServlet extends HttpServlet
                 }
                 else
                 {
-                    String url = makeRedirectUrl( req, "//rdap.iana.org" );
+                    String url = makeRedirectUrl( req, base );
                     resp.sendRedirect( url );
                 }
             }
