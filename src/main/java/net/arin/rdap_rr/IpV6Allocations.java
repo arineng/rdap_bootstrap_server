@@ -37,10 +37,12 @@ public class IpV6Allocations extends DefaultHandler
     private Record record = null;
     private String tempChars = null;
     private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private RirMap rirMap = new RirMap();
 
     public void loadData()
         throws Exception
     {
+        rirMap.loadData();
         InputStream inputStream = getClass().getResourceAsStream( "/v6_allocations.xml" );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
@@ -89,31 +91,31 @@ public class IpV6Allocations extends DefaultHandler
             String value = "(unknown)";
             if( record.description.equals( "ARIN" ) )
             {
-                value = "://rdap.arin.net";
+                value = rirMap.getRirUrl( "ARIN" );
             }
             else if( record.description.equals( "RIPE NCC" ) )
             {
-                value = "://rdap.ripe.net";
+                value = rirMap.getRirUrl( "RIPE" );
             }
             else if( record.description.equals( "APNIC" ) )
             {
-                value = "://rdap.apnic.net";
+                value = rirMap.getRirUrl( "APNIC" );
             }
             else if( record.description.equals( "LACNIC" ) )
             {
-                value = "://rdap.lacnic.net";
+                value = rirMap.getRirUrl( "LACNIC" );
             }
             else if( record.description.equals( "AFRINIC" ) )
             {
-                value = "://rdap.afrinic.net";
+                value = rirMap.getRirUrl( "AFRINIC" );
             }
             else if( record.description.startsWith( "IANA" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             else if( record.status.equals( "RESERVED" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             allocations.put( key, value );
         }

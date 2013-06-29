@@ -33,10 +33,12 @@ public class IpV4Allocations extends DefaultHandler
     private Record record = null;
     private String tempChars = null;
     private HashMap<Integer,String> allocations = new HashMap<Integer, String>(  );
+    private RirMap rirMap = new RirMap();
 
     public void loadData()
         throws Exception
     {
+        rirMap.loadData();
         InputStream inputStream = getClass().getResourceAsStream( "/v4_allocations.xml" );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
@@ -81,55 +83,55 @@ public class IpV4Allocations extends DefaultHandler
             String value = "(unknown)";
             if( record.designation.equals( "ARIN" ) )
             {
-                value = "://rdap.arin.net";
+                value = rirMap.getRirUrl( "ARIN" );
             }
             else if( record.designation.equals( "Administered by ARIN" ) )
             {
-                value = "://rdap.arin.net";
+                value = rirMap.getRirUrl( "ARIN" );
             }
             else if( record.designation.equals( "RIPE NCC" ) )
             {
-                value = "://rdap.ripe.net";
+                value = rirMap.getRirUrl( "RIPE" );
             }
             else if( record.designation.equals( "Administered by RIPE NCC" ) )
             {
-                value = "://rdap.ripe.net";
+                value = rirMap.getRirUrl( "RIPE" );
             }
             else if( record.designation.equals( "APNIC" ) )
             {
-                value = "://rdap.apnic.net";
+                value = rirMap.getRirUrl( "APNIC" );
             }
             else if( record.designation.equals( "Administered by APNIC" ) )
             {
-                value = "://rdap.apnic.net";
+                value = rirMap.getRirUrl( "APNIC" );
             }
             else if( record.designation.equals( "LACNIC" ) )
             {
-                value = "://rdap.lacnic.net";
+                value = rirMap.getRirUrl( "LACNIC" );
             }
             else if( record.designation.equals( "Administered by LACNIC" ) )
             {
-                value = "://rdap.lacnic.net";
+                value = rirMap.getRirUrl( "LACNIC" );
             }
             else if( record.designation.equals( "AFRINIC" ) )
             {
-                value = "://rdap.afrinic.net";
+                value = rirMap.getRirUrl( "AFRINIC" );
             }
             else if( record.designation.equals( "Administered by AFRINIC" ) )
             {
-                value = "://rdap.afrinic.net";
+                value = rirMap.getRirUrl( "AFRINIC" );
             }
             else if( record.designation.startsWith( "IANA" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             else if( record.status.equals( "LEGACY" ) )
             {
-                value = "://rdap.arin.net";
+                value = rirMap.getRirUrl( "ARIN" );
             }
             else if( record.status.equals( "RESERVED" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             allocations.put( key, value );
         }

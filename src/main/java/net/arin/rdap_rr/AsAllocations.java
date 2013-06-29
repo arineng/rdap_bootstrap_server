@@ -34,10 +34,12 @@ public class AsAllocations extends DefaultHandler
     private Record record = null;
     private String tempChars = null;
     private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private RirMap rirMap = new RirMap();
 
     public void loadData()
         throws Exception
     {
+        rirMap.loadData();
         InputStream inputStream = getClass().getResourceAsStream( "/as_allocations.xml" );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
@@ -78,35 +80,35 @@ public class AsAllocations extends DefaultHandler
             String value = "(unknown)";
             if( record.description.equals( "Assigned by ARIN" ) )
             {
-                value = "://rdap.arin.net";
+                value = rirMap.getRirUrl( "ARIN" );
             }
             else if( record.description.equals( "Assigned by RIPE NCC" ) )
             {
-                value = "://rdap.ripe.net";
+                value = rirMap.getRirUrl( "RIPE" );
             }
             else if( record.description.equals( "Assigned by APNIC" ) )
             {
-                value = "://rdap.apnic.net";
+                value = rirMap.getRirUrl( "APNIC" );
             }
             else if( record.description.equals( "Assigned by LACNIC" ) )
             {
-                value = "://rdap.lacnic.net";
+                value = rirMap.getRirUrl( "LACNIC" );
             }
             else if( record.description.equals( "Assigned by AFRINIC" ) )
             {
-                value = "://rdap.afrinic.net";
+                value = rirMap.getRirUrl( "AFRINIC" );
             }
             else if( record.description.equals( "Reserved" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             else if( record.description.equals( "Unallocated" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             else if( record.description.equals( "AS_TRANS" ) )
             {
-                value = "://rdap.iana.net";
+                value = rirMap.getRirUrl( "IANA" );
             }
             if( !allocations.containsKey( key ) )
             {
@@ -119,6 +121,14 @@ public class AsAllocations extends DefaultHandler
     {
         Entry<Long, String> entry = allocations.floorEntry( number );
         return entry.getValue();
+    }
+
+    public void addAsCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addAsRirCounter( s );
+        }
     }
 
     class Record
