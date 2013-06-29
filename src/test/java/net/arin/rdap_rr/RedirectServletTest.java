@@ -68,4 +68,16 @@ public class RedirectServletTest
         assertEquals( "://rdap.afrinic.net", servlet.makeDomainBase( "/domain/0.c.2.ip6.arpa" ) );
         assertEquals( "://rdap.lacnic.net", servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ) );
     }
+
+    @Test
+    public void testNameserverBase() throws Exception
+    {
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/nameserver/ns1.example.XN--0ZWM56D" ) );
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/nameserver/ns1.example.XN--0ZWM56D." ) );
+        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/nameserver/ns1.example.COM" ) );
+        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/nameserver/ns1.example.COM." ) );
+    }
 }

@@ -78,6 +78,26 @@ public class RedirectServlet extends HttpServlet
                 resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
             }
         }
+        else if( pathInfo.startsWith( "/nameserver/" ) )
+        {
+            try
+            {
+                String base = makeNameserverBase( pathInfo );
+                if( base == null )
+                {
+                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                }
+                else
+                {
+                    String url = makeRedirectUrl( req, base );
+                    resp.sendRedirect( url );
+                }
+            }
+            catch ( Exception e )
+            {
+                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+            }
+        }
         else if( pathInfo.startsWith( "/ip/" ) )
         {
             try
@@ -216,6 +236,19 @@ public class RedirectServlet extends HttpServlet
             return ipV6Allocations.getUrl( IPv6Address.fromByteArray( bytes ) );
         }
         //else
+        String[] labels = pathInfo.split( "\\." );
+        return tldAllocations.getUrl( labels[ labels.length -1 ] );
+    }
+
+    public String makeNameserverBase( String pathInfo )
+    {
+        //strip leading "/nameserver/"
+        pathInfo = pathInfo.substring( 12 );
+        //strip possible trailing period
+        if( pathInfo.endsWith( "." ) )
+        {
+            pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
+        }
         String[] labels = pathInfo.split( "\\." );
         return tldAllocations.getUrl( labels[ labels.length -1 ] );
     }
