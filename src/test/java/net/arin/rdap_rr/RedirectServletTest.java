@@ -70,14 +70,27 @@ public class RedirectServletTest
     }
 
     @Test
-    public void testNameserverBase() throws Exception
+    public void testMakeNameserverBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/nameserver/ns1.example.XN--0ZWM56D" ) );
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/nameserver/ns1.example.XN--0ZWM56D." ) );
-        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/nameserver/ns1.example.COM" ) );
-        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/nameserver/ns1.example.COM." ) );
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeNameserverBase( "/nameserver/ns1.example.XN--0ZWM56D" ) );
+        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeNameserverBase( "/nameserver/ns1.example.XN--0ZWM56D." ) );
+        assertEquals( "://rdap.COM", servlet.makeNameserverBase( "/nameserver/ns1.example.COM" ) );
+        assertEquals( "://rdap.COM", servlet.makeNameserverBase( "/nameserver/ns1.example.COM." ) );
+    }
+
+    @Test
+    public void testMakeEntityBase() throws Exception
+    {
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "://rdap.arin.net", servlet.makeEntityBase( "/entity/ABC123-ARIN" ) );
+        assertEquals( "://rdap.ripe.net", servlet.makeEntityBase( "/entity/ABC123-RIPE" ) );
+        assertEquals( "://rdap.apnic.net", servlet.makeEntityBase( "/entity/ABC123-AP" ) );
+        assertEquals( "://rdap.lacnic.net", servlet.makeEntityBase( "/entity/ABC123-LACNIC" ) );
+        assertEquals( "://rdap.afrinic.net", servlet.makeEntityBase( "/entity/ABC123-AFRINIC" ) );
     }
 }

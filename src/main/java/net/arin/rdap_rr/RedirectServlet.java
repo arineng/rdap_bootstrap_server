@@ -118,6 +118,26 @@ public class RedirectServlet extends HttpServlet
                 resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
             }
         }
+        else if( pathInfo.startsWith( "/entity/" ) )
+        {
+            try
+            {
+                String base = makeEntityBase( pathInfo );
+                if( base == null )
+                {
+                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                }
+                else
+                {
+                    String url = makeRedirectUrl( req, base );
+                    resp.sendRedirect( url );
+                }
+            }
+            catch ( Exception e )
+            {
+                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+            }
+        }
         else if( pathInfo.startsWith( "/autnum/" ) )
         {
             try
@@ -251,5 +271,30 @@ public class RedirectServlet extends HttpServlet
         }
         String[] labels = pathInfo.split( "\\." );
         return tldAllocations.getUrl( labels[ labels.length -1 ] );
+    }
+
+    public String makeEntityBase( String pathInfo )
+    {
+        if( pathInfo.endsWith( "-ARIN" ) )
+        {
+           return "://rdap.arin.net";
+        }
+        else if( pathInfo.endsWith( "-AP" ) )
+        {
+            return "://rdap.apnic.net";
+        }
+        else if( pathInfo.endsWith( "-RIPE" ) )
+        {
+            return "://rdap.ripe.net";
+        }
+        else if( pathInfo.endsWith( "-LACNIC" ) )
+        {
+            return "://rdap.lacnic.net";
+        }
+        else if( pathInfo.endsWith( "-AFRINIC" ) )
+        {
+            return "://rdap.afrinic.net";
+        }
+        return null;
     }
 }
