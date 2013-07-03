@@ -37,6 +37,8 @@ public class RedirectServlet extends HttpServlet
     private IpV4Allocations ipV4Allocations = new IpV4Allocations();
     private TldAllocations tldAllocations = new TldAllocations();
 
+    private Statistics statistics;
+
     @Override
     public void init( ServletConfig config ) throws ServletException
     {
@@ -46,6 +48,10 @@ public class RedirectServlet extends HttpServlet
             ipV4Allocations.loadData();
             ipV6Allocations.loadData();
             tldAllocations.loadData();
+
+            //setup statistics
+            statistics = new Statistics();
+            asAllocations.addAsCountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -144,6 +150,7 @@ public class RedirectServlet extends HttpServlet
             {
                 long autnum = makeAutNumLong( pathInfo );
                 String base = asAllocations.getUrl( autnum );
+                statistics.asHitByUrl( base );
                 if( base == null )
                 {
                     resp.sendError( HttpServletResponse.SC_NOT_FOUND );

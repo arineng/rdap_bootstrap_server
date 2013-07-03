@@ -32,6 +32,26 @@ public class Statistics
     private HashMap<String,AtomicLong> domainTldHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> nsTldHits = new HashMap<String, AtomicLong>(  );
 
+    private RirMap rirMap = new RirMap();
+
+    public Statistics() throws Exception
+    {
+        rirMap.loadData();
+    }
+
+    public void asHitByUrl( String url )
+    {
+        String rir = rirMap.getRirFromUrl( url );
+        if( url != null )
+        {
+            AtomicLong hits = asRirHits.get( rir );
+            if( rir != null )
+            {
+                hits.incrementAndGet();
+            }
+        }
+    }
+
     public void addAsRirCounter( String rir )
     {
         if( !asRirHits.containsKey( rir ) )
