@@ -38,6 +38,7 @@ public class Statistics
     public Statistics() throws Exception
     {
         rirMap.loadData();
+        rirMap.addEntityRirCountersToStatistics( this );
     }
 
     private void incrementRirCounter( HashMap<String, AtomicLong> hashMap, String key )
@@ -94,6 +95,30 @@ public class Statistics
         return new AsHitCounter();
     }
 
+    public HitCounter getEntityRirHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String url )
+            {
+                incrementRirCounter( entityRirHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
+    public HitCounter getDomainRirHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String url )
+            {
+                incrementRirCounter( entityRirHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
     private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
     {
         if( !hashMap.containsKey( key ) )
@@ -115,5 +140,15 @@ public class Statistics
     public void addIp6RirCounter( String rir )
     {
         addCounterToHashMap( ip6RirHits, rir );
+    }
+
+    public void addEntityRirCounter( String rir )
+    {
+        addCounterToHashMap( entityRirHits, rir );
+    }
+
+    public void addDomainRirCounter( String rir )
+    {
+        addCounterToHashMap( domainRirHits, rir );
     }
 }

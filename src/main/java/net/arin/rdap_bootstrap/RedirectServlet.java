@@ -53,7 +53,9 @@ public class RedirectServlet extends HttpServlet
             statistics = new Statistics();
             asAllocations.addAsCountersToStatistics( statistics );
             ipV4Allocations.addIp4CountersToStatistics( statistics );
+            ipV4Allocations.addDomainRirCountersToStatistics( statistics );
             ipV6Allocations.addIp6CountersToStatistics( statistics );
+            ipV6Allocations.addDomainRirCountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -220,7 +222,7 @@ public class RedirectServlet extends HttpServlet
         {
             String[] labels = pathInfo.split( "\\." );
             String firstOctet = labels[ labels.length -3 ];
-            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ) );
+            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ), statistics.getDomainRirHitCounter() );
         }
         else if( pathInfo.endsWith( ".ip6.arpa" ) )
         {
@@ -261,7 +263,7 @@ public class RedirectServlet extends HttpServlet
                     byteIdx++;
                 }
             }
-            return ipV6Allocations.getUrl( IPv6Address.fromByteArray( bytes ) );
+            return ipV6Allocations.getUrl( IPv6Address.fromByteArray( bytes ), statistics.getDomainRirHitCounter() );
         }
         //else
         String[] labels = pathInfo.split( "\\." );
@@ -283,26 +285,29 @@ public class RedirectServlet extends HttpServlet
 
     public String makeEntityBase( String pathInfo )
     {
+        String retval = null;
         if( pathInfo.endsWith( "-ARIN" ) )
         {
-           return "://rdap.arin.net";
+           retval = "://rdap.arin.net";
         }
         else if( pathInfo.endsWith( "-AP" ) )
         {
-            return "://rdap.apnic.net";
+            retval = "://rdap.apnic.net";
         }
         else if( pathInfo.endsWith( "-RIPE" ) )
         {
-            return "://rdap.ripe.net";
+            retval = "://rdap.ripe.net";
         }
         else if( pathInfo.endsWith( "-LACNIC" ) )
         {
-            return "://rdap.lacnic.net";
+            retval = "://rdap.lacnic.net";
         }
         else if( pathInfo.endsWith( "-AFRINIC" ) )
         {
-            return "://rdap.afrinic.net";
+            retval = "://rdap.afrinic.net";
         }
-        return null;
+        HitCounter hitCounter = statistics.getEntityRirHitCounter();
+        hitCounter.incrementCounter( retval );
+        return retval;
     }
 }

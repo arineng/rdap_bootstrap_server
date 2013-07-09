@@ -160,6 +160,14 @@ public class IpV4Allocations extends DefaultHandler
         }
     }
 
+    public void addDomainRirCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addDomainRirCounter( s );
+        }
+    }
+
     class Record
     {
         public String prefix;

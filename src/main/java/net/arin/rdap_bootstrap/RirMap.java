@@ -49,4 +49,12 @@ public class RirMap
     {
         return reverseMap.get( url );
     }
+
+    public void addEntityRirCountersToStatistics( Statistics stats )
+    {
+        for ( Object s : rirMap.values() )
+        {
+            stats.addEntityRirCounter( s.toString() );
+        }
+    }
 }

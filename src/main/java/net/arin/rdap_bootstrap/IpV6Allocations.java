@@ -163,6 +163,14 @@ public class IpV6Allocations extends DefaultHandler
         }
     }
 
+    public void addDomainRirCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addDomainRirCounter( s );
+        }
+    }
+
     class Record
     {
         public String prefix;
