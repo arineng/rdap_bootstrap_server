@@ -13,7 +13,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package net.arin.rdap_rr;
+package net.arin.rdap_bootstrap;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;

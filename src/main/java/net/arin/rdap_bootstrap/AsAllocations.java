@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_rr;
+package net.arin.rdap_bootstrap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

@@ -7,7 +7,7 @@
         <servlet-name>RDAPRoot</servlet-name>
         <display-name>RDAP Root Redirector</display-name>
         <description>A servlet that redirects to other RDAP servers</description>
-        <servlet-class>net.arin.rdap_rr.RedirectServlet</servlet-class>
+        <servlet-class>net.arin.rdap_bootstrap.RedirectServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>

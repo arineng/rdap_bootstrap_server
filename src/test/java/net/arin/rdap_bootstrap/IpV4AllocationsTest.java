@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_rr;
+package net.arin.rdap_bootstrap;
 
 import org.junit.Test;
 
@@ -23,19 +23,23 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @version $Rev$, $Date$
  */
-public class TldAllocationsTest
+public class IpV4AllocationsTest
 {
     @Test
     public void testAllocations() throws Exception
     {
-        TldAllocations tldAllocations = new TldAllocations();
-        tldAllocations.loadData();
+        IpV4Allocations v4 = new IpV4Allocations();
+        v4.loadData();
 
-        assertEquals( "://rdap.XN--0ZWM56D", tldAllocations.getUrl( "XN--0ZWM56D" ) );
-        assertEquals( "://rdap.COM", tldAllocations.getUrl( "COM" ) );
-        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "AERO" ) );
-        assertEquals( "://rdap.DE", tldAllocations.getUrl( "DE" ) );
-        assertEquals( "://rdap.DE", tldAllocations.getUrl( "de" ) );
-        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "aero" ) );
+        assertEquals( "://rdap.arin.net", v4.getUrl( 3 ) );
+        assertEquals( "://rdap.apnic.net", v4.getUrl( 1 ) );
+        assertEquals( "://rdap.iana.net", v4.getUrl( 0 ) );
+        assertEquals( "://rdap.apnic.net", v4.getUrl( 27 ) );
+        assertEquals( "://rdap.ripe.net", v4.getUrl( 31 ) );
+        assertEquals( "://rdap.afrinic.net", v4.getUrl( 41 ) );
+        assertEquals( "://rdap.lacnic.net", v4.getUrl( 177 ) );
+        assertEquals( "://rdap.ripe.net", v4.getUrl( 188 ) );
+        assertEquals( "://rdap.lacnic.net", v4.getUrl( 191 ) );
+        assertEquals( "://rdap.iana.net", v4.getUrl( 224 ) );
     }
 }

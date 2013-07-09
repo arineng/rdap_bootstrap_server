@@ -14,41 +14,38 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_rr;
+package net.arin.rdap_bootstrap;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Properties;
 
 /**
  * @version $Rev$, $Date$
  */
-public class RirMap
+public class TldAllocations
 {
-    private Properties rirMap = new Properties(  );
-    private HashMap<String,String> reverseMap = new HashMap<String, String>(  );
+    private HashMap<String,String> allocations = new HashMap<String, String>(  );
 
     public void loadData()
         throws Exception
     {
-        InputStream inputStream = getClass().getResourceAsStream( "/rir-map.properties" );
-        rirMap.load( inputStream );
-        for ( Entry<Object, Object> entry : rirMap.entrySet() )
+        InputStream inputStream = getClass().getResourceAsStream( "/tlds-alpha-by-domain.txt" );
+        BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );
+        String line = null;
+        while( (line = reader.readLine()) != null )
         {
-            reverseMap.put( (String)entry.getValue(), (String)entry.getKey() );
+            String key = line.trim();
+            String value = "://rdap." + key;
+            allocations.put( key, value );
         }
     }
 
-    public String getRirUrl( String rir )
+
+    public String getUrl( String tld )
     {
-        return rirMap.getProperty( rir );
+        return allocations.get( tld.toUpperCase() );
     }
 
-    public String getRirFromUrl( String url )
-    {
-        return reverseMap.get( url );
-    }
 }
