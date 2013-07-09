@@ -52,6 +52,7 @@ public class RedirectServlet extends HttpServlet
             //setup statistics
             statistics = new Statistics();
             asAllocations.addAsCountersToStatistics( statistics );
+            ipV4Allocations.addIp4CountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -189,7 +190,7 @@ public class RedirectServlet extends HttpServlet
         if( pathInfo.indexOf( ":" ) == -1 ) //is not ipv6
         {
             String firstOctet = pathInfo.split( "\\." )[ 0 ];
-            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ) );
+            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ), statistics.getIp4RirHitCounter() );
         }
         //else
         IPv6Address addr = null;

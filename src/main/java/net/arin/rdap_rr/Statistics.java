@@ -40,36 +40,64 @@ public class Statistics
         rirMap.loadData();
     }
 
+    private void incrementRirCounter( HashMap<String, AtomicLong> hashMap, String key )
+    {
+        String rir = rirMap.getRirFromUrl( key );
+        if( key != null )
+        {
+            AtomicLong hits = hashMap.get( rir );
+            if( hits != null )
+            {
+                hits.incrementAndGet();
+                totalHits.incrementAndGet();
+            }
+            else
+            {
+                totalMisses.incrementAndGet();
+            }
+        }
+    }
+
     public HitCounter getAsHitCounter()
     {
         class AsHitCounter implements HitCounter
         {
             public void incrementCounter( String url )
             {
-                String rir = rirMap.getRirFromUrl( url );
-                if( url != null )
-                {
-                    AtomicLong hits = asRirHits.get( rir );
-                    if( rir != null )
-                    {
-                        hits.incrementAndGet();
-                        totalHits.incrementAndGet();
-                    }
-                    else
-                    {
-                        totalMisses.incrementAndGet();
-                    }
-                }
+                incrementRirCounter( asRirHits, url );
             }
         }
         return new AsHitCounter();
     }
 
-    public void addAsRirCounter( String rir )
+    public HitCounter getIp4RirHitCounter()
     {
-        if( !asRirHits.containsKey( rir ) )
+        class AsHitCounter implements HitCounter
         {
-            asRirHits.put( rir, new AtomicLong( 0 ) );
+            public void incrementCounter( String url )
+            {
+                incrementRirCounter( ip4RirHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
+    private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
+    {
+        if( !hashMap.containsKey( key ) )
+        {
+            hashMap.put( key, new AtomicLong( 0 ) );
         }
     }
+
+    public void addAsRirCounter( String rir )
+    {
+        addCounterToHashMap( asRirHits, rir );
+    }
+
+    public void addIp4RirCounter( String rir )
+    {
+        addCounterToHashMap( ip4RirHits, rir );
+    }
+
 }

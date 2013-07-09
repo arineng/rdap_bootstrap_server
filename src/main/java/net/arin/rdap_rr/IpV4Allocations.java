@@ -139,7 +139,25 @@ public class IpV4Allocations extends DefaultHandler
 
     public String getUrl( int prefix )
     {
-        return allocations.get( prefix );
+        return getUrl( prefix, null );
+    }
+
+    public String getUrl( int prefix, HitCounter hitCounter )
+    {
+        String retval =  allocations.get( prefix );
+        if( retval != null && hitCounter != null )
+        {
+            hitCounter.incrementCounter( retval );
+        }
+        return retval;
+    }
+
+    public void addIp4CountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addIp4RirCounter( s );
+        }
     }
 
     class Record
