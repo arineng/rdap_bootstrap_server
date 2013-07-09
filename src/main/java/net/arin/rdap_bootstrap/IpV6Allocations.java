@@ -120,24 +120,47 @@ public class IpV6Allocations extends DefaultHandler
         }
     }
 
-    public String getUrl( long prefix )
+    public String getUrl( long prefix, HitCounter hitCounter )
     {
+        String retval = null;
         Map.Entry<Long,String> entry = allocations.floorEntry( prefix );
         if( entry != null )
         {
-            return entry.getValue();
+            retval = entry.getValue();
+            if( hitCounter != null )
+            {
+                hitCounter.incrementCounter( retval );
+            }
         }
-        return null;
+        return retval;
+    }
+
+    public String getUrl( IPv6Address addr, HitCounter hitCounter )
+    {
+        return getUrl( addr.getHighBits(), hitCounter );
     }
 
     public String getUrl( IPv6Address addr )
     {
-        return getUrl( addr.getHighBits() );
+        return getUrl( addr.getHighBits(), null );
+    }
+
+    public String getUrl( IPv6Network net, HitCounter hitCounter )
+    {
+        return getUrl( net.getFirst().getHighBits(), hitCounter );
     }
 
     public String getUrl( IPv6Network net )
     {
-        return getUrl( net.getFirst().getHighBits() );
+        return getUrl( net.getFirst().getHighBits(), null );
+    }
+
+    public void addIp6CountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addIp6RirCounter( s );
+        }
     }
 
     class Record

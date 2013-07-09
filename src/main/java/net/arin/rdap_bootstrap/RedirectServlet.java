@@ -53,6 +53,7 @@ public class RedirectServlet extends HttpServlet
             statistics = new Statistics();
             asAllocations.addAsCountersToStatistics( statistics );
             ipV4Allocations.addIp4CountersToStatistics( statistics );
+            ipV6Allocations.addIp6CountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -203,7 +204,7 @@ public class RedirectServlet extends HttpServlet
             IPv6Network net = IPv6Network.fromString( pathInfo );
             addr = net.getFirst();
         }
-        return ipV6Allocations.getUrl( addr );
+        return ipV6Allocations.getUrl( addr, statistics.getIp6RirHitCounter() );
     }
 
     public String makeDomainBase( String pathInfo )

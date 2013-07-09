@@ -82,6 +82,18 @@ public class Statistics
         return new AsHitCounter();
     }
 
+    public HitCounter getIp6RirHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String url )
+            {
+                incrementRirCounter( ip6RirHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
     private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
     {
         if( !hashMap.containsKey( key ) )
@@ -100,4 +112,8 @@ public class Statistics
         addCounterToHashMap( ip4RirHits, rir );
     }
 
+    public void addIp6RirCounter( String rir )
+    {
+        addCounterToHashMap( ip6RirHits, rir );
+    }
 }
