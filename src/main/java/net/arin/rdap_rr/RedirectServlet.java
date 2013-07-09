@@ -149,8 +149,7 @@ public class RedirectServlet extends HttpServlet
             try
             {
                 long autnum = makeAutNumLong( pathInfo );
-                String base = asAllocations.getUrl( autnum );
-                statistics.asHitByUrl( base );
+                String base = asAllocations.getUrl( autnum, statistics.getAsHitCounter() );
                 if( base == null )
                 {
                     resp.sendError( HttpServletResponse.SC_NOT_FOUND );

@@ -119,7 +119,16 @@ public class AsAllocations extends DefaultHandler
 
     public String getUrl( long number )
     {
+        return getUrl( number, null );
+    };
+
+    public String getUrl( long number, HitCounter hitCounter )
+    {
         Entry<Long, String> entry = allocations.floorEntry( number );
+        if( hitCounter != null && entry.getValue() != null )
+        {
+            hitCounter.incrementCounter( entry.getValue() );
+        }
         return entry.getValue();
     }
 

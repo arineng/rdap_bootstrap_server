@@ -39,17 +39,24 @@ public class Statistics
         rirMap.loadData();
     }
 
-    public void asHitByUrl( String url )
+    public HitCounter getAsHitCounter()
     {
-        String rir = rirMap.getRirFromUrl( url );
-        if( url != null )
+        class AsHitCounter implements HitCounter
         {
-            AtomicLong hits = asRirHits.get( rir );
-            if( rir != null )
+            public void incrementCounter( String url )
             {
-                hits.incrementAndGet();
+                String rir = rirMap.getRirFromUrl( url );
+                if( url != null )
+                {
+                    AtomicLong hits = asRirHits.get( rir );
+                    if( rir != null )
+                    {
+                        hits.incrementAndGet();
+                    }
+                }
             }
         }
+        return new AsHitCounter();
     }
 
     public void addAsRirCounter( String rir )
