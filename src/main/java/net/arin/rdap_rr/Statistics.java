@@ -23,7 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Statistics
 {
-    private HashMap<String,AtomicLong> httpHits = new HashMap<String, AtomicLong>(  );
+    private AtomicLong totalHits = new AtomicLong( 0 );
+    private AtomicLong totalMisses = new AtomicLong( 0 );
     private HashMap<String,AtomicLong> asRirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> ip4RirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> ip6RirHits = new HashMap<String, AtomicLong>(  );
@@ -52,6 +53,11 @@ public class Statistics
                     if( rir != null )
                     {
                         hits.incrementAndGet();
+                        totalHits.incrementAndGet();
+                    }
+                    else
+                    {
+                        totalMisses.incrementAndGet();
                     }
                 }
             }
