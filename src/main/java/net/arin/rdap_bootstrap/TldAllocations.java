@@ -16,10 +16,10 @@
  */
 package net.arin.rdap_bootstrap;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * @version $Rev$, $Date$
@@ -31,13 +31,13 @@ public class TldAllocations
     public void loadData()
         throws Exception
     {
-        InputStream inputStream = getClass().getResourceAsStream( "/tlds-alpha-by-domain.txt" );
-        BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );
-        String line = null;
-        while( (line = reader.readLine()) != null )
+        InputStream inputStream = getClass().getResourceAsStream( "/tld-map.properties" );
+        Properties props = new Properties(  );
+        props.load( inputStream );
+        for( Entry<Object, Object> entry: props.entrySet() )
         {
-            String key = line.trim();
-            String value = "://rdap." + key;
+            String key = entry.getKey().toString().trim();
+            String value = entry.getValue().toString().trim();
             allocations.put( key, value );
         }
     }
