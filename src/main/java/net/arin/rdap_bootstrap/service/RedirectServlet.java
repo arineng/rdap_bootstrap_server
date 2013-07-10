@@ -16,8 +16,14 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
+import net.arin.rdap_bootstrap.json.Notice;
+import net.arin.rdap_bootstrap.json.Response;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,7 +31,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @version $Rev$, $Date$
@@ -171,6 +181,10 @@ public class RedirectServlet extends HttpServlet
                 resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
             }
         }
+        else if( pathInfo.startsWith( "/help" ) )
+        {
+            makeHelp( resp.getOutputStream() );
+        }
         else
         {
             resp.sendError( HttpServletResponse.SC_NOT_FOUND );
@@ -290,26 +304,69 @@ public class RedirectServlet extends HttpServlet
         String retval = null;
         if( pathInfo.endsWith( "-ARIN" ) )
         {
-           retval = "://rdap.arin.net";
+           retval = statistics.getRirMap().getRirUrl( "ARIN" );
         }
         else if( pathInfo.endsWith( "-AP" ) )
         {
-            retval = "://rdap.apnic.net";
+            retval = statistics.getRirMap().getRirUrl( "APNIC" );
         }
         else if( pathInfo.endsWith( "-RIPE" ) )
         {
-            retval = "://rdap.ripe.net";
+            retval = statistics.getRirMap().getRirUrl( "RIPE" );
         }
         else if( pathInfo.endsWith( "-LACNIC" ) )
         {
-            retval = "://rdap.lacnic.net";
+            retval = statistics.getRirMap().getRirUrl( "LACNIC" );
         }
         else if( pathInfo.endsWith( "-AFRINIC" ) )
         {
-            retval = "://rdap.afrinic.net";
+            retval = statistics.getRirMap().getRirUrl( "AFRINIC" );
         }
         HitCounter hitCounter = statistics.getEntityRirHitCounter();
         hitCounter.incrementCounter( retval );
         return retval;
+    }
+
+    private Notice makeStatsNotice( String title, HashMap<String, AtomicLong> hashMap )
+    {
+        Notice notice = new Notice();
+        notice.setTitle( title );
+        String[] description = new String[ hashMap.size() ];
+        int i = 0;
+        for ( Entry<String, AtomicLong> entry : hashMap.entrySet() )
+        {
+            description[ i++ ] = String.format( "%6 = %5d", entry.getKey(), entry.getValue() );
+        }
+        notice.setDescription( description );
+        return notice;
+    }
+
+    public void makeHelp( OutputStream outputStream ) throws IOException
+    {
+        Response response = new Response( null );
+        Notice[] notices = new Notice[ 8 ];
+
+        notices[ 0 ] = makeStatsNotice( "Autnum hits by RIR", statistics.getAsRirHits() );
+        notices[ 1 ] = makeStatsNotice( "IPv4 hits by RIR", statistics.getIp4RirHits() );
+        notices[ 2 ] = makeStatsNotice( "IPv6s hits by RIR", statistics.getIp6RirHits() );
+        notices[ 3 ] = makeStatsNotice( "Entity hits by RIR", statistics.getEntityRirHits() );
+        notices[ 4 ] = makeStatsNotice( "Domain hits by RIR", statistics.getDomainRirHits() );
+        notices[ 5 ] = makeStatsNotice( "Domain hits by TLD", statistics.getDomainTldHits() );
+        notices[ 6 ] = makeStatsNotice( "NS hits by TLD", statistics.getNsTldHits() );
+
+        //totals
+        Notice notice = new Notice();
+        notice.setTitle( "Totals" );
+        String[] description = new String[ 2 ];
+        description[ 0 ] = String.format( "Hits   = %5d", statistics.getTotalHits() );
+        description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalHits() );
+        notice.setDescription( description );
+        notices[ 7 ] = notice;
+
+        response.setNotices( notices );
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer( new DefaultPrettyPrinter(  ) );
+        writer.writeValue( outputStream, response );
     }
 }

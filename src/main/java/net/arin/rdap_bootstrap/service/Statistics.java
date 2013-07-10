@@ -56,6 +56,56 @@ public class Statistics
         }
     }
 
+    public RirMap getRirMap()
+    {
+        return rirMap;
+    }
+
+    public AtomicLong getTotalHits()
+    {
+        return totalHits;
+    }
+
+    public AtomicLong getTotalMisses()
+    {
+        return totalMisses;
+    }
+
+    public HashMap<String, AtomicLong> getAsRirHits()
+    {
+        return asRirHits;
+    }
+
+    public HashMap<String, AtomicLong> getIp4RirHits()
+    {
+        return ip4RirHits;
+    }
+
+    public HashMap<String, AtomicLong> getIp6RirHits()
+    {
+        return ip6RirHits;
+    }
+
+    public HashMap<String, AtomicLong> getEntityRirHits()
+    {
+        return entityRirHits;
+    }
+
+    public HashMap<String, AtomicLong> getDomainRirHits()
+    {
+        return domainRirHits;
+    }
+
+    public HashMap<String, AtomicLong> getDomainTldHits()
+    {
+        return domainTldHits;
+    }
+
+    public HashMap<String, AtomicLong> getNsTldHits()
+    {
+        return nsTldHits;
+    }
+
     public HitCounter getAsHitCounter()
     {
         class AsHitCounter implements HitCounter
