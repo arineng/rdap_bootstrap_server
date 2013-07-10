@@ -44,18 +44,15 @@ public class Statistics
     private void incrementRirCounter( HashMap<String, AtomicLong> hashMap, String key )
     {
         String rir = rirMap.getRirFromUrl( key );
-        if( key != null )
+        AtomicLong hits = hashMap.get( rir );
+        if( hits != null )
         {
-            AtomicLong hits = hashMap.get( rir );
-            if( hits != null )
-            {
-                hits.incrementAndGet();
-                totalHits.incrementAndGet();
-            }
-            else
-            {
-                totalMisses.incrementAndGet();
-            }
+            hits.incrementAndGet();
+            totalHits.incrementAndGet();
+        }
+        else
+        {
+            totalMisses.incrementAndGet();
         }
     }
 
@@ -119,6 +116,47 @@ public class Statistics
         return new AsHitCounter();
     }
 
+    private void incrementTldCounter( HashMap<String, AtomicLong> hashMap, String key )
+    {
+        if( key != null )
+        {
+            AtomicLong hits = hashMap.get( key );
+            if( hits != null )
+            {
+                hits.incrementAndGet();
+                totalHits.incrementAndGet();
+            }
+            else
+            {
+                totalMisses.incrementAndGet();
+            }
+        }
+    }
+
+    public HitCounter getDomainTldHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String url )
+            {
+                incrementTldCounter( domainTldHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
+    public HitCounter getNsTldHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String url )
+            {
+                incrementTldCounter( nsTldHits, url );
+            }
+        }
+        return new AsHitCounter();
+    }
+
     private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
     {
         if( !hashMap.containsKey( key ) )
@@ -150,5 +188,15 @@ public class Statistics
     public void addDomainRirCounter( String rir )
     {
         addCounterToHashMap( domainRirHits, rir );
+    }
+
+    public void addDomainTldCounter( String tld )
+    {
+        addCounterToHashMap( domainTldHits, tld );
+    }
+
+    public void addNsTldCounter( String tld )
+    {
+        addCounterToHashMap( nsTldHits, tld );
     }
 }

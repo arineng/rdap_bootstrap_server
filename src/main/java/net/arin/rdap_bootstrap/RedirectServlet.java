@@ -56,6 +56,8 @@ public class RedirectServlet extends HttpServlet
             ipV4Allocations.addDomainRirCountersToStatistics( statistics );
             ipV6Allocations.addIp6CountersToStatistics( statistics );
             ipV6Allocations.addDomainRirCountersToStatistics( statistics );
+            tldAllocations.addDomainTldCountersToStatistics( statistics );
+            tldAllocations.addNsTldCountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -267,7 +269,7 @@ public class RedirectServlet extends HttpServlet
         }
         //else
         String[] labels = pathInfo.split( "\\." );
-        return tldAllocations.getUrl( labels[ labels.length -1 ] );
+        return tldAllocations.getUrl( labels[ labels.length -1 ], statistics.getDomainTldHitCounter() );
     }
 
     public String makeNameserverBase( String pathInfo )
@@ -280,7 +282,7 @@ public class RedirectServlet extends HttpServlet
             pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
         }
         String[] labels = pathInfo.split( "\\." );
-        return tldAllocations.getUrl( labels[ labels.length -1 ] );
+        return tldAllocations.getUrl( labels[ labels.length -1 ], statistics.getNsTldHitCounter() );
     }
 
     public String makeEntityBase( String pathInfo )

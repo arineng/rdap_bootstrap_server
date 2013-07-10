@@ -42,10 +42,34 @@ public class TldAllocations
         }
     }
 
-
     public String getUrl( String tld )
     {
-        return allocations.get( tld.toUpperCase() );
+        return getUrl( tld, null );
     }
 
+    public String getUrl( String tld, HitCounter hitCounter )
+    {
+        String retval = allocations.get( tld.toUpperCase() );
+        if( hitCounter != null )
+        {
+            hitCounter.incrementCounter( retval );
+        }
+        return retval;
+    }
+
+    public void addDomainTldCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.values() )
+        {
+            stats.addDomainTldCounter( s );
+        }
+    }
+
+    public void addNsTldCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.keySet() )
+        {
+            stats.addNsTldCounter( s );
+        }
+    }
 }
