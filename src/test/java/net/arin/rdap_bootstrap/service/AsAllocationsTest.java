@@ -14,8 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.service;
 
+import net.arin.rdap_bootstrap.service.AsAllocations;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

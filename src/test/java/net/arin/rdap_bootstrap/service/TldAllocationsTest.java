@@ -14,12 +14,29 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.service;
+
+import net.arin.rdap_bootstrap.service.TldAllocations;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * @version $Rev$, $Date$
  */
-public interface HitCounter
+public class TldAllocationsTest
 {
-    public void incrementCounter( String key );
+    @Test
+    public void testAllocations() throws Exception
+    {
+        TldAllocations tldAllocations = new TldAllocations();
+        tldAllocations.loadData();
+
+        assertEquals( "://rdap.XN--0ZWM56D", tldAllocations.getUrl( "XN--0ZWM56D" ) );
+        assertEquals( "://rdap.COM", tldAllocations.getUrl( "COM" ) );
+        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "AERO" ) );
+        assertEquals( "://rdap.DE", tldAllocations.getUrl( "DE" ) );
+        assertEquals( "://rdap.DE", tldAllocations.getUrl( "de" ) );
+        assertEquals( "://rdap.AERO", tldAllocations.getUrl( "aero" ) );
+    }
 }

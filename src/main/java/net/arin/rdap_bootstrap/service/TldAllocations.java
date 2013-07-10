@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.service;
 
 import java.io.InputStream;
 import java.util.HashMap;

@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.service;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -23,23 +23,24 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 /**
  * @version $Rev$, $Date$
  */
-public class IpV4Allocations extends DefaultHandler
+public class AsAllocations extends DefaultHandler
 {
     private Record record = null;
     private String tempChars = null;
-    private HashMap<Integer,String> allocations = new HashMap<Integer, String>(  );
+    private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
     private RirMap rirMap = new RirMap();
 
     public void loadData()
         throws Exception
     {
         rirMap.loadData();
-        InputStream inputStream = getClass().getResourceAsStream( "/v4_allocations.xml" );
+        InputStream inputStream = getClass().getResourceAsStream( "/as_allocations.xml" );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         sp.parse( inputStream, this );
@@ -65,113 +66,83 @@ public class IpV4Allocations extends DefaultHandler
     @Override
     public void endElement( String uri, String localName, String qName ) throws SAXException
     {
-        if( qName.equals( "prefix" ) )
+        if( qName.equals( "number" ) )
         {
-            record.prefix = tempChars;
+            record.number = tempChars;
         }
-        else if( qName.equals( "designation" ) )
+        else if( qName.equals( "description" ) )
         {
-            record.designation = tempChars;
-        }
-        else if( qName.equals( "status" ) )
-        {
-            record.status = tempChars;
+            record.description = tempChars;
         }
         else if( qName.equals( "record" ) )
         {
-            int key = Integer.parseInt( record.prefix.split( "/" )[0] );
+            long key = Long.parseLong( record.number.split( "-" )[0] );
             String value = "(unknown)";
-            if( record.designation.equals( "ARIN" ) )
+            if( record.description.equals( "Assigned by ARIN" ) )
             {
                 value = rirMap.getRirUrl( "ARIN" );
             }
-            else if( record.designation.equals( "Administered by ARIN" ) )
-            {
-                value = rirMap.getRirUrl( "ARIN" );
-            }
-            else if( record.designation.equals( "RIPE NCC" ) )
+            else if( record.description.equals( "Assigned by RIPE NCC" ) )
             {
                 value = rirMap.getRirUrl( "RIPE" );
             }
-            else if( record.designation.equals( "Administered by RIPE NCC" ) )
-            {
-                value = rirMap.getRirUrl( "RIPE" );
-            }
-            else if( record.designation.equals( "APNIC" ) )
+            else if( record.description.equals( "Assigned by APNIC" ) )
             {
                 value = rirMap.getRirUrl( "APNIC" );
             }
-            else if( record.designation.equals( "Administered by APNIC" ) )
-            {
-                value = rirMap.getRirUrl( "APNIC" );
-            }
-            else if( record.designation.equals( "LACNIC" ) )
+            else if( record.description.equals( "Assigned by LACNIC" ) )
             {
                 value = rirMap.getRirUrl( "LACNIC" );
             }
-            else if( record.designation.equals( "Administered by LACNIC" ) )
-            {
-                value = rirMap.getRirUrl( "LACNIC" );
-            }
-            else if( record.designation.equals( "AFRINIC" ) )
+            else if( record.description.equals( "Assigned by AFRINIC" ) )
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            else if( record.designation.equals( "Administered by AFRINIC" ) )
-            {
-                value = rirMap.getRirUrl( "AFRINIC" );
-            }
-            else if( record.designation.startsWith( "IANA" ) )
+            else if( record.description.equals( "Reserved" ) )
             {
                 value = rirMap.getRirUrl( "IANA" );
             }
-            else if( record.status.equals( "LEGACY" ) )
-            {
-                value = rirMap.getRirUrl( "ARIN" );
-            }
-            else if( record.status.equals( "RESERVED" ) )
+            else if( record.description.equals( "Unallocated" ) )
             {
                 value = rirMap.getRirUrl( "IANA" );
             }
-            allocations.put( key, value );
+            else if( record.description.equals( "AS_TRANS" ) )
+            {
+                value = rirMap.getRirUrl( "IANA" );
+            }
+            if( !allocations.containsKey( key ) )
+            {
+                allocations.put( key, value );
+            }
         }
     }
 
-    public String getUrl( int prefix )
+    public String getUrl( long number )
     {
-        return getUrl( prefix, null );
-    }
+        return getUrl( number, null );
+    };
 
-    public String getUrl( int prefix, HitCounter hitCounter )
+    public String getUrl( long number, HitCounter hitCounter )
     {
-        String retval =  allocations.get( prefix );
-        if( retval != null && hitCounter != null )
+        Entry<Long, String> entry = allocations.floorEntry( number );
+        if( hitCounter != null && entry.getValue() != null )
         {
-            hitCounter.incrementCounter( retval );
+            hitCounter.incrementCounter( entry.getValue() );
         }
-        return retval;
+        return entry.getValue();
     }
 
-    public void addIp4CountersToStatistics( Statistics stats )
+    public void addAsCountersToStatistics( Statistics stats )
     {
         for ( String s : allocations.values() )
         {
-            stats.addIp4RirCounter( s );
-        }
-    }
-
-    public void addDomainRirCountersToStatistics( Statistics stats )
-    {
-        for ( String s : allocations.values() )
-        {
-            stats.addDomainRirCounter( s );
+            stats.addAsRirCounter( s );
         }
     }
 
     class Record
     {
-        public String prefix;
-        public String designation;
-        public String status;
+        public String number;
+        public String description;
     }
 }

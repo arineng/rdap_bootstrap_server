@@ -14,10 +14,11 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.service;
 
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
+import net.arin.rdap_bootstrap.service.IpV6Allocations;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
