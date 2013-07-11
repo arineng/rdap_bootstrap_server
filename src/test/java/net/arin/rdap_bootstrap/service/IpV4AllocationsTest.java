@@ -43,4 +43,42 @@ public class IpV4AllocationsTest
         assertEquals( "://rdap.lacnic.net", v4.getUrl( 191 ) );
         assertEquals( "://rdap.iana.net", v4.getUrl( 224 ) );
     }
+
+    @Test
+    public void testIp4HitCounter() throws Exception
+    {
+        IpV4Allocations v4 = new IpV4Allocations();
+        v4.loadData();
+        Statistics statistics = new Statistics();
+        v4.addIp4CountersToStatistics( statistics );
+
+        v4.getUrl( 3, statistics.getIp4RirHitCounter() );
+        assertEquals( 1, statistics.getIp4RirHits().get( "ARIN" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        v4.getUrl( 3, statistics.getIp4RirHitCounter() );
+        assertEquals( 2, statistics.getIp4RirHits().get( "ARIN" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
+
+    @Test
+    public void testDomainHitCounter() throws Exception
+    {
+        IpV4Allocations v4 = new IpV4Allocations();
+        v4.loadData();
+        Statistics statistics = new Statistics();
+        v4.addDomainRirCountersToStatistics( statistics );
+
+        v4.getUrl( 3, statistics.getDomainRirHitCounter() );
+        assertEquals( 1, statistics.getDomainRirHits().get( "ARIN" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        v4.getUrl( 3, statistics.getDomainRirHitCounter() );
+        assertEquals( 2, statistics.getDomainRirHits().get( "ARIN" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
 }

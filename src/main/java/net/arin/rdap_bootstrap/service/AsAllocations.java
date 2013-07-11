@@ -77,7 +77,7 @@ public class AsAllocations extends DefaultHandler
         else if( qName.equals( "record" ) )
         {
             long key = Long.parseLong( record.number.split( "-" )[0] );
-            String value = "(unknown)";
+            String value = rirMap.getRirUrl( "IANA" );
             if( record.description.equals( "Assigned by ARIN" ) )
             {
                 value = rirMap.getRirUrl( "ARIN" );
@@ -98,18 +98,6 @@ public class AsAllocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            else if( record.description.equals( "Reserved" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
-            }
-            else if( record.description.equals( "Unallocated" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
-            }
-            else if( record.description.equals( "AS_TRANS" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
-            }
             if( !allocations.containsKey( key ) )
             {
                 allocations.put( key, value );
@@ -125,7 +113,7 @@ public class AsAllocations extends DefaultHandler
     public String getUrl( long number, HitCounter hitCounter )
     {
         Entry<Long, String> entry = allocations.floorEntry( number );
-        if( hitCounter != null && entry.getValue() != null )
+        if( hitCounter != null )
         {
             hitCounter.incrementCounter( entry.getValue() );
         }
@@ -136,7 +124,7 @@ public class AsAllocations extends DefaultHandler
     {
         for ( String s : allocations.values() )
         {
-            stats.addAsRirCounter( s );
+            stats.addAsRirCounter( rirMap.getRirFromUrl( s ) );
         }
     }
 

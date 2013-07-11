@@ -39,4 +39,45 @@ public class TldAllocationsTest
         assertEquals( "://rdap.DE", tldAllocations.getUrl( "de" ) );
         assertEquals( "://rdap.AERO", tldAllocations.getUrl( "aero" ) );
     }
+
+    @Test
+    public void testDomainHitCounter() throws Exception
+    {
+        TldAllocations tldAllocations = new TldAllocations();
+        tldAllocations.loadData();
+        Statistics statistics = new Statistics();
+        tldAllocations.addDomainTldCountersToStatistics( statistics );
+
+        tldAllocations.getUrl( "COM", statistics.getDomainTldHitCounter() );
+        assertEquals( 1, statistics.getDomainTldHits().get( "COM" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        tldAllocations.getUrl( "com", statistics.getDomainTldHitCounter() );
+        assertEquals( 2, statistics.getDomainTldHits().get( "COM" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        tldAllocations.getUrl( "foobar", statistics.getDomainTldHitCounter() );
+        assertEquals( 1, statistics.getTotalMisses().get() );
+    }
+
+    @Test
+    public void testNsHitCounter() throws Exception
+    {
+        TldAllocations tldAllocations = new TldAllocations();
+        tldAllocations.loadData();
+        Statistics statistics = new Statistics();
+        tldAllocations.addNsTldCountersToStatistics( statistics );
+
+        tldAllocations.getUrl( "COM", statistics.getNsTldHitCounter() );
+        assertEquals( 1, statistics.getNsTldHits().get( "COM" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        tldAllocations.getUrl( "com", statistics.getNsTldHitCounter() );
+        assertEquals( 2, statistics.getNsTldHits().get( "COM" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
 }

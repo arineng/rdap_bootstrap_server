@@ -80,7 +80,7 @@ public class IpV4Allocations extends DefaultHandler
         else if( qName.equals( "record" ) )
         {
             int key = Integer.parseInt( record.prefix.split( "/" )[0] );
-            String value = "(unknown)";
+            String value = rirMap.getRirUrl( "IANA" );
             if( record.designation.equals( "ARIN" ) )
             {
                 value = rirMap.getRirUrl( "ARIN" );
@@ -121,17 +121,9 @@ public class IpV4Allocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            else if( record.designation.startsWith( "IANA" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
-            }
             else if( record.status.equals( "LEGACY" ) )
             {
                 value = rirMap.getRirUrl( "ARIN" );
-            }
-            else if( record.status.equals( "RESERVED" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
             }
             allocations.put( key, value );
         }
@@ -156,7 +148,7 @@ public class IpV4Allocations extends DefaultHandler
     {
         for ( String s : allocations.values() )
         {
-            stats.addIp4RirCounter( s );
+            stats.addIp4RirCounter( rirMap.getRirFromUrl( s ) );
         }
     }
 
@@ -164,7 +156,7 @@ public class IpV4Allocations extends DefaultHandler
     {
         for ( String s : allocations.values() )
         {
-            stats.addDomainRirCounter( s );
+            stats.addDomainRirCounter( rirMap.getRirFromUrl( s ) );
         }
     }
 

@@ -52,7 +52,7 @@ public class RirMap
 
     public void addEntityRirCountersToStatistics( Statistics stats )
     {
-        for ( Object s : rirMap.values() )
+        for ( Object s : rirMap.keySet() )
         {
             stats.addEntityRirCounter( s.toString() );
         }

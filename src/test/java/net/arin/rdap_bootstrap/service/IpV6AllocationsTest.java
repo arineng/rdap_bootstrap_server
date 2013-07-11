@@ -49,4 +49,42 @@ public class IpV6AllocationsTest
         assertEquals( "://rdap.afrinic.net", v6.getUrl( IPv6Network.fromString( "2c00:0000::/12" )) );
         assertEquals( "://rdap.lacnic.net", v6.getUrl( IPv6Network.fromString( "2800:0000::/12" ) ) );
     }
+
+    @Test
+    public void testIp6HitCounter() throws Exception
+    {
+        IpV6Allocations v6 = new IpV6Allocations();
+        v6.loadData();
+        Statistics statistics = new Statistics();
+        v6.addIp6CountersToStatistics( statistics );
+
+        v6.getUrl(IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getIp6RirHitCounter() );
+        assertEquals( 1, statistics.getIp6RirHits().get( "ARIN" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        v6.getUrl( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getIp6RirHitCounter() );
+        assertEquals( 2, statistics.getIp6RirHits().get( "ARIN" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
+
+    @Test
+    public void testDomainHitCounter() throws Exception
+    {
+        IpV6Allocations v6 = new IpV6Allocations();
+        v6.loadData();
+        Statistics statistics = new Statistics();
+        v6.addDomainRirCountersToStatistics( statistics );
+
+        v6.getUrl(IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getDomainRirHitCounter() );
+        assertEquals( 1, statistics.getDomainRirHits().get( "ARIN" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        v6.getUrl(IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getDomainRirHitCounter() );
+        assertEquals( 2, statistics.getDomainRirHits().get( "ARIN" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
 }

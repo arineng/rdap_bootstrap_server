@@ -47,4 +47,23 @@ public class AsAllocationsTest
         assertEquals( "://rdap.iana.net", asAllocations.getUrl( 394240 ) );
         assertEquals( "://rdap.iana.net", asAllocations.getUrl( 4294967294L ) );
     }
+
+    @Test
+    public void testHitCounter() throws Exception
+    {
+        AsAllocations asAllocations = new AsAllocations();
+        asAllocations.loadData();
+        Statistics statistics = new Statistics();
+        asAllocations.addAsCountersToStatistics( statistics );
+
+        asAllocations.getUrl( 1, statistics.getAsHitCounter() );
+        assertEquals( 1, statistics.getAsRirHits().get( "ARIN" ).get() );
+        assertEquals( 1, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+
+        asAllocations.getUrl( 1, statistics.getAsHitCounter() );
+        assertEquals( 2, statistics.getAsRirHits().get( "ARIN" ).get() );
+        assertEquals( 2, statistics.getTotalHits().get() );
+        assertEquals( 0, statistics.getTotalMisses().get() );
+    }
 }

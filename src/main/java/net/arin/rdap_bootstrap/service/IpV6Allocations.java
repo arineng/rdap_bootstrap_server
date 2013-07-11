@@ -87,7 +87,7 @@ public class IpV6Allocations extends DefaultHandler
         {
             IPv6Network v6net = IPv6Network.fromString( record.prefix );
             long key = v6net.getFirst().getHighBits();
-            String value = "(unknown)";
+            String value = rirMap.getRirUrl( "IANA" );
             if( record.description.equals( "ARIN" ) )
             {
                 value = rirMap.getRirUrl( "ARIN" );
@@ -107,14 +107,6 @@ public class IpV6Allocations extends DefaultHandler
             else if( record.description.equals( "AFRINIC" ) )
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
-            }
-            else if( record.description.startsWith( "IANA" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
-            }
-            else if( record.status.equals( "RESERVED" ) )
-            {
-                value = rirMap.getRirUrl( "IANA" );
             }
             allocations.put( key, value );
         }
@@ -159,7 +151,7 @@ public class IpV6Allocations extends DefaultHandler
     {
         for ( String s : allocations.values() )
         {
-            stats.addIp6RirCounter( s );
+            stats.addIp6RirCounter( rirMap.getRirFromUrl( s ) );
         }
     }
 
@@ -167,7 +159,7 @@ public class IpV6Allocations extends DefaultHandler
     {
         for ( String s : allocations.values() )
         {
-            stats.addDomainRirCounter( s );
+            stats.addDomainRirCounter( rirMap.getRirFromUrl( s ) );
         }
     }
 

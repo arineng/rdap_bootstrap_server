@@ -160,7 +160,7 @@ public class Statistics
         {
             public void incrementCounter( String url )
             {
-                incrementRirCounter( entityRirHits, url );
+                incrementRirCounter( domainRirHits, url );
             }
         }
         return new AsHitCounter();
@@ -168,18 +168,15 @@ public class Statistics
 
     private void incrementTldCounter( HashMap<String, AtomicLong> hashMap, String key )
     {
-        if( key != null )
+        AtomicLong hits = hashMap.get( key );
+        if ( hits != null )
         {
-            AtomicLong hits = hashMap.get( key );
-            if( hits != null )
-            {
-                hits.incrementAndGet();
-                totalHits.incrementAndGet();
-            }
-            else
-            {
-                totalMisses.incrementAndGet();
-            }
+            hits.incrementAndGet();
+            totalHits.incrementAndGet();
+        }
+        else
+        {
+            totalMisses.incrementAndGet();
         }
     }
 
@@ -187,9 +184,9 @@ public class Statistics
     {
         class AsHitCounter implements HitCounter
         {
-            public void incrementCounter( String url )
+            public void incrementCounter( String tld )
             {
-                incrementTldCounter( domainTldHits, url );
+                incrementTldCounter( domainTldHits, tld );
             }
         }
         return new AsHitCounter();
@@ -199,9 +196,9 @@ public class Statistics
     {
         class AsHitCounter implements HitCounter
         {
-            public void incrementCounter( String url )
+            public void incrementCounter( String tld )
             {
-                incrementTldCounter( nsTldHits, url );
+                incrementTldCounter( nsTldHits, tld );
             }
         }
         return new AsHitCounter();

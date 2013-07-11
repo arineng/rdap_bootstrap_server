@@ -336,7 +336,7 @@ public class RedirectServlet extends HttpServlet
         int i = 0;
         for ( Entry<String, AtomicLong> entry : hashMap.entrySet() )
         {
-            description[ i++ ] = String.format( "%6s = %5d", entry.getKey(), entry.getValue().get() );
+            description[ i++ ] = String.format( "%-25s = %5d", entry.getKey(), entry.getValue().get() );
         }
         notice.setDescription( description );
         return notice;
@@ -360,7 +360,7 @@ public class RedirectServlet extends HttpServlet
         notice.setTitle( "Totals" );
         String[] description = new String[ 2 ];
         description[ 0 ] = String.format( "Hits   = %5d", statistics.getTotalHits().get() );
-        description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalHits().get() );
+        description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalMisses().get() );
         notice.setDescription( description );
         notices[ 7 ] = notice;
 

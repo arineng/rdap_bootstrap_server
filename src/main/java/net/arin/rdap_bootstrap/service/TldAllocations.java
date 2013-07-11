@@ -38,7 +38,7 @@ public class TldAllocations
         {
             String key = entry.getKey().toString().trim();
             String value = entry.getValue().toString().trim();
-            allocations.put( key, value );
+            allocations.put( key.toUpperCase(), value );
         }
     }
 
@@ -49,17 +49,18 @@ public class TldAllocations
 
     public String getUrl( String tld, HitCounter hitCounter )
     {
-        String retval = allocations.get( tld.toUpperCase() );
+        tld = tld.toUpperCase();
+        String retval = allocations.get( tld );
         if( hitCounter != null )
         {
-            hitCounter.incrementCounter( retval );
+            hitCounter.incrementCounter( tld );
         }
         return retval;
     }
 
     public void addDomainTldCountersToStatistics( Statistics stats )
     {
-        for ( String s : allocations.values() )
+        for ( String s : allocations.keySet() )
         {
             stats.addDomainTldCounter( s );
         }
