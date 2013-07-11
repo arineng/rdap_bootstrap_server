@@ -1,0 +1,24 @@
+          ------------------------------
+          RDAP Bootstrap Web Application
+          ------------------------------
+
+    The Registry Data Access Protocol (RDAP) is a protocol under development by the IETF as a
+    replacement for the ancient Whois protocol. The purpose of the protocol is to provide
+    access to Domain Name Registries (DNRs) and Regional Internet Registries (RIRs).
+
+    Though RDAP is a more modern protocol, some of the same infrastructure issues exist with it
+    as with Whois. One such issue is bootstrapping, which is the problem of instructing RDAP
+    clients where to find authoritative RDAP servers.
+
+    This web application is an RDAP bootstrap server. The intent is that RDAP clients without
+    their own bootstrap knowledge will send their first request to a bootstrap server. The
+    bootstrap server will then redirect RDAP clients to the most appropriate authoritative
+    RDAP server.
+
+    As RDAP is still a specification under development and many DNRs and RIRs still do not have
+    RDAP servers available, this software is currently provided as a proof-of-concept. As RDAP
+    progresses, features will be added to this software to make it more usable.
+
+    RDAP is an HTTP based, RESTful style protocol using JSON. The standard is being developed
+    by the WEIRDS working group of the IETF. The specifications for RDAP can be found
+    {{{http://datatracker.ietf.org/wg/weirds/}here}}.
