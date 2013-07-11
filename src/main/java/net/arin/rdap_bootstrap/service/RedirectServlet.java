@@ -183,6 +183,7 @@ public class RedirectServlet extends HttpServlet
         }
         else if( pathInfo.startsWith( "/help" ) )
         {
+            resp.setContentType( "application/rdap+json" );
             makeHelp( resp.getOutputStream() );
         }
         else
@@ -335,7 +336,7 @@ public class RedirectServlet extends HttpServlet
         int i = 0;
         for ( Entry<String, AtomicLong> entry : hashMap.entrySet() )
         {
-            description[ i++ ] = String.format( "%6 = %5d", entry.getKey(), entry.getValue() );
+            description[ i++ ] = String.format( "%6s = %5d", entry.getKey(), entry.getValue().get() );
         }
         notice.setDescription( description );
         return notice;
@@ -358,8 +359,8 @@ public class RedirectServlet extends HttpServlet
         Notice notice = new Notice();
         notice.setTitle( "Totals" );
         String[] description = new String[ 2 ];
-        description[ 0 ] = String.format( "Hits   = %5d", statistics.getTotalHits() );
-        description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalHits() );
+        description[ 0 ] = String.format( "Hits   = %5d", statistics.getTotalHits().get() );
+        description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalHits().get() );
         notice.setDescription( description );
         notices[ 7 ] = notice;
 

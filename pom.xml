@@ -29,7 +29,4 @@
           <version>2.2.0</version>
       </dependency>
   </dependencies>
-  <build>
-    <finalName>rdap_root_redirector</finalName>
-  </build>
 </project>
