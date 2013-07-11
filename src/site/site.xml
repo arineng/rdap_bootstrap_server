@@ -23,6 +23,7 @@
             <item name="Index" href="index.html" collapse="true">
             </item>
             <item name="License" href="license.html"/>
+            <item name="Getting and Installing" href="getting_and_installing.html"/>
         </menu>
 
     </body>
