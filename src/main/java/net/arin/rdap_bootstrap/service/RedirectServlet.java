@@ -340,6 +340,11 @@ public class RedirectServlet extends HttpServlet
             HitCounter hitCounter = statistics.getEntityTldHitCounter();
             hitCounter.incrementCounter( retval );
         }
+        else
+        {
+            HitCounter hitCounter = statistics.getEntityTldHitCounter();
+            hitCounter.incrementCounter( "" ); //record a miss
+        }
         return retval;
     }
 
