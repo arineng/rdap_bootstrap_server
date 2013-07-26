@@ -32,16 +32,19 @@ public class IpV4Allocations extends DefaultHandler
 {
     private Record record = null;
     private String tempChars = null;
-    private HashMap<Integer,String> allocations = new HashMap<Integer, String>(  );
+    private volatile HashMap<Integer,String> allocations = new HashMap<Integer, String>(  );
+    private HashMap<Integer,String> _allocations;
     private RirMap rirMap = new RirMap();
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
         rirMap.loadData( resourceFiles );
+        _allocations = new HashMap<Integer, String>(  );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         sp.parse( resourceFiles.getInputStream( ResourceFiles.V4_ALLOCATIONS ), this );
+        allocations = _allocations;
     }
 
     @Override
@@ -124,7 +127,7 @@ public class IpV4Allocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "ARIN" );
             }
-            allocations.put( key, value );
+            _allocations.put( key, value );
         }
     }
 

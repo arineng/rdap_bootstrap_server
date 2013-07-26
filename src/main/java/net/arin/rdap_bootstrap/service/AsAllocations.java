@@ -23,6 +23,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -33,16 +34,19 @@ public class AsAllocations extends DefaultHandler
 {
     private Record record = null;
     private String tempChars = null;
-    private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private volatile TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private TreeMap<Long,String> _allocations;
     private RirMap rirMap = new RirMap();
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
         rirMap.loadData( resourceFiles );
+        _allocations = new TreeMap<Long, String>(  );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         sp.parse( resourceFiles.getInputStream( ResourceFiles.AS_ALLOCATIONS ), this );
+        allocations = _allocations;
     }
 
     @Override
@@ -97,9 +101,9 @@ public class AsAllocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            if( !allocations.containsKey( key ) )
+            if( !_allocations.containsKey( key ) )
             {
-                allocations.put( key, value );
+                _allocations.put( key, value );
             }
         }
     }

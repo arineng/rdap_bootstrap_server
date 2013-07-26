@@ -26,19 +26,22 @@ import java.util.Properties;
  */
 public class TldAllocations
 {
-    private HashMap<String,String> allocations = new HashMap<String, String>(  );
+    private volatile HashMap<String,String> allocations = new HashMap<String, String>(  );
+    private HashMap<String,String> _allocations;
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
         Properties props = new Properties(  );
         props.load( resourceFiles.getInputStream( ResourceFiles.TLD_MAP ) );
+        _allocations = new HashMap<String, String>(  );
         for( Entry<Object, Object> entry: props.entrySet() )
         {
             String key = entry.getKey().toString().trim();
             String value = entry.getValue().toString().trim();
-            allocations.put( key.toUpperCase(), value );
+            _allocations.put( key.toUpperCase(), value );
         }
+        allocations = _allocations;
     }
 
     public String getUrl( String tld )

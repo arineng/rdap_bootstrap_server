@@ -35,16 +35,19 @@ public class IpV6Allocations extends DefaultHandler
 {
     private Record record = null;
     private String tempChars = null;
-    private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private volatile TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
+    private TreeMap<Long,String> _allocations;
     private RirMap rirMap = new RirMap();
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
         rirMap.loadData( resourceFiles );
+        _allocations = new TreeMap<Long, String>(  );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         sp.parse( resourceFiles.getInputStream( ResourceFiles.V6_ALLOCATIONS ), this );
+        allocations = _allocations;
     }
 
     @Override
@@ -107,7 +110,7 @@ public class IpV6Allocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            allocations.put( key, value );
+            _allocations.put( key, value );
         }
     }
 

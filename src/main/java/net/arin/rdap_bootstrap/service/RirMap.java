@@ -26,18 +26,22 @@ import java.util.Properties;
  */
 public class RirMap
 {
-    private Properties rirMap = new Properties(  );
-    private HashMap<String,String> reverseMap = new HashMap<String, String>(  );
+    private volatile Properties rirMap = new Properties(  );
+    private volatile HashMap<String,String> reverseMap = new HashMap<String, String>(  );
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
         InputStream inputStream = resourceFiles.getInputStream( ResourceFiles.RIR_MAP );
-        rirMap.load( inputStream );
-        for ( Entry<Object, Object> entry : rirMap.entrySet() )
+        Properties _rirMap = new Properties(  );
+        _rirMap.load( inputStream );
+        HashMap<String,String> _reverseMap = new HashMap<String, String>(  );
+        for ( Entry<Object, Object> entry : _rirMap.entrySet() )
         {
-            reverseMap.put( (String)entry.getValue(), (String)entry.getKey() );
+            _reverseMap.put( (String)entry.getValue(), (String)entry.getKey() );
         }
+        rirMap = _rirMap;
+        reverseMap = _reverseMap;
     }
 
     public String getRirUrl( String rir )
