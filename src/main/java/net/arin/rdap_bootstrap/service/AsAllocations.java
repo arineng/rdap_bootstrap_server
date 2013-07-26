@@ -101,7 +101,7 @@ public class AsAllocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            if( !_allocations.containsKey( key ) )
+            if( !_allocations.containsKey( key ) && value != null )
             {
                 _allocations.put( key, value );
             }

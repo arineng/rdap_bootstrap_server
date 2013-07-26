@@ -127,7 +127,10 @@ public class IpV4Allocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "ARIN" );
             }
-            _allocations.put( key, value );
+            if( value != null )
+            {
+                _allocations.put( key, value );
+            }
         }
     }
 

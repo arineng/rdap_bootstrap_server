@@ -110,7 +110,10 @@ public class IpV6Allocations extends DefaultHandler
             {
                 value = rirMap.getRirUrl( "AFRINIC" );
             }
-            _allocations.put( key, value );
+            if( value != null )
+            {
+                _allocations.put( key, value );
+            }
         }
     }
 

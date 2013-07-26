@@ -35,6 +35,8 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -47,29 +49,26 @@ public class RedirectServlet extends HttpServlet
     private IpV4Allocations ipV4Allocations = new IpV4Allocations();
     private TldAllocations tldAllocations = new TldAllocations();
 
-    private Statistics statistics;
+    private volatile Statistics statistics;
+
+    private ResourceFiles resourceFiles;
+    private Timer timer;
+
+    private static final long CHECK_CONFIG_FILES = 60000L;
 
     @Override
     public void init( ServletConfig config ) throws ServletException
     {
         try
         {
-            ResourceFiles resourceFiles = new ResourceFiles();
-            asAllocations.loadData( resourceFiles );
-            ipV4Allocations.loadData( resourceFiles );
-            ipV6Allocations.loadData( resourceFiles );
-            tldAllocations.loadData( resourceFiles );
+            LoadConfigTask loadConfigTask = new LoadConfigTask();
+            loadConfigTask.loadStats();
 
-            //setup statistics
-            statistics = new Statistics( resourceFiles );
-            asAllocations.addAsCountersToStatistics( statistics );
-            ipV4Allocations.addIp4CountersToStatistics( statistics );
-            ipV4Allocations.addDomainRirCountersToStatistics( statistics );
-            ipV6Allocations.addIp6CountersToStatistics( statistics );
-            ipV6Allocations.addDomainRirCountersToStatistics( statistics );
-            tldAllocations.addDomainTldCountersToStatistics( statistics );
-            tldAllocations.addNsTldCountersToStatistics( statistics );
-            tldAllocations.addEntityTldCountersToStatistics( statistics );
+            if( config != null )
+            {
+                timer = new Timer(  );
+                timer.schedule( loadConfigTask, CHECK_CONFIG_FILES, CHECK_CONFIG_FILES );
+            }
         }
         catch ( Exception e )
         {
@@ -386,5 +385,82 @@ public class RedirectServlet extends HttpServlet
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer( new DefaultPrettyPrinter(  ) );
         writer.writeValue( outputStream, response );
+    }
+
+    private class LoadConfigTask extends TimerTask
+    {
+        private boolean isModified( long currentTime, long lastModified )
+        {
+            if( ( currentTime - CHECK_CONFIG_FILES ) < lastModified )
+            {
+                return true;
+            }
+            //else
+            return false;
+        }
+
+        @Override
+        public void run()
+        {
+            boolean load = false;
+            long currentTime = System.currentTimeMillis();
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.AS_ALLOCATIONS ) ) )
+            {
+                load = true;
+            }
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.RIR_MAP ) ) )
+            {
+                load = true;
+            }
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.TLD_MAP ) ) )
+            {
+                load = true;
+            }
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.V4_ALLOCATIONS ) ) )
+            {
+                load = true;
+            }
+            if( isModified( currentTime,
+                resourceFiles.getLastModified( ResourceFiles.V6_ALLOCATIONS ) ) )
+            {
+                load = true;
+            }
+            if( load )
+            {
+                try
+                {
+                    loadStats();
+                }
+                catch ( Exception e )
+                {
+                    getServletContext().log( "Problem loading config", e );
+                }
+            }
+        }
+
+        public void loadStats() throws Exception
+        {
+            if( getServletConfig() != null )
+            {
+                getServletContext().log( "Loading resource files and reloading statistics." );
+            }
+            resourceFiles = new ResourceFiles();
+            asAllocations.loadData( resourceFiles );
+            ipV4Allocations.loadData( resourceFiles );
+            ipV6Allocations.loadData( resourceFiles );
+            tldAllocations.loadData( resourceFiles );
+
+            //setup statistics
+            Statistics _statistics = new Statistics( resourceFiles );
+            asAllocations.addAsCountersToStatistics( _statistics );
+            ipV4Allocations.addIp4CountersToStatistics( _statistics );
+            ipV4Allocations.addDomainRirCountersToStatistics( _statistics );
+            ipV6Allocations.addIp6CountersToStatistics( _statistics );
+            ipV6Allocations.addDomainRirCountersToStatistics( _statistics );
+            tldAllocations.addDomainTldCountersToStatistics( _statistics );
+            tldAllocations.addNsTldCountersToStatistics( _statistics );
+            tldAllocations.addEntityTldCountersToStatistics( _statistics );
+            statistics = _statistics;
+        }
     }
 }
