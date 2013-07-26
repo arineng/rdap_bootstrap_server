@@ -35,14 +35,13 @@ public class IpV4Allocations extends DefaultHandler
     private HashMap<Integer,String> allocations = new HashMap<Integer, String>(  );
     private RirMap rirMap = new RirMap();
 
-    public void loadData()
+    public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
-        rirMap.loadData();
-        InputStream inputStream = getClass().getResourceAsStream( "/v4_allocations.xml" );
+        rirMap.loadData( resourceFiles );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
-        sp.parse( inputStream, this );
+        sp.parse( resourceFiles.getInputStream( ResourceFiles.V4_ALLOCATIONS ), this );
     }
 
     @Override

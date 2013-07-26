@@ -54,13 +54,14 @@ public class RedirectServlet extends HttpServlet
     {
         try
         {
-            asAllocations.loadData();
-            ipV4Allocations.loadData();
-            ipV6Allocations.loadData();
-            tldAllocations.loadData();
+            ResourceFiles resourceFiles = new ResourceFiles();
+            asAllocations.loadData( resourceFiles );
+            ipV4Allocations.loadData( resourceFiles );
+            ipV6Allocations.loadData( resourceFiles );
+            tldAllocations.loadData( resourceFiles );
 
             //setup statistics
-            statistics = new Statistics();
+            statistics = new Statistics( resourceFiles );
             asAllocations.addAsCountersToStatistics( statistics );
             ipV4Allocations.addIp4CountersToStatistics( statistics );
             ipV4Allocations.addDomainRirCountersToStatistics( statistics );

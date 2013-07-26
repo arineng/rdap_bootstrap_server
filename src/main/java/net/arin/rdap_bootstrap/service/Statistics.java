@@ -36,9 +36,9 @@ public class Statistics
 
     private RirMap rirMap = new RirMap();
 
-    public Statistics() throws Exception
+    public Statistics( ResourceFiles resourceFiles ) throws Exception
     {
-        rirMap.loadData();
+        rirMap.loadData( resourceFiles );
         rirMap.addEntityRirCountersToStatistics( this );
     }
 

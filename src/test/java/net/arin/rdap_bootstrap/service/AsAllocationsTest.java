@@ -30,7 +30,7 @@ public class AsAllocationsTest
     public void testAllocations() throws Exception
     {
         AsAllocations asAllocations = new AsAllocations();
-        asAllocations.loadData();
+        asAllocations.loadData( new ResourceFiles() );
 
         assertEquals( "://rdap.arin.net", asAllocations.getUrl( 1 ) );
         assertEquals( "://rdap.iana.net", asAllocations.getUrl( 0 ) );
@@ -52,8 +52,9 @@ public class AsAllocationsTest
     public void testHitCounter() throws Exception
     {
         AsAllocations asAllocations = new AsAllocations();
-        asAllocations.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        asAllocations.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         asAllocations.addAsCountersToStatistics( statistics );
 
         asAllocations.getUrl( 1, statistics.getAsHitCounter() );

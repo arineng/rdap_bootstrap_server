@@ -38,14 +38,13 @@ public class IpV6Allocations extends DefaultHandler
     private TreeMap<Long,String> allocations = new TreeMap<Long, String>(  );
     private RirMap rirMap = new RirMap();
 
-    public void loadData()
+    public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
-        rirMap.loadData();
-        InputStream inputStream = getClass().getResourceAsStream( "/v6_allocations.xml" );
+        rirMap.loadData( resourceFiles );
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
-        sp.parse( inputStream, this );
+        sp.parse( resourceFiles.getInputStream( ResourceFiles.V6_ALLOCATIONS ), this );
     }
 
     @Override

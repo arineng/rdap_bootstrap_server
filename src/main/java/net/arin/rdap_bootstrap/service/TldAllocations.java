@@ -28,12 +28,11 @@ public class TldAllocations
 {
     private HashMap<String,String> allocations = new HashMap<String, String>(  );
 
-    public void loadData()
+    public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
-        InputStream inputStream = getClass().getResourceAsStream( "/tld-map.properties" );
         Properties props = new Properties(  );
-        props.load( inputStream );
+        props.load( resourceFiles.getInputStream( ResourceFiles.TLD_MAP ) );
         for( Entry<Object, Object> entry: props.entrySet() )
         {
             String key = entry.getKey().toString().trim();

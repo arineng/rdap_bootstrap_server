@@ -30,7 +30,7 @@ public class IpV4AllocationsTest
     public void testAllocations() throws Exception
     {
         IpV4Allocations v4 = new IpV4Allocations();
-        v4.loadData();
+        v4.loadData( new ResourceFiles() );
 
         assertEquals( "://rdap.arin.net", v4.getUrl( 3 ) );
         assertEquals( "://rdap.apnic.net", v4.getUrl( 1 ) );
@@ -48,8 +48,9 @@ public class IpV4AllocationsTest
     public void testIp4HitCounter() throws Exception
     {
         IpV4Allocations v4 = new IpV4Allocations();
-        v4.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        v4.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         v4.addIp4CountersToStatistics( statistics );
 
         v4.getUrl( 3, statistics.getIp4RirHitCounter() );
@@ -67,8 +68,9 @@ public class IpV4AllocationsTest
     public void testDomainHitCounter() throws Exception
     {
         IpV4Allocations v4 = new IpV4Allocations();
-        v4.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        v4.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         v4.addDomainRirCountersToStatistics( statistics );
 
         v4.getUrl( 3, statistics.getDomainRirHitCounter() );

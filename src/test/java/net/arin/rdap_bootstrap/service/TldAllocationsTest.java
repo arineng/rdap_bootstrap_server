@@ -30,7 +30,7 @@ public class TldAllocationsTest
     public void testAllocations() throws Exception
     {
         TldAllocations tldAllocations = new TldAllocations();
-        tldAllocations.loadData();
+        tldAllocations.loadData( new ResourceFiles() );
 
         assertEquals( "://rdap.XN--0ZWM56D", tldAllocations.getUrl( "XN--0ZWM56D" ) );
         assertEquals( "://rdap.COM", tldAllocations.getUrl( "COM" ) );
@@ -44,8 +44,9 @@ public class TldAllocationsTest
     public void testDomainHitCounter() throws Exception
     {
         TldAllocations tldAllocations = new TldAllocations();
-        tldAllocations.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        tldAllocations.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         tldAllocations.addDomainTldCountersToStatistics( statistics );
 
         tldAllocations.getUrl( "COM", statistics.getDomainTldHitCounter() );
@@ -66,8 +67,9 @@ public class TldAllocationsTest
     public void testNsHitCounter() throws Exception
     {
         TldAllocations tldAllocations = new TldAllocations();
-        tldAllocations.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        tldAllocations.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         tldAllocations.addNsTldCountersToStatistics( statistics );
 
         tldAllocations.getUrl( "COM", statistics.getNsTldHitCounter() );

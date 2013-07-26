@@ -29,10 +29,10 @@ public class RirMap
     private Properties rirMap = new Properties(  );
     private HashMap<String,String> reverseMap = new HashMap<String, String>(  );
 
-    public void loadData()
+    public void loadData( ResourceFiles resourceFiles )
         throws Exception
     {
-        InputStream inputStream = getClass().getResourceAsStream( "/rir-map.properties" );
+        InputStream inputStream = resourceFiles.getInputStream( ResourceFiles.RIR_MAP );
         rirMap.load( inputStream );
         for ( Entry<Object, Object> entry : rirMap.entrySet() )
         {

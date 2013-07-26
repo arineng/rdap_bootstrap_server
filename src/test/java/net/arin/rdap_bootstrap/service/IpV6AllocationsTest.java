@@ -32,7 +32,7 @@ public class IpV6AllocationsTest
     public void testAllocations() throws Exception
     {
         IpV6Allocations v6 = new IpV6Allocations();
-        v6.loadData();
+        v6.loadData( new ResourceFiles() );
 
         assertEquals( "://rdap.arin.net", v6.getUrl( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ) ) );
         assertEquals( "://rdap.arin.net", v6.getUrl( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:ffff" ) ) );
@@ -54,8 +54,9 @@ public class IpV6AllocationsTest
     public void testIp6HitCounter() throws Exception
     {
         IpV6Allocations v6 = new IpV6Allocations();
-        v6.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        v6.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         v6.addIp6CountersToStatistics( statistics );
 
         v6.getUrl(IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getIp6RirHitCounter() );
@@ -73,8 +74,9 @@ public class IpV6AllocationsTest
     public void testDomainHitCounter() throws Exception
     {
         IpV6Allocations v6 = new IpV6Allocations();
-        v6.loadData();
-        Statistics statistics = new Statistics();
+        ResourceFiles resourceFiles = new ResourceFiles();
+        v6.loadData( resourceFiles );
+        Statistics statistics = new Statistics( resourceFiles );
         v6.addDomainRirCountersToStatistics( statistics );
 
         v6.getUrl(IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ), statistics.getDomainRirHitCounter() );
