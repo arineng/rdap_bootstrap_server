@@ -68,6 +68,7 @@ public class RedirectServlet extends HttpServlet
             ipV6Allocations.addDomainRirCountersToStatistics( statistics );
             tldAllocations.addDomainTldCountersToStatistics( statistics );
             tldAllocations.addNsTldCountersToStatistics( statistics );
+            tldAllocations.addEntityTldCountersToStatistics( statistics );
         }
         catch ( Exception e )
         {
@@ -303,6 +304,7 @@ public class RedirectServlet extends HttpServlet
     public String makeEntityBase( String pathInfo )
     {
         String retval = null;
+        //try the RIRs first
         if( pathInfo.endsWith( "-ARIN" ) )
         {
            retval = statistics.getRirMap().getRirUrl( "ARIN" );
@@ -323,8 +325,21 @@ public class RedirectServlet extends HttpServlet
         {
             retval = statistics.getRirMap().getRirUrl( "AFRINIC" );
         }
-        HitCounter hitCounter = statistics.getEntityRirHitCounter();
-        hitCounter.incrementCounter( retval );
+        if( retval != null )
+        {
+            HitCounter hitCounter = statistics.getEntityRirHitCounter();
+            hitCounter.incrementCounter( retval );
+            return retval;
+        }
+        //else try the TLDs
+        int i = pathInfo.lastIndexOf( "-" );
+        if( i != -1 && i != pathInfo.length() - 1 )
+        {
+            String tld = pathInfo.substring( i+1 );
+            retval = tldAllocations.getUrl( tld );
+            HitCounter hitCounter = statistics.getEntityTldHitCounter();
+            hitCounter.incrementCounter( retval );
+        }
         return retval;
     }
 
@@ -345,15 +360,16 @@ public class RedirectServlet extends HttpServlet
     public void makeHelp( OutputStream outputStream ) throws IOException
     {
         Response response = new Response( null );
-        Notice[] notices = new Notice[ 8 ];
+        Notice[] notices = new Notice[ 9 ];
 
         notices[ 0 ] = makeStatsNotice( "Autnum hits by RIR", statistics.getAsRirHits() );
         notices[ 1 ] = makeStatsNotice( "IPv4 hits by RIR", statistics.getIp4RirHits() );
         notices[ 2 ] = makeStatsNotice( "IPv6s hits by RIR", statistics.getIp6RirHits() );
         notices[ 3 ] = makeStatsNotice( "Entity hits by RIR", statistics.getEntityRirHits() );
-        notices[ 4 ] = makeStatsNotice( "Domain hits by RIR", statistics.getDomainRirHits() );
-        notices[ 5 ] = makeStatsNotice( "Domain hits by TLD", statistics.getDomainTldHits() );
-        notices[ 6 ] = makeStatsNotice( "NS hits by TLD", statistics.getNsTldHits() );
+        notices[ 4 ] = makeStatsNotice( "Entity hits by TLD", statistics.getEntityTldHits() );
+        notices[ 5 ] = makeStatsNotice( "Domain hits by RIR", statistics.getDomainRirHits() );
+        notices[ 6 ] = makeStatsNotice( "Domain hits by TLD", statistics.getDomainTldHits() );
+        notices[ 7 ] = makeStatsNotice( "NS hits by TLD", statistics.getNsTldHits() );
 
         //totals
         Notice notice = new Notice();
@@ -362,7 +378,7 @@ public class RedirectServlet extends HttpServlet
         description[ 0 ] = String.format( "Hits   = %5d", statistics.getTotalHits().get() );
         description[ 1 ] = String.format( "Misses = %5d", statistics.getTotalMisses().get() );
         notice.setDescription( description );
-        notices[ 7 ] = notice;
+        notices[ 8 ] = notice;
 
         response.setNotices( notices );
 

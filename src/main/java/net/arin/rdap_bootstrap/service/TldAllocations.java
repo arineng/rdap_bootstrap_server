@@ -73,4 +73,12 @@ public class TldAllocations
             stats.addNsTldCounter( s );
         }
     }
+
+    public void addEntityTldCountersToStatistics( Statistics stats )
+    {
+        for ( String s : allocations.keySet() )
+        {
+            stats.addEntityTldCounter( s );
+        }
+    }
 }

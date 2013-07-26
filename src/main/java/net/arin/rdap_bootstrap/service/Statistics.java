@@ -29,6 +29,7 @@ public class Statistics
     private HashMap<String,AtomicLong> ip4RirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> ip6RirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> entityRirHits = new HashMap<String, AtomicLong>(  );
+    private HashMap<String,AtomicLong> entityTldHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> domainRirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> domainTldHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> nsTldHits = new HashMap<String, AtomicLong>(  );
@@ -89,6 +90,11 @@ public class Statistics
     public HashMap<String, AtomicLong> getEntityRirHits()
     {
         return entityRirHits;
+    }
+
+    public HashMap<String, AtomicLong> getEntityTldHits()
+    {
+        return entityTldHits;
     }
 
     public HashMap<String, AtomicLong> getDomainRirHits()
@@ -204,6 +210,18 @@ public class Statistics
         return new AsHitCounter();
     }
 
+    public HitCounter getEntityTldHitCounter()
+    {
+        class AsHitCounter implements HitCounter
+        {
+            public void incrementCounter( String tld )
+            {
+                incrementTldCounter( entityTldHits, tld );
+            }
+        }
+        return new AsHitCounter();
+    }
+
     private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
     {
         if( !hashMap.containsKey( key ) )
@@ -245,5 +263,10 @@ public class Statistics
     public void addNsTldCounter( String tld )
     {
         addCounterToHashMap( nsTldHits, tld );
+    }
+
+    public void addEntityTldCounter( String tld )
+    {
+        addCounterToHashMap( entityTldHits, tld );
     }
 }
