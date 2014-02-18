@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013,2014 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,6 +14,8 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package net.arin.rdap_bootstrap.json;
+
+import java.util.List;
 
 /**
  * An RDAP JSON response.
@@ -58,5 +60,10 @@ public class Response
     public void setNotices( Notice[] notices )
     {
         this.notices = notices;
+    }
+
+    public void setNotices( List<Notice> notices )
+    {
+        this.notices = notices.toArray(this.notices);
     }
 }
