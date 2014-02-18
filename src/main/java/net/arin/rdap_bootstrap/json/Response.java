@@ -64,6 +64,6 @@ public class Response
 
     public void setNotices( List<Notice> notices )
     {
-        this.notices = notices.toArray(this.notices);
+        this.notices = notices.toArray( new Notice[ notices.size() ] );
     }
 }
