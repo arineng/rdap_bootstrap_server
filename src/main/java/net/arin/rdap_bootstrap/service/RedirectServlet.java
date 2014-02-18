@@ -372,6 +372,7 @@ public class RedirectServlet extends HttpServlet
         for (Entry<String, String> entry : tldAllocations.getAllocationMappings().entrySet())
         {
             String s = String.format( "%-8s -> http(s)%s", entry.getKey(), entry.getValue() );
+            description.add( s );
         }
         notice.setDescription( description.toArray( new String[ description.size() ] ) );
         return notice;
