@@ -44,6 +44,11 @@ public class RirMap
         reverseMap = _reverseMap;
     }
 
+    public Properties getPropertyMappings()
+    {
+        return rirMap;
+    }
+
     public String getRirUrl( String rir )
     {
         return rirMap.getProperty( rir );

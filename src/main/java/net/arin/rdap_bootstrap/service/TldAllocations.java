@@ -44,6 +44,11 @@ public class TldAllocations
         allocations = _allocations;
     }
 
+    public HashMap<String,String> getAllocationMappings()
+    {
+        return allocations;
+    }
+
     public String getUrl( String tld )
     {
         return getUrl( tld, null );
