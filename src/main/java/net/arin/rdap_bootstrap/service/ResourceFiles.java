@@ -19,6 +19,7 @@ import java.util.Properties;
 public class ResourceFiles
 {
     public final static String AS_ALLOCATIONS = "as_allocations";
+    public final static String AS_BOOTSTRAP   = "as_bootstrap";
     public final static String RIR_MAP        = "rir_map";
     public final static String TLD_MAP        = "tld_map";
     public final static String V4_ALLOCATIONS = "v4_allocations";

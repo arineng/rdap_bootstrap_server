@@ -44,6 +44,60 @@ public class JsonBootstrapFile
         public void addServiceUrl( String url );
     }
 
+    /**
+     * A utility class for referencing URLs.
+     */
+    public static class ServiceUrls
+    {
+        private ArrayList<String> urls = new ArrayList<String>();
+        private int httpIdx = -1;
+        private int httpsIdx = -1;
+
+        public void addUrl( String url )
+        {
+            if( url != null )
+            {
+                urls.add( url );
+                if( url.startsWith( "http://" ) )
+                {
+                    httpIdx = urls.size() -1;
+                }
+                else if( url.startsWith( "https://" ) )
+                {
+                    httpsIdx = urls.size() - 1;
+                }
+            }
+        }
+
+        public ArrayList<String> getUrls()
+        {
+            return urls;
+        }
+
+        public void setUrls( ArrayList<String> urls )
+        {
+            this.urls = urls;
+        }
+
+        public String getHttpUrl()
+        {
+            if( httpIdx != -1 ){
+                return urls.get( httpIdx );
+            }
+            //else
+            return null;
+        }
+
+        public String getHttpsUrl()
+        {
+            if( httpsIdx != -1 ){
+                return urls.get( httpsIdx );
+            }
+            //else
+            return null;
+        }
+    }
+
     public void loadData( InputStream inputStream, Handler handler )
         throws Exception
     {
@@ -100,23 +154,36 @@ public class JsonBootstrapFile
                             handler.startService();
                             while( jsonParser.nextToken() != JsonToken.END_ARRAY )
                             {
-                                if( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                                if( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
                                 {
-                                    throw new RuntimeException( "service entry at " +
-                                        jsonParser.getCurrentLocation() + " is not a string" );
+                                    throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
                                 }
                                 //else
-                                handler.addServiceEntry( jsonParser.getValueAsString() );
-                            }
-                            while( jsonParser.nextToken() != JsonToken.END_ARRAY )
-                            {
-                                if( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                                while( jsonParser.nextToken() != JsonToken.END_ARRAY )
                                 {
-                                    throw new RuntimeException( "service URL at " +
-                                        jsonParser.getCurrentLocation() + " is not a string" );
+                                    if( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                                    {
+                                        throw new RuntimeException( "service entry at " +
+                                            jsonParser.getCurrentLocation() + " is not a string" );
+                                    }
+                                    //else
+                                    handler.addServiceEntry( jsonParser.getValueAsString() );
+                                }
+                                if( jsonParser.nextToken() != JsonToken.START_ARRAY )
+                                {
+                                    throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
                                 }
                                 //else
-                                handler.addServiceUrl( jsonParser.getValueAsString() );
+                                while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
+                                {
+                                    if ( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                                    {
+                                        throw new RuntimeException( "service URL at " +
+                                            jsonParser.getCurrentLocation() + " is not a string" );
+                                    }
+                                    //else
+                                    handler.addServiceUrl( jsonParser.getValueAsString() );
+                                }
                             }
                             handler.endService();
                         }
