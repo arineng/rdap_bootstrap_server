@@ -1,0 +1,37 @@
+{
+  "rdap_bootstrap": {
+    "version": "1.0",
+    "publication": "2014-09-09T15:39:03-0400",
+    "services": [
+      [
+        [
+          "v4",
+          "v6",
+          "autnum"
+        ],
+        [
+          "https://rdappilot.arin.net/restfulwhoi/rdap",
+          "http://rdappilot.arin.net/restfulwhois/rdap"
+        ]
+      ],
+      [
+        [
+          "entity"
+        ],
+        [
+          "https://rdappilot.arin.net/restfulwhoi/rdap",
+          "http://rdappilot.arin.net/restfulwhois/rdap"
+        ]
+      ],
+      [
+        [
+          "domain"
+        ],
+        [
+          "https://tlab.verisign.com/COM",
+          "http://tlab.verisign.com/COM"
+        ]
+      ]
+    ]
+  }
+}

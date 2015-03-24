@@ -18,15 +18,16 @@ import java.util.Properties;
  */
 public class ResourceFiles
 {
-    public final static String AS_ALLOCATIONS   = "as_allocations";
-    public final static String AS_BOOTSTRAP     = "as_bootstrap";
-    public final static String RIR_MAP          = "rir_map";
-    public final static String TLD_MAP          = "tld_map";
-    public final static String DOMAIN_BOOTSTRAP = "domain_bootstrap";
-    public final static String V4_ALLOCATIONS   = "v4_allocations";
-    public final static String V4_BOOTSTRAP     = "v4_bootstrap";
-    public final static String V6_ALLOCATIONS   = "v6_allocations";
-    public final static String V6_BOOTSTRAP     = "v6_bootstrap";
+    public final static String DEFAULT_BOOTSTRAP = "default_bootstrap";
+    public final static String AS_ALLOCATIONS    = "as_allocations";
+    public final static String AS_BOOTSTRAP      = "as_bootstrap";
+    public final static String RIR_MAP           = "rir_map";
+    public final static String TLD_MAP           = "tld_map";
+    public final static String DOMAIN_BOOTSTRAP  = "domain_bootstrap";
+    public final static String V4_ALLOCATIONS    = "v4_allocations";
+    public final static String V4_BOOTSTRAP      = "v4_bootstrap";
+    public final static String V6_ALLOCATIONS    = "v6_allocations";
+    public final static String V6_BOOTSTRAP      = "v6_bootstrap";
 
     private Properties resourceFiles;
     private HashMap<String,Boolean> isFile;
