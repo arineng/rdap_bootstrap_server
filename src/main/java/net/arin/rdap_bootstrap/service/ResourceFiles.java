@@ -23,6 +23,7 @@ public class ResourceFiles
     public final static String RIR_MAP        = "rir_map";
     public final static String TLD_MAP        = "tld_map";
     public final static String V4_ALLOCATIONS = "v4_allocations";
+    public final static String V4_BOOTSTRAP   = "v4_bootstrap";
     public final static String V6_ALLOCATIONS = "v6_allocations";
 
     private Properties resourceFiles;
