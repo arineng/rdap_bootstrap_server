@@ -25,6 +25,7 @@ import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
 import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.Statistics.UrlHits;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -76,20 +77,23 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    protected void serve( BaseMaker baseMaker, DefaultBootstrap.Type defaultType, String pathInfo,
+    protected void serve( UrlHits urlHits, BaseMaker baseMaker, DefaultBootstrap.Type defaultType, String pathInfo,
                           HttpServletRequest req, HttpServletResponse resp )
         throws IOException
     {
         try
         {
+            UrlHits hits = urlHits;
             ServiceUrls urls = baseMaker.makeBase( pathInfo );
             if( urls == null && defaultType != null )
             {
                 urls = defaultBootstrap.getServiceUrls( defaultType );
+                hits = UrlHits.DEFAULTHITS;
             }
             if( urls == null )
             {
                 resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                statistics.getTotalMisses().incrementAndGet();
             }
             else
             {
@@ -105,6 +109,10 @@ public class RedirectServlet extends HttpServlet
                 else
                 {
                     redirectUrl = urls.getUrls().get( 0 ) + req.getPathInfo();
+                }
+                if( hits != null )
+                {
+                    hits.hit( redirectUrl );
                 }
                 resp.sendRedirect( redirectUrl );
             }
@@ -123,23 +131,23 @@ public class RedirectServlet extends HttpServlet
         String pathInfo = req.getPathInfo();
         if( pathInfo.startsWith( "/domain/" ) )
         {
-            serve( new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
+            serve( UrlHits.DOMAINHITS, new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/nameserver/" ) )
         {
-            serve( new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
+            serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/ip/" ) )
         {
-            serve( new MakeIpBase(), Type.IP, pathInfo, req, resp );
+            serve( UrlHits.IPHITS, new MakeIpBase(), Type.IP, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/entity/" ) )
         {
-            serve( new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
+            serve( UrlHits.ENTITYHITS, new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/autnum/" ) )
         {
-            serve( new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
+            serve( UrlHits.ASHITS, new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/help" ) )
         {
@@ -312,17 +320,17 @@ public class RedirectServlet extends HttpServlet
 
     }
 
-    private Notice makeStatsNotice( String title, HashMap<String, AtomicLong> hashMap )
+    private Notice makeStatsNotice( Statistics.UrlHits stats )
     {
         Notice notice = new Notice();
-        notice.setTitle( title );
-        String[] description = new String[ hashMap.size() ];
-        int i = 0;
-        for ( Entry<String, AtomicLong> entry : hashMap.entrySet() )
+        notice.setTitle( stats.getTitle() );
+        ArrayList<String> description = new ArrayList<String>(  );
+        for ( Entry<String, AtomicLong> entry : stats.getEntrySet() )
         {
-            description[ i++ ] = String.format( "%-25s = %5d", entry.getKey(), entry.getValue().get() );
+            description.add(
+                String.format( "%-5d = %25s", entry.getValue().get(), entry.getKey() ) );
         }
-        notice.setDescription( description );
+        notice.setDescription( description.toArray( new String[ description.size() ] ) );
         return notice;
     }
 
@@ -332,14 +340,10 @@ public class RedirectServlet extends HttpServlet
         ArrayList<Notice> notices = new ArrayList<Notice>();
 
         //do statistics
-        notices.add(makeStatsNotice("Autnum hits by RIR", statistics.getAsRirHits()));
-        notices.add(makeStatsNotice("IPv4 hits by RIR", statistics.getIp4RirHits()));
-        notices.add(makeStatsNotice("IPv6s hits by RIR", statistics.getIp6RirHits()));
-        notices.add(makeStatsNotice("Entity hits by RIR", statistics.getEntityRirHits()));
-        notices.add(makeStatsNotice("Entity hits by TLD", statistics.getEntityTldHits()));
-        notices.add(makeStatsNotice("Domain hits by RIR", statistics.getDomainRirHits()));
-        notices.add(makeStatsNotice("Domain hits by TLD", statistics.getDomainTldHits()));
-        notices.add( makeStatsNotice( "NS hits by TLD", statistics.getNsTldHits() ) );
+        for( Statistics.UrlHits stats: Statistics.UrlHits.values() )
+        {
+            notices.add(makeStatsNotice( stats ) );
+        }
 
         //totals
         Notice notice = new Notice();

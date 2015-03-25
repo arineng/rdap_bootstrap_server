@@ -15,7 +15,11 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -23,45 +27,49 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Statistics
 {
+    public enum UrlHits
+    {
+        IPHITS( "IP Hits" ),
+        DOMAINHITS( "Domain Hits" ),
+        ENTITYHITS( "Entity Hits" ),
+        NAMESERVERHITS( "Nameserver Hits" ),
+        DEFAULTHITS( "Default Hits" ),
+        ASHITS( "Autnum Hits" );
+
+        private Map<String,AtomicLong> hitsMap = Collections.synchronizedMap( new HashMap<String, AtomicLong>(  ) );
+        private String title;
+
+        public void hit( String url )
+        {
+            AtomicLong counter = hitsMap.get( url );
+            if( counter == null )
+            {
+                hitsMap.put( url, new AtomicLong( 1 ) );
+            }
+            else
+            {
+                counter.incrementAndGet();
+            }
+        }
+
+        public Set<Entry<String,AtomicLong>> getEntrySet()
+        {
+            return hitsMap.entrySet();
+        }
+
+        public String getTitle()
+        {
+            return title;
+        }
+
+        private UrlHits( String title )
+        {
+            this.title = title;
+        }
+    }
+
     private AtomicLong totalHits = new AtomicLong( 0 );
     private AtomicLong totalMisses = new AtomicLong( 0 );
-    private HashMap<String,AtomicLong> asRirHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> ip4RirHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> ip6RirHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> entityRirHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> entityTldHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> domainRirHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> domainTldHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> nsTldHits = new HashMap<String, AtomicLong>(  );
-    private HashMap<String,AtomicLong> defaultHits = new HashMap<String, AtomicLong>(  );
-
-    private RirMap rirMap = new RirMap();
-
-    public Statistics( ResourceFiles resourceFiles ) throws Exception
-    {
-        rirMap.loadData( resourceFiles );
-        rirMap.addEntityRirCountersToStatistics( this );
-    }
-
-    private void incrementRirCounter( HashMap<String, AtomicLong> hashMap, String key )
-    {
-        String rir = rirMap.getRirFromUrl( key );
-        AtomicLong hits = hashMap.get( rir );
-        if( hits != null )
-        {
-            hits.incrementAndGet();
-            totalHits.incrementAndGet();
-        }
-        else
-        {
-            totalMisses.incrementAndGet();
-        }
-    }
-
-    public RirMap getRirMap()
-    {
-        return rirMap;
-    }
 
     public AtomicLong getTotalHits()
     {
@@ -71,203 +79,5 @@ public class Statistics
     public AtomicLong getTotalMisses()
     {
         return totalMisses;
-    }
-
-    public HashMap<String, AtomicLong> getAsRirHits()
-    {
-        return asRirHits;
-    }
-
-    public HashMap<String, AtomicLong> getIp4RirHits()
-    {
-        return ip4RirHits;
-    }
-
-    public HashMap<String, AtomicLong> getIp6RirHits()
-    {
-        return ip6RirHits;
-    }
-
-    public HashMap<String, AtomicLong> getEntityRirHits()
-    {
-        return entityRirHits;
-    }
-
-    public HashMap<String, AtomicLong> getEntityTldHits()
-    {
-        return entityTldHits;
-    }
-
-    public HashMap<String, AtomicLong> getDomainRirHits()
-    {
-        return domainRirHits;
-    }
-
-    public HashMap<String, AtomicLong> getDomainTldHits()
-    {
-        return domainTldHits;
-    }
-
-    public HashMap<String, AtomicLong> getNsTldHits()
-    {
-        return nsTldHits;
-    }
-
-    public HitCounter getAsHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String url )
-            {
-                incrementRirCounter( asRirHits, url );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getIp4RirHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String url )
-            {
-                incrementRirCounter( ip4RirHits, url );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getIp6RirHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String url )
-            {
-                incrementRirCounter( ip6RirHits, url );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getEntityRirHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String url )
-            {
-                incrementRirCounter( entityRirHits, url );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getDomainRirHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String url )
-            {
-                incrementRirCounter( domainRirHits, url );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    private void incrementTldCounter( HashMap<String, AtomicLong> hashMap, String key )
-    {
-        AtomicLong hits = hashMap.get( key );
-        if ( hits != null )
-        {
-            hits.incrementAndGet();
-            totalHits.incrementAndGet();
-        }
-        else
-        {
-            totalMisses.incrementAndGet();
-        }
-    }
-
-    public HitCounter getDomainTldHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String tld )
-            {
-                incrementTldCounter( domainTldHits, tld );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getNsTldHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String tld )
-            {
-                incrementTldCounter( nsTldHits, tld );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    public HitCounter getEntityTldHitCounter()
-    {
-        class AsHitCounter implements HitCounter
-        {
-            public void incrementCounter( String tld )
-            {
-                incrementTldCounter( entityTldHits, tld );
-            }
-        }
-        return new AsHitCounter();
-    }
-
-    private void addCounterToHashMap( HashMap<String,AtomicLong> hashMap, String key )
-    {
-        if( !hashMap.containsKey( key ) )
-        {
-            hashMap.put( key, new AtomicLong( 0 ) );
-        }
-    }
-
-    public void addAsRirCounter( String rir )
-    {
-        addCounterToHashMap( asRirHits, rir );
-    }
-
-    public void addIp4RirCounter( String rir )
-    {
-        addCounterToHashMap( ip4RirHits, rir );
-    }
-
-    public void addIp6RirCounter( String rir )
-    {
-        addCounterToHashMap( ip6RirHits, rir );
-    }
-
-    public void addEntityRirCounter( String rir )
-    {
-        addCounterToHashMap( entityRirHits, rir );
-    }
-
-    public void addDomainRirCounter( String rir )
-    {
-        addCounterToHashMap( domainRirHits, rir );
-    }
-
-    public void addDomainTldCounter( String tld )
-    {
-        addCounterToHashMap( domainTldHits, tld );
-    }
-
-    public void addNsTldCounter( String tld )
-    {
-        addCounterToHashMap( nsTldHits, tld );
-    }
-
-    public void addEntityTldCounter( String tld )
-    {
-        addCounterToHashMap( entityTldHits, tld );
     }
 }
