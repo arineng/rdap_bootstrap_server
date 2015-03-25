@@ -16,6 +16,7 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -31,7 +32,8 @@ public class DefaultBootstrapTest
         DefaultBootstrap d = new DefaultBootstrap();
         d.loadData( new ResourceFiles() );
 
-        assertEquals( "http://rdappilot.arin.net/restfulwhois/rdap", d.getServiceUrls( d.AUTNUM ).getHttpUrl() );
-        assertEquals( "http://tlab.verisign.com/COM", d.getServiceUrls( d.DOMAIN ).getHttpUrl() );
+        assertEquals( "http://rdappilot.arin.net/restfulwhois/rdap",
+            d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
+        assertEquals( "http://tlab.verisign.com/COM", d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
     }
 }

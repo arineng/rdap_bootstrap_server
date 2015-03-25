@@ -23,6 +23,8 @@ import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
+import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
+import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -40,10 +42,12 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class RedirectServlet extends HttpServlet
 {
-    private AsAllocations asAllocations = new AsAllocations();
-    private IpV6Allocations ipV6Allocations = new IpV6Allocations();
-    private IpV4Allocations ipV4Allocations = new IpV4Allocations();
-    private TldAllocations tldAllocations = new TldAllocations();
+    private AsBootstrap asBootstrap           = new AsBootstrap();
+    private IpV6Bootstrap ipV6Bootstrap       = new IpV6Bootstrap();
+    private IpV4Bootstrap ipV4Bootstrap       = new IpV4Bootstrap();
+    private DomainBootstrap domainBootstrap   = new DomainBootstrap();
+    private DefaultBootstrap defaultBootstrap = new DefaultBootstrap();
+    private EntityBootstrap entityBootstrap   = new EntityBootstrap();
 
     private volatile Statistics statistics;
 
@@ -58,7 +62,7 @@ public class RedirectServlet extends HttpServlet
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
-            loadConfigTask.loadStats();
+            loadConfigTask.loadData();
 
             if( config != null )
             {
@@ -72,6 +76,46 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
+    protected void serve( BaseMaker baseMaker, DefaultBootstrap.Type defaultType, String pathInfo,
+                          HttpServletRequest req, HttpServletResponse resp )
+        throws IOException
+    {
+        try
+        {
+            ServiceUrls urls = baseMaker.makeBase( pathInfo );
+            if( urls == null && defaultType != null )
+            {
+                urls = defaultBootstrap.getServiceUrls( defaultType );
+            }
+            if( urls == null )
+            {
+                resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+            }
+            else
+            {
+                String redirectUrl = null;
+                if( req.getScheme().equals( "http" ) && urls.getHttpUrl() != null )
+                {
+                    redirectUrl = urls.getHttpUrl() + req.getPathInfo();
+                }
+                else if( req.getScheme().equals( "https" ) && urls.getHttpsUrl() != null )
+                {
+                    redirectUrl = urls.getHttpsUrl() + req.getPathInfo();
+                }
+                else
+                {
+                    redirectUrl = urls.getUrls().get( 0 ) + req.getPathInfo();
+                }
+                resp.sendRedirect( redirectUrl );
+            }
+        }
+        catch ( Exception e )
+        {
+            resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+        }
+
+    }
+
     @Override
     protected void service( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
@@ -79,104 +123,23 @@ public class RedirectServlet extends HttpServlet
         String pathInfo = req.getPathInfo();
         if( pathInfo.startsWith( "/domain/" ) )
         {
-            try
-            {
-                String base = makeDomainBase( pathInfo );
-                if( base == null )
-                {
-                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
-                }
-                else
-                {
-                    String url = makeRedirectUrl( req, base );
-                    resp.sendRedirect( url );
-                }
-            }
-            catch ( Exception e )
-            {
-                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
-            }
+            serve( new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/nameserver/" ) )
         {
-            try
-            {
-                String base = makeNameserverBase( pathInfo );
-                if( base == null )
-                {
-                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
-                }
-                else
-                {
-                    String url = makeRedirectUrl( req, base );
-                    resp.sendRedirect( url );
-                }
-            }
-            catch ( Exception e )
-            {
-                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
-            }
+            serve( new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/ip/" ) )
         {
-            try
-            {
-                String base = makeIpBase( pathInfo );
-                if( base == null )
-                {
-                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
-                }
-                else
-                {
-                    String url = makeRedirectUrl( req, base );
-                    resp.sendRedirect( url );
-                }
-            }
-            catch ( Exception e )
-            {
-                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
-            }
+            serve( new MakeIpBase(), Type.IP, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/entity/" ) )
         {
-            try
-            {
-                String base = makeEntityBase( pathInfo );
-                if( base == null )
-                {
-                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
-                }
-                else
-                {
-                    String url = makeRedirectUrl( req, base );
-                    resp.sendRedirect( url );
-                }
-            }
-            catch ( Exception e )
-            {
-                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
-            }
+            serve( new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/autnum/" ) )
         {
-            try
-            {
-                long autnum = makeAutNumLong( pathInfo );
-                String base = asAllocations.getUrl( autnum, statistics.getAsHitCounter() );
-                if( base == null )
-                {
-                    resp.sendError( HttpServletResponse.SC_NOT_FOUND );
-                }
-                else
-                {
-                    String url = makeRedirectUrl( req, base );
-                    resp.sendRedirect( url );
-                }
-            }
-            catch ( Exception e )
-            {
-                resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
-            }
+            serve( new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
         }
         else if( pathInfo.startsWith( "/help" ) )
         {
@@ -189,159 +152,164 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    private String makeRedirectUrl( HttpServletRequest req, String base )
+    public interface BaseMaker
     {
-        return req.getScheme() + base + req.getPathInfo();
+        public ServiceUrls makeBase( String pathInfo );
     }
 
-    public long makeAutNumLong( String pathInfo )
+    public ServiceUrls makeAutnumBase( String pathInfo )
     {
-        long autnum = Long.parseLong( pathInfo.split( "/" )[2] );
-        return autnum;
+        return new MakeAutnumBase().makeBase( pathInfo );
     }
 
-    public String makeIpBase( String pathInfo )
+    public class MakeAutnumBase implements BaseMaker
     {
-        //strip leading "/ip/"
-        pathInfo = pathInfo.substring( 4 );
-        if( pathInfo.indexOf( ":" ) == -1 ) //is not ipv6
+        public ServiceUrls makeBase( String pathInfo )
         {
-            String firstOctet = pathInfo.split( "\\." )[ 0 ];
-            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ), statistics.getIp4RirHitCounter() );
+            return asBootstrap.getServiceUrls( pathInfo.split( "/" )[2] );
         }
-        //else
-        IPv6Address addr = null;
-        if( pathInfo.indexOf( "/" ) == -1 )
-        {
-            addr = IPv6Address.fromString( pathInfo );
-        }
-        else
-        {
-            IPv6Network net = IPv6Network.fromString( pathInfo );
-            addr = net.getFirst();
-        }
-        return ipV6Allocations.getUrl( addr, statistics.getIp6RirHitCounter() );
     }
 
-    public String makeDomainBase( String pathInfo )
+    public ServiceUrls makeIpBase( String pathInfo )
     {
-        //strip leading "/domain/"
-        pathInfo = pathInfo.substring( 8 );
-        //strip possible trailing period
-        if( pathInfo.endsWith( "." ) )
+        return new MakeIpBase().makeBase( pathInfo );
+    }
+
+    public class MakeIpBase implements BaseMaker
+    {
+        public ServiceUrls makeBase( String pathInfo )
         {
-            pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
-        }
-        if( pathInfo.endsWith( ".in-addr.arpa" ) )
-        {
-            String[] labels = pathInfo.split( "\\." );
-            String firstOctet = labels[ labels.length -3 ];
-            return ipV4Allocations.getUrl( Integer.parseInt( firstOctet ), statistics.getDomainRirHitCounter() );
-        }
-        else if( pathInfo.endsWith( ".ip6.arpa" ) )
-        {
-            String[] labels = pathInfo.split( "\\." );
-            byte[] bytes = new byte[ 16 ];
-            Arrays.fill( bytes, ( byte ) 0 );
-            int labelIdx = labels.length -3;
-            int byteIdx = 0;
-            int idxJump = 1;
-            while( labelIdx > 0 )
+            //strip leading "/ip/"
+            pathInfo = pathInfo.substring( 4 );
+            if( pathInfo.indexOf( ":" ) == -1 ) //is not ipv6
             {
-                char ch = labels[ labelIdx ].charAt( 0 );
-                byte value = 0;
-                if( ch >= '0' && ch <= '9' )
-                {
-                    value = (byte)(ch - '0');
-                }
-                else if (ch >= 'A' && ch <= 'F' )
-                {
-                    value = (byte)(ch - ( 'A' - 0xaL ) );
-                }
-                else if (ch >= 'a' && ch <= 'f' )
-                {
-                    value = (byte)(ch - ( 'a' - 0xaL ) );
-                }
-                if( idxJump % 2 == 1 )
-                {
-                    bytes[ byteIdx ] = ( byte ) (value << 4);
-                }
-                else
-                {
-                    bytes[ byteIdx ] = ( byte ) (bytes[ byteIdx ] + value);
-                }
-                labelIdx--;
-                idxJump++;
-                if( idxJump % 2 == 1 )
-                {
-                    byteIdx++;
-                }
+                String firstOctet = pathInfo.split( "\\." )[ 0 ];
+                return ipV4Bootstrap.getServiceUrls( Integer.parseInt( firstOctet ) );
             }
-            return ipV6Allocations.getUrl( IPv6Address.fromByteArray( bytes ), statistics.getDomainRirHitCounter() );
+            //else
+            IPv6Address addr = null;
+            if( pathInfo.indexOf( "/" ) == -1 )
+            {
+                addr = IPv6Address.fromString( pathInfo );
+            }
+            else
+            {
+                IPv6Network net = IPv6Network.fromString( pathInfo );
+                addr = net.getFirst();
+            }
+            return ipV6Bootstrap.getServiceUrls( addr );
         }
-        //else
-        String[] labels = pathInfo.split( "\\." );
-        return tldAllocations.getUrl( labels[ labels.length -1 ], statistics.getDomainTldHitCounter() );
     }
 
-    public String makeNameserverBase( String pathInfo )
+    public ServiceUrls makeDomainBase( String pathInfo )
     {
-        //strip leading "/nameserver/"
-        pathInfo = pathInfo.substring( 12 );
-        //strip possible trailing period
-        if( pathInfo.endsWith( "." ) )
-        {
-            pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
-        }
-        String[] labels = pathInfo.split( "\\." );
-        return tldAllocations.getUrl( labels[ labels.length -1 ], statistics.getNsTldHitCounter() );
+        return new MakeDomainBase().makeBase( pathInfo );
     }
 
-    public String makeEntityBase( String pathInfo )
+    public class MakeDomainBase implements BaseMaker
     {
-        String retval = null;
-        //try the RIRs first
-        if( pathInfo.endsWith( "-ARIN" ) )
+        public ServiceUrls makeBase( String pathInfo )
         {
-           retval = statistics.getRirMap().getRirUrl( "ARIN" );
+            //strip leading "/domain/"
+            pathInfo = pathInfo.substring( 8 );
+            //strip possible trailing period
+            if( pathInfo.endsWith( "." ) )
+            {
+                pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
+            }
+            if( pathInfo.endsWith( ".in-addr.arpa" ) )
+            {
+                String[] labels = pathInfo.split( "\\." );
+                String firstOctet = labels[ labels.length -3 ];
+                return ipV4Bootstrap.getServiceUrls( Integer.parseInt( firstOctet ) );
+            }
+            else if( pathInfo.endsWith( ".ip6.arpa" ) )
+            {
+                String[] labels = pathInfo.split( "\\." );
+                byte[] bytes = new byte[ 16 ];
+                Arrays.fill( bytes, ( byte ) 0 );
+                int labelIdx = labels.length -3;
+                int byteIdx = 0;
+                int idxJump = 1;
+                while( labelIdx > 0 )
+                {
+                    char ch = labels[ labelIdx ].charAt( 0 );
+                    byte value = 0;
+                    if( ch >= '0' && ch <= '9' )
+                    {
+                        value = (byte)(ch - '0');
+                    }
+                    else if (ch >= 'A' && ch <= 'F' )
+                    {
+                        value = (byte)(ch - ( 'A' - 0xaL ) );
+                    }
+                    else if (ch >= 'a' && ch <= 'f' )
+                    {
+                        value = (byte)(ch - ( 'a' - 0xaL ) );
+                    }
+                    if( idxJump % 2 == 1 )
+                    {
+                        bytes[ byteIdx ] = ( byte ) (value << 4);
+                    }
+                    else
+                    {
+                        bytes[ byteIdx ] = ( byte ) (bytes[ byteIdx ] + value);
+                    }
+                    labelIdx--;
+                    idxJump++;
+                    if( idxJump % 2 == 1 )
+                    {
+                        byteIdx++;
+                    }
+                }
+                return ipV6Bootstrap.getServiceUrls( IPv6Address.fromByteArray( bytes ) );
+            }
+            //else
+            String[] labels = pathInfo.split( "\\." );
+            return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
         }
-        else if( pathInfo.endsWith( "-AP" ) )
+
+    }
+
+    public ServiceUrls makeNameserverBase( String pathInfo )
+    {
+        return new MakeNameserverBase().makeBase( pathInfo );
+    }
+
+    public class MakeNameserverBase implements BaseMaker
+    {
+        public ServiceUrls makeBase( String pathInfo )
         {
-            retval = statistics.getRirMap().getRirUrl( "APNIC" );
+            //strip leading "/nameserver/"
+            pathInfo = pathInfo.substring( 12 );
+            //strip possible trailing period
+            if( pathInfo.endsWith( "." ) )
+            {
+                pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
+            }
+            String[] labels = pathInfo.split( "\\." );
+            return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
         }
-        else if( pathInfo.endsWith( "-RIPE" ) )
+    }
+
+    public ServiceUrls makeEntityBase( String pathInfo )
+    {
+        return new MakeEntityBase().makeBase( pathInfo );
+    }
+
+    public class MakeEntityBase implements BaseMaker
+    {
+        public ServiceUrls makeBase( String pathInfo )
         {
-            retval = statistics.getRirMap().getRirUrl( "RIPE" );
+            int i = pathInfo.lastIndexOf( '-' );
+            if( i != -1 && i + 1 < pathInfo.length() )
+            {
+                return entityBootstrap.getServiceUrls( pathInfo.substring( i + 1 ) );
+            }
+            //else
+            return null;
         }
-        else if( pathInfo.endsWith( "-LACNIC" ) )
-        {
-            retval = statistics.getRirMap().getRirUrl( "LACNIC" );
-        }
-        else if( pathInfo.endsWith( "-AFRINIC" ) )
-        {
-            retval = statistics.getRirMap().getRirUrl( "AFRINIC" );
-        }
-        if( retval != null )
-        {
-            HitCounter hitCounter = statistics.getEntityRirHitCounter();
-            hitCounter.incrementCounter( retval );
-            return retval;
-        }
-        //else try the TLDs
-        int i = pathInfo.lastIndexOf( "-" );
-        if( i != -1 && i != pathInfo.length() - 1 )
-        {
-            String tld = pathInfo.substring( i+1 );
-            retval = tldAllocations.getUrl( tld );
-            HitCounter hitCounter = statistics.getEntityTldHitCounter();
-            hitCounter.incrementCounter( retval );
-        }
-        else
-        {
-            HitCounter hitCounter = statistics.getEntityTldHitCounter();
-            hitCounter.incrementCounter( "" ); //record a miss
-        }
-        return retval;
+
     }
 
     private Notice makeStatsNotice( String title, HashMap<String, AtomicLong> hashMap )
@@ -358,31 +326,10 @@ public class RedirectServlet extends HttpServlet
         return notice;
     }
 
-    private Notice makeMappings()
-    {
-        Notice notice = new Notice();
-        notice.setTitle( "Redirection Mappings" );
-        ArrayList<String> description = new ArrayList<String>();
-        for (Entry<Object, Object> entry : statistics.getRirMap().getPropertyMappings().entrySet())
-        {
-            String s = String.format( "%-8s -> http(s)%s", entry.getKey(), entry.getValue() );
-            description.add( s );
-        }
-        for (Entry<String, String> entry : tldAllocations.getAllocationMappings().entrySet())
-        {
-            String s = String.format( "%-8s -> http(s)%s", entry.getKey(), entry.getValue() );
-            description.add( s );
-        }
-        notice.setDescription( description.toArray( new String[ description.size() ] ) );
-        return notice;
-    }
-
     public void makeHelp( OutputStream outputStream ) throws IOException
     {
         Response response = new Response( null );
         ArrayList<Notice> notices = new ArrayList<Notice>();
-
-        notices.add( makeMappings() );
 
         //do statistics
         notices.add(makeStatsNotice("Autnum hits by RIR", statistics.getAsRirHits()));
@@ -427,24 +374,28 @@ public class RedirectServlet extends HttpServlet
         {
             boolean load = false;
             long currentTime = System.currentTimeMillis();
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.AS_ALLOCATIONS ) ) )
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.AS_BOOTSTRAP ) ) )
             {
                 load = true;
             }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.RIR_MAP ) ) )
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.DOMAIN_BOOTSTRAP ) ) )
             {
                 load = true;
             }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.TLD_MAP ) ) )
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.DEFAULT_BOOTSTRAP ) ) )
             {
                 load = true;
             }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.V4_ALLOCATIONS ) ) )
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.V4_BOOTSTRAP ) ) )
+            {
+                load = true;
+            }
+            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.ENTITY_BOOTSTRAP ) ) )
             {
                 load = true;
             }
             if( isModified( currentTime,
-                resourceFiles.getLastModified( ResourceFiles.V6_ALLOCATIONS ) ) )
+                resourceFiles.getLastModified( ResourceFiles.V6_BOOTSTRAP ) ) )
             {
                 load = true;
             }
@@ -452,7 +403,7 @@ public class RedirectServlet extends HttpServlet
             {
                 try
                 {
-                    loadStats();
+                    loadData();
                 }
                 catch ( Exception e )
                 {
@@ -461,29 +412,19 @@ public class RedirectServlet extends HttpServlet
             }
         }
 
-        public void loadStats() throws Exception
+        public void loadData() throws Exception
         {
             if( getServletConfig() != null )
             {
-                getServletContext().log( "Loading resource files and reloading statistics." );
+                getServletContext().log( "Loading resource files." );
             }
             resourceFiles = new ResourceFiles();
-            asAllocations.loadData( resourceFiles );
-            ipV4Allocations.loadData( resourceFiles );
-            ipV6Allocations.loadData( resourceFiles );
-            tldAllocations.loadData( resourceFiles );
-
-            //setup statistics
-            Statistics _statistics = new Statistics( resourceFiles );
-            asAllocations.addAsCountersToStatistics( _statistics );
-            ipV4Allocations.addIp4CountersToStatistics( _statistics );
-            ipV4Allocations.addDomainRirCountersToStatistics( _statistics );
-            ipV6Allocations.addIp6CountersToStatistics( _statistics );
-            ipV6Allocations.addDomainRirCountersToStatistics( _statistics );
-            tldAllocations.addDomainTldCountersToStatistics( _statistics );
-            tldAllocations.addNsTldCountersToStatistics( _statistics );
-            tldAllocations.addEntityTldCountersToStatistics( _statistics );
-            statistics = _statistics;
+            asBootstrap.loadData( resourceFiles );
+            ipV4Bootstrap.loadData( resourceFiles );
+            ipV6Bootstrap.loadData( resourceFiles );
+            domainBootstrap.loadData( resourceFiles );
+            entityBootstrap.loadData( resourceFiles );
+            defaultBootstrap.loadData( resourceFiles );
         }
     }
 }

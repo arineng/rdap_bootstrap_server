@@ -5,9 +5,9 @@
     "services": [
       [
         [
-          "v4",
-          "v6",
-          "autnum"
+          "ip",
+          "autnum",
+          "nameserver"
         ],
         [
           "https://rdappilot.arin.net/restfulwhoi/rdap",

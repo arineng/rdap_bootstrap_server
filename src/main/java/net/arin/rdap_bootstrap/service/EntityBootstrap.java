@@ -23,27 +23,8 @@ import java.util.HashMap;
 /**
  * @version $Rev$, $Date$
  */
-public class DefaultBootstrap implements JsonBootstrapFile.Handler
+public class EntityBootstrap implements JsonBootstrapFile.Handler
 {
-    public enum Type {
-        NAMESERVER("nameserver"),
-        IP("ip"),
-        AUTNUM("autnum"),
-        ENTITY("entity"),
-        DOMAIN("domain");
-
-        private String pValue;
-        private Type( String pValue )
-        {
-            this.pValue = pValue;
-        }
-
-        public String getPValue()
-        {
-            return pValue;
-        }
-    }
-
     private volatile HashMap<String,ServiceUrls> allocations = new HashMap<String, ServiceUrls>(  );
     private HashMap<String,ServiceUrls> _allocations;
 
@@ -53,7 +34,7 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
         throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
-        bsFile.loadData( resourceFiles.getInputStream( resourceFiles.DEFAULT_BOOTSTRAP ), this );
+        bsFile.loadData( resourceFiles.getInputStream( resourceFiles.ENTITY_BOOTSTRAP ), this );
     }
 
     @Override
@@ -92,9 +73,9 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
         serviceUrls.addUrl( url );
     }
 
-    public ServiceUrls getServiceUrls( Type type )
+    public ServiceUrls getServiceUrls( String defaultType )
     {
-        return allocations.get( type.getPValue() );
+        return allocations.get( defaultType );
     }
 
 }

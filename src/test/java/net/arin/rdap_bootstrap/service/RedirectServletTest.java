@@ -26,13 +26,22 @@ import static junit.framework.Assert.assertEquals;
  */
 public class RedirectServletTest
 {
+    private static final String ARIN = "http://rdappilot.arin.net/restfulwhois/rdap";
+    private static final String LACNIC = "http://rdap.labs.lacnic.net/rdap";
+    private static final String IANA = "http://rdap.iana.org";
+    private static final String APNIC = "http://rdap.apnic.net";
+    private static final String RIPE = "http://rdap.db.ripe.net";
+    private static final String AFRINIC = "http://rdap.rd.me.afrinic.net/whois/AFRINIC";
+    private static final String COM = "http://tlab.verisign.com/COM";
+
     @Test
     public void testMakeAutNumInt() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
 
-        assertEquals( 10, servlet.makeAutNumLong( "/autnum/10" ) );
-        assertEquals( 42222, servlet.makeAutNumLong( "/autnum/42222" ) );
+        assertEquals( ARIN, servlet.makeAutnumBase( "/autnum/10" ).getHttpUrl() );
+        assertEquals( RIPE, servlet.makeAutnumBase( "/autnum/42222" ).getHttpUrl() );
     }
 
     @Test
@@ -41,14 +50,14 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "://rdap.arin.net", servlet.makeIpBase( "/ip/3.0.0.0" ) );
-        assertEquals( "://rdap.arin.net", servlet.makeIpBase( "/ip/3.0.0.0/16" ) );
-        assertEquals( "://rdap.lacnic.net", servlet.makeIpBase( "/ip/191.0.1.0" ) );
-        assertEquals( "://rdap.lacnic.net", servlet.makeIpBase( "/ip/191.0.1.0/24" ) );
-        assertEquals( "://rdap.arin.net", servlet.makeIpBase( "/ip/2620:0000:0000:0000:0000:0000:0000:0000" ) );
-        assertEquals( "://rdap.afrinic.net", servlet.makeIpBase( "/ip/2c00:0000::/12" ) );
-        assertEquals( "://rdap.lacnic.net", servlet.makeIpBase( "/ip/2800:0000::/12" ) );
-        assertEquals( "://rdap.iana.net", servlet.makeIpBase( "/ip/2001:0000::1" ) );
+        assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0/16" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeIpBase( "/ip/2620:0000:0000:0000:0000:0000:0000:0000" ).getHttpUrl() );
+        assertEquals( AFRINIC, servlet.makeIpBase( "/ip/2c00:0000::/12" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/2800:0000::/12" ).getHttpUrl() );
+        assertEquals( IANA, servlet.makeIpBase( "/ip/2001:0000::1" ).getHttpUrl() );
     }
 
     @Test
@@ -57,17 +66,15 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/domain/example.XN--0ZWM56D" ) );
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeDomainBase( "/domain/example.XN--0ZWM56D." ) );
-        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/domain/example.COM" ) );
-        assertEquals( "://rdap.COM", servlet.makeDomainBase( "/domain/example.COM." ) );
-        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.0.0.3.in-addr.arpa." ) );
-        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.0.0.3.in-addr.arpa" ) );
-        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.3.in-addr.arpa" ) );
-        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/3.in-addr.arpa" ) );
-        assertEquals( "://rdap.arin.net", servlet.makeDomainBase( "/domain/0.2.6.2.ip6.arpa" ) );
-        assertEquals( "://rdap.afrinic.net", servlet.makeDomainBase( "/domain/0.c.2.ip6.arpa" ) );
-        assertEquals( "://rdap.lacnic.net", servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ) );
+        assertEquals( COM, servlet.makeDomainBase( "/domain/example.COM" ).getHttpUrl() );
+        assertEquals( COM, servlet.makeDomainBase( "/domain/example.COM." ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa." ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.7.in-addr.arpa" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeDomainBase( "/domain/7.in-addr.arpa" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.2.6.2.ip6.arpa" ).getHttpUrl() );
+        assertEquals( AFRINIC, servlet.makeDomainBase( "/domain/0.c.2.ip6.arpa" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ).getHttpUrl() );
     }
 
     @Test
@@ -76,10 +83,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeNameserverBase( "/nameserver/ns1.example.XN--0ZWM56D" ) );
-        assertEquals( "://rdap.XN--0ZWM56D", servlet.makeNameserverBase( "/nameserver/ns1.example.XN--0ZWM56D." ) );
-        assertEquals( "://rdap.COM", servlet.makeNameserverBase( "/nameserver/ns1.example.COM" ) );
-        assertEquals( "://rdap.COM", servlet.makeNameserverBase( "/nameserver/ns1.example.COM." ) );
+        assertEquals( COM, servlet.makeNameserverBase( "/nameserver/ns1.example.COM" ).getHttpUrl() );
+        assertEquals( COM, servlet.makeNameserverBase( "/nameserver/ns1.example.COM." ).getHttpUrl() );
     }
 
     @Test
@@ -88,10 +93,10 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "://rdap.arin.net", servlet.makeEntityBase( "/entity/ABC123-ARIN" ) );
-        assertEquals( "://rdap.ripe.net", servlet.makeEntityBase( "/entity/ABC123-RIPE" ) );
-        assertEquals( "://rdap.apnic.net", servlet.makeEntityBase( "/entity/ABC123-AP" ) );
-        assertEquals( "://rdap.lacnic.net", servlet.makeEntityBase( "/entity/ABC123-LACNIC" ) );
-        assertEquals( "://rdap.afrinic.net", servlet.makeEntityBase( "/entity/ABC123-AFRINIC" ) );
+        assertEquals( ARIN, servlet.makeEntityBase( "/entity/ABC123-ARIN" ).getHttpUrl() );
+        assertEquals( RIPE, servlet.makeEntityBase( "/entity/ABC123-RIPE" ).getHttpUrl() );
+        assertEquals( APNIC, servlet.makeEntityBase( "/entity/ABC123-AP" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeEntityBase( "/entity/ABC123-LACNIC" ).getHttpUrl() );
+        assertEquals( AFRINIC, servlet.makeEntityBase( "/entity/ABC123-AFRINIC" ).getHttpUrl() );
     }
 }

@@ -118,8 +118,9 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
         bsFile.loadData( resourceFiles.getInputStream( resourceFiles.AS_BOOTSTRAP ), this );
     }
 
-    public ServiceUrls getServiceUrls( long number )
+    public ServiceUrls getServiceUrls( String autnum )
     {
+        long number = Long.parseLong( autnum );
         Map.Entry<Long,AsRangeInfo> entry = allocations.floorEntry( number );
         if( entry != null )
         {

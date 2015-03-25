@@ -33,6 +33,7 @@ public class Statistics
     private HashMap<String,AtomicLong> domainRirHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> domainTldHits = new HashMap<String, AtomicLong>(  );
     private HashMap<String,AtomicLong> nsTldHits = new HashMap<String, AtomicLong>(  );
+    private HashMap<String,AtomicLong> defaultHits = new HashMap<String, AtomicLong>(  );
 
     private RirMap rirMap = new RirMap();
 
