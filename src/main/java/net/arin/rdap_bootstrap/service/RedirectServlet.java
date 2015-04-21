@@ -25,6 +25,7 @@ import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
 import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import net.arin.rdap_bootstrap.service.Statistics.UrlHits;
 
 import javax.servlet.ServletConfig;
@@ -378,30 +379,12 @@ public class RedirectServlet extends HttpServlet
         {
             boolean load = false;
             long currentTime = System.currentTimeMillis();
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.AS_BOOTSTRAP ) ) )
+            for ( BootFiles bootFiles : BootFiles.values() )
             {
-                load = true;
-            }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.DOMAIN_BOOTSTRAP ) ) )
-            {
-                load = true;
-            }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.DEFAULT_BOOTSTRAP ) ) )
-            {
-                load = true;
-            }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.V4_BOOTSTRAP ) ) )
-            {
-                load = true;
-            }
-            if( isModified( currentTime, resourceFiles.getLastModified( ResourceFiles.ENTITY_BOOTSTRAP ) ) )
-            {
-                load = true;
-            }
-            if( isModified( currentTime,
-                resourceFiles.getLastModified( ResourceFiles.V6_BOOTSTRAP ) ) )
-            {
-                load = true;
+               if( isModified( currentTime, resourceFiles.getLastModified( bootFiles.getKey() ) ) )
+               {
+                   load = true;
+               }
             }
             if( load )
             {

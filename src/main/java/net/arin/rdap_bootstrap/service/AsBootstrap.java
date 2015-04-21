@@ -17,6 +17,7 @@
 package net.arin.rdap_bootstrap.service;
 
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -115,7 +116,7 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
         throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
-        bsFile.loadData( resourceFiles.getInputStream( resourceFiles.AS_BOOTSTRAP ), this );
+        bsFile.loadData( resourceFiles.getInputStream( BootFiles.AS.getKey() ), this );
     }
 
     public ServiceUrls getServiceUrls( String autnum )

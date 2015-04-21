@@ -19,6 +19,7 @@ package net.arin.rdap_bootstrap.service;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -80,7 +81,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
         throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
-        bsFile.loadData( resourceFiles.getInputStream( resourceFiles.V6_BOOTSTRAP ), this );
+        bsFile.loadData( resourceFiles.getInputStream( BootFiles.V6.getKey() ), this );
     }
 
     public ServiceUrls getServiceUrls( long prefix )

@@ -17,6 +17,7 @@
 package net.arin.rdap_bootstrap.service;
 
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -36,7 +37,7 @@ public class DomainBootstrap implements JsonBootstrapFile.Handler
         throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
-        bsFile.loadData( resourceFiles.getInputStream( resourceFiles.DOMAIN_BOOTSTRAP ), this );
+        bsFile.loadData( resourceFiles.getInputStream( BootFiles.DOMAIN.getKey() ), this );
     }
 
     @Override

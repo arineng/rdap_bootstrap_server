@@ -18,40 +18,59 @@ import java.util.Properties;
  */
 public class ResourceFiles
 {
-    public final static String DEFAULT_BOOTSTRAP = "default_bootstrap";
-    public final static String AS_ALLOCATIONS    = "as_allocations";
-    public final static String AS_BOOTSTRAP      = "as_bootstrap";
-    public final static String RIR_MAP           = "rir_map";
-    public final static String TLD_MAP           = "tld_map";
-    public final static String DOMAIN_BOOTSTRAP  = "domain_bootstrap";
-    public final static String V4_ALLOCATIONS    = "v4_allocations";
-    public final static String V4_BOOTSTRAP      = "v4_bootstrap";
-    public final static String V6_ALLOCATIONS    = "v6_allocations";
-    public final static String V6_BOOTSTRAP      = "v6_bootstrap";
-    public final static String ENTITY_BOOTSTRAP  = "entity_bootstrap";
+    public enum BootFiles
+    {
+        DEFAULT( "default_bootstrap" ),
+        AS( "as_bootstrap" ),
+        DOMAIN( "domain_bootstrap" ),
+        V4( "v4_bootstrap" ),
+        V6( "v6_bootstrap" ),
+        ENTITY( "entity_bootstrap" );
+
+        private String key;
+
+        public String getKey()
+        {
+            return key;
+        }
+
+        private BootFiles( String key )
+        {
+            this.key = key;
+        }
+    }
+
+    public final static String PROPERTY_PREFIX = "arin.rdapbootstrap.";
 
     private Properties resourceFiles;
     private HashMap<String,Boolean> isFile;
 
     public ResourceFiles() throws IOException
     {
-        String extFileName = System.getProperty( "arin.rdapbootstrap.resource_files" );
+        String extFileName = System.getProperty( PROPERTY_PREFIX + "resource_files" );
         resourceFiles = new Properties(  );
+        File file;
         if( extFileName == null )
         {
             InputStream inputStream = getClass().getResourceAsStream( "/resource_files.properties" );
             resourceFiles.load( inputStream );
         }
-        else
+        else if( ( file = new File( extFileName ) ).isFile() )
         {
-            File file = new File( extFileName );
             InputStream inputStream = new FileInputStream( file );
             resourceFiles.load( inputStream );
+        }
+        else
+        {
+            for ( BootFiles bootFiles : BootFiles.values() )
+            {
+               resourceFiles.put( bootFiles.key, System.getProperty( PROPERTY_PREFIX + "bootfile." + bootFiles.key ) );
+            }
         }
         isFile = new HashMap<String, Boolean>(  );
         for ( Entry<Object, Object> entry : resourceFiles.entrySet() )
         {
-            File file = new File( entry.getValue().toString() );
+            file = new File( entry.getValue().toString() );
             isFile.put( entry.getKey().toString(), file.exists() );
         }
     }
