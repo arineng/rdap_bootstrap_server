@@ -60,11 +60,13 @@ public class ResourceFiles
             InputStream inputStream = new FileInputStream( file );
             resourceFiles.load( inputStream );
         }
-        else
+        //override with explicitly set system properties
+        for ( BootFiles bootFiles : BootFiles.values() )
         {
-            for ( BootFiles bootFiles : BootFiles.values() )
+            String value = System.getProperty( PROPERTY_PREFIX + "bootfile." + bootFiles.key );
+            if( value != null && value.length() > 0 )
             {
-               resourceFiles.put( bootFiles.key, System.getProperty( PROPERTY_PREFIX + "bootfile." + bootFiles.key ) );
+                resourceFiles.put( bootFiles.key, value );
             }
         }
         isFile = new HashMap<String, Boolean>(  );

@@ -14,11 +14,38 @@ To build using Gradle:
 
 ```gradle test```
 
-which will create the build and run the unit tests.
+which will create the build and run the unit tests. The resulting war file will be in `build/libs`.
 
 To build with Maven (being deprecated):
 
 ```mvn package```
+
+which will create the build and run the unit tests. The resulting WAR file will be in `target`.
+
+## Deploying and Testing
+
+Deploying the WAR file depends on the Servlet container/server you are using. It is usually as simple
+as copying the WAR file to a particular directory. The WAR file comes bundled with some bootstrap files
+so testing can take place before fully configuring the bootstrap.
+
+The URL path for querying the servlet will depend on your Servlet container and the configuration you
+have given to the container for this servlet. If you are using JBoss, the URL path defaults to `/rdapbootstrap`.
+
+To test the bootstrap server, issue an RDAP query such as `ip/1.1.1.1`. You should see a redirect to
+APNIC's RDAP server.
+
+```
+$ wget http://localhost:8080/rdapbootstrap/ip/1.1.1.1
+--2015-04-24 16:24:39--  http://localhost:8080/rdapbootstrap/ip/1.1.1.1
+Resolving localhost... ::1, 127.0.0.1
+Connecting to localhost|::1|:8080... connected.
+HTTP request sent, awaiting response... 302 Moved Temporarily
+Location: http://rdap.apnic.net/ip/1.1.1.1 [following]
+--2015-04-24 16:24:39--  http://rdap.apnic.net/ip/1.1.1.1
+Resolving rdap.apnic.net... 2001:dd8:9:2::101:43, 203.119.101.43
+Connecting to rdap.apnic.net|2001:dd8:9:2::101:43|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+```
 
 ## Properties and Bootstrap Files
 

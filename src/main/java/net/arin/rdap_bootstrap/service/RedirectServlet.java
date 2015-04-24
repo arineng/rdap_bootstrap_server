@@ -61,6 +61,7 @@ public class RedirectServlet extends HttpServlet
     @Override
     public void init( ServletConfig config ) throws ServletException
     {
+        super.init( config );
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
