@@ -7,7 +7,14 @@ conduct their own bootstrapping.
 
 ## Versioning, Building And Runtime Requirements
 
-Any version containing the word SNAPSHOT is a development version.
+Any version containing the word SNAPSHOT is a development version. Versions are:
+
+* 1000.0-SNAPSHOT reflects the master branch development version. It is set high at a major version
+number of 1000 so that the master branch is not re-versioned for every release.
+* 1.0.0 - First release. At the time of this release, the IANA bootstrap files are available but contain
+no usable content, and the embedded bootstrap files point to our best known locations for servers. Minor
+point release may occur to update the embedded files until the IANA files become populated with useful
+data.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher.
 It should build against Java 6 or higher.
