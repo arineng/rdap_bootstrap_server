@@ -16,6 +16,8 @@ no usable content, and the embedded bootstrap files point to our best known loca
 point release may occur to update the embedded files until the IANA files become populated with useful
 data.
 
+A pre-built version of is available [here](https://github.com/arinlabs/arin_rdap) for Vagrant users.
+
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher.
 It should build against Java 6 or higher.
 
