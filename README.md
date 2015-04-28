@@ -5,7 +5,9 @@ A bootstrap server aids clients by reading the bootstrapping information publish
 it to send HTTP redirects to RDAP queries. Clients utilizing a bootstrap server will not need to
 conduct their own bootstrapping.
 
-## Build And Runtime Requirements
+## Versioning, Building And Runtime Requirements
+
+Any version containing the word SNAPSHOT is a development version.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher.
 It should build against Java 6 or higher.
