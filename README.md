@@ -14,13 +14,17 @@ It should build against Java 6 or higher.
 
 To build using Gradle:
 
-```gradle test```
+```
+gradle test
+```
 
 which will create the build and run the unit tests. The resulting war file will be in `build/libs`.
 
 To build with Maven (being deprecated):
 
-```mvn package```
+```
+mvn package
+```
 
 which will create the build and run the unit tests. The resulting WAR file will be in `target`.
 
