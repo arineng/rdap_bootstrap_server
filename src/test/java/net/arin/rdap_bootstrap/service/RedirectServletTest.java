@@ -27,7 +27,7 @@ import static junit.framework.Assert.assertEquals;
 public class RedirectServletTest
 {
     private static final String ARIN = "http://rdappilot.arin.net/restfulwhois/rdap";
-    private static final String LACNIC = "http://rdap.labs.lacnic.net/rdap";
+    private static final String LACNIC = "http://rdap.lacnic.net/rdap";
     private static final String IANA = "http://rdap.iana.org";
     private static final String APNIC = "http://rdap.apnic.net";
     private static final String RIPE = "http://rdap.db.ripe.net";

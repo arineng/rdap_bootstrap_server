@@ -79,8 +79,8 @@
           "2800:0000::/12"
         ],
         [
-          "https://rdap.labs.lacnic.net/rdap",
-          "http://rdap.labs.lacnic.net/rdap"
+          "https://rdap.lacnic.net/rdap",
+          "http://rdap.lacnic.net/rdap"
         ]
       ],
       [

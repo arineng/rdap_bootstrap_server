@@ -38,9 +38,9 @@ public class IpV4BootstrapTest
         assertEquals( "http://rdap.apnic.net", v4.getServiceUrls( 27 ).getHttpUrl() );
         assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 31 ).getHttpUrl() );
         assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", v4.getServiceUrls( 41 ).getHttpUrl() );
-        assertEquals( "http://rdap.labs.lacnic.net/rdap", v4.getServiceUrls( 177 ).getHttpUrl() );
+        assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 177 ).getHttpUrl() );
         assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 188 ).getHttpUrl() );
-        assertEquals( "http://rdap.labs.lacnic.net/rdap", v4.getServiceUrls( 191 ).getHttpUrl() );
+        assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 191 ).getHttpUrl() );
         assertNull( v4.getServiceUrls( 224 ) );
     }
 
