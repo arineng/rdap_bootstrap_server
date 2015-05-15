@@ -356,6 +356,18 @@ public class RedirectServlet extends HttpServlet
         notice.setDescription( description );
         notices.add( notice );
 
+        for (BootFiles bootFiles : BootFiles.values()) {
+            Notice bootFileModifiedNotice = new Notice();
+
+            bootFileModifiedNotice.setTitle( "bootstrapFileLastModifiedDate" );
+            String[] bootFileModifiedDescription = new String[ 2 ];
+            bootFileModifiedDescription[0] = bootFiles.getKey();
+            bootFileModifiedDescription[1] = new Date(resourceFiles.getLastModified(bootFiles.getKey())).toString();
+            bootFileModifiedNotice.setDescription( bootFileModifiedDescription );
+
+            notices.add( bootFileModifiedNotice );
+        }
+
         response.setNotices( notices );
 
         ObjectMapper mapper = new ObjectMapper();
@@ -384,6 +396,7 @@ public class RedirectServlet extends HttpServlet
             {
                if( isModified( currentTime, resourceFiles.getLastModified( bootFiles.getKey() ) ) )
                {
+                   getServletContext().log( bootFiles.getKey() + " was last modified at " + new Date(resourceFiles.getLastModified(bootFiles.getKey())).toString() );
                    load = true;
                }
             }
