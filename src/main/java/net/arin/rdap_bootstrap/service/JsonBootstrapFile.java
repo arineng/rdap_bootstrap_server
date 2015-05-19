@@ -42,6 +42,7 @@ public class JsonBootstrapFile
         public void endService();
         public void addServiceEntry( String entry );
         public void addServiceUrl( String url );
+        public void setPublication( String publication );
     }
 
     /**
@@ -134,6 +135,16 @@ public class JsonBootstrapFile
                         {
                             throw new RuntimeException( "'version' is not '1.0'" );
                         }
+                    }
+                    else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
+                            jsonParser.getCurrentName().equals( "publication" ) )
+                    {
+                        if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
+                        {
+                            throw new RuntimeException( "'publication' is not a string" );
+                        }
+
+                        handler.setPublication( jsonParser.getValueAsString() );
                     }
                     else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
                         jsonParser.getCurrentName().equals( "services" ) )

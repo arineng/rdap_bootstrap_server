@@ -61,6 +61,7 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
     private TreeMap<Long,AsRangeInfo> _allocations;
 
     private JsonBootstrapFile.ServiceUrls serviceUrls;
+    private String publication;
 
     @Override
     public void startServices()
@@ -134,5 +135,9 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
         //else
         return null;
     }
+
+    @Override
+    public void setPublication( String publication ) { this.publication = publication; }
+    public String getPublication() { return publication; }
 
 }
