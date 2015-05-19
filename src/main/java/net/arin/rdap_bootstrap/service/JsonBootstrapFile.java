@@ -139,6 +139,8 @@ public class JsonBootstrapFile
                     else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
                             jsonParser.getCurrentName().equals( "publication" ) )
                     {
+                        // These are dates, but since we're outputting them as Strings anyway, and not really doing
+                        // anything else with them leaving them as Strings should be okay.
                         if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
                         {
                             throw new RuntimeException( "'publication' is not a string" );
