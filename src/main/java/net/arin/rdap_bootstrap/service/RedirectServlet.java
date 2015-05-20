@@ -356,24 +356,33 @@ public class RedirectServlet extends HttpServlet
         notice.setDescription( description );
         notices.add( notice );
 
-        for (BootFiles bootFiles : BootFiles.values()) {
-            Notice bootFileModifiedNotice = new Notice();
-
-            bootFileModifiedNotice.setTitle( "bootstrapFileLastModifiedDate" );
-            String[] bootFileModifiedDescription = new String[ 2 ];
-            bootFileModifiedDescription[0] = bootFiles.getKey();
-            // Date format as 2015-05-15T17:04:06-0500 (Y-m-d'T'H:M:Sz)
-            bootFileModifiedDescription[1] = String.format( "%1$tFT%1$tT%1$tz", resourceFiles.getLastModified(bootFiles.getKey()) );
-            bootFileModifiedNotice.setDescription( bootFileModifiedDescription );
-
-            notices.add( bootFileModifiedNotice );
-        }
+        // Modified dates for various bootstrap files, done this way so that Publication dates can be published as well.
+        notices.add( createPublicationDateNotice("Default", resourceFiles.getLastModified(BootFiles.DEFAULT.getKey()), defaultBootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice("As", resourceFiles.getLastModified(BootFiles.AS.getKey()), asBootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice("Domain", resourceFiles.getLastModified(BootFiles.DOMAIN.getKey()), domainBootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice("Entity", resourceFiles.getLastModified(BootFiles.ENTITY.getKey()), entityBootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice("IpV4", resourceFiles.getLastModified(BootFiles.V4.getKey()), ipV4Bootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice("IpV6", resourceFiles.getLastModified(BootFiles.V6.getKey()), ipV6Bootstrap.getPublication()) );
 
         response.setNotices( notices );
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer( new DefaultPrettyPrinter(  ) );
         writer.writeValue( outputStream, response );
+    }
+
+    private Notice createPublicationDateNotice(String file, long lastModified, String publicationDate)
+    {
+        Notice bootFileModifiedNotice = new Notice();
+
+        bootFileModifiedNotice.setTitle( String.format("%s Bootstrap File Modified and Published Dates", file) );
+        String[] bootFileModifiedDescription = new String[ 2 ];
+        // Date format as 2015-05-15T17:04:06-0500 (Y-m-d'T'H:M:Sz)
+        bootFileModifiedDescription[0] = String.format( "%1$tFT%1$tT%1$tz", lastModified );
+        bootFileModifiedDescription[1] = publicationDate;
+        bootFileModifiedNotice.setDescription( bootFileModifiedDescription );
+
+        return bootFileModifiedNotice;
     }
 
     private class LoadConfigTask extends TimerTask

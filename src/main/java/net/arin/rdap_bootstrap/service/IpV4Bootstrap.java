@@ -30,6 +30,7 @@ public class IpV4Bootstrap implements JsonBootstrapFile.Handler
     private HashMap<Integer,ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
+    private String publication;
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
@@ -79,4 +80,8 @@ public class IpV4Bootstrap implements JsonBootstrapFile.Handler
     {
         return allocations.get( prefix );
     }
+
+    @Override
+    public void setPublication( String publication ) { this.publication = publication; }
+    public String getPublication() { return publication; }
 }

@@ -38,6 +38,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     private TreeMap<Long,ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
+    private String publication;
 
     @Override
     public void startServices()
@@ -104,5 +105,9 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     {
         return getServiceUrls( net.getFirst().getHighBits() );
     }
+
+    @Override
+    public void setPublication( String publication ) { this.publication = publication; }
+    public String getPublication() { return publication; }
 
 }
