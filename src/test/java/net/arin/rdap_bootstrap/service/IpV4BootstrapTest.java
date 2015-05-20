@@ -34,10 +34,12 @@ public class IpV4BootstrapTest
 
         assertNull( v4.getServiceUrls( 3 ) );
         assertEquals( "http://rdap.apnic.net", v4.getServiceUrls( 1 ).getHttpUrl() );
-        assertEquals( "http://rdap.iana.org", v4.getServiceUrls( 0 ).getHttpUrl() );
+        //TODO renable when their server are put back in the bootstrap files
+        //assertEquals( "http://rdap.iana.org", v4.getServiceUrls( 0 ).getHttpUrl() );
         assertEquals( "http://rdap.apnic.net", v4.getServiceUrls( 27 ).getHttpUrl() );
         assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 31 ).getHttpUrl() );
-        assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", v4.getServiceUrls( 41 ).getHttpUrl() );
+        //TODO renable when their server are put back in the bootstrap files
+        //assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", v4.getServiceUrls( 41 ).getHttpUrl() );
         assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 177 ).getHttpUrl() );
         assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 188 ).getHttpUrl() );
         assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 191 ).getHttpUrl() );

@@ -40,7 +40,8 @@ public class AsBootstrapTest
         assertEquals( "http://rdap.db.ripe.net", asBootstrap.getServiceUrls( "251" ).getHttpUrl() );
         assertEquals( "http://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11450" ).getHttpUrl() );
         assertEquals( "http://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11451" ).getHttpUrl() );
-        assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", asBootstrap.getServiceUrls( "11569" ).getHttpUrl() );
+        //TODO renable when their server are put back in the bootstrap files
+        //assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", asBootstrap.getServiceUrls( "11569" ).getHttpUrl() );
         assertEquals( "http://rdap.apnic.net", asBootstrap.getServiceUrls( "17408" ).getHttpUrl() );
         assertEquals( "http://rdap.apnic.net", asBootstrap.getServiceUrls( "18431" ).getHttpUrl() );
         assertNull( asBootstrap.getServiceUrls( "394240" ) );

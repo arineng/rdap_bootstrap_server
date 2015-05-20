@@ -5,17 +5,6 @@
     "services": [
       [
         [
-          "000.000.000.000/8",
-          "010.000.000.000/8",
-          "127.000.000.000/8"
-        ],
-        [
-          "https://rdap.iana.org",
-          "http://rdap.iana.org"
-        ]
-      ],
-      [
-        [
           "001.000.000.000/8",
           "014.000.000.000/8",
           "027.000.000.000/8",
@@ -206,20 +195,6 @@
         [
           "https://rdappilot.arin.net/restfulwhois/rdap",
           "http://rdappilot.arin.net/restfulwhois/rdap"
-        ]
-      ],
-      [
-        [
-          "041.000.000.000/8",
-          "102.000.000.000/8",
-          "105.000.000.000/8",
-          "154.000.000.000/8",
-          "196.000.000.000/8",
-          "197.000.000.000/8"
-        ],
-        [
-          "https://rdap.rd.me.afrinic.net/whois/AFRINIC",
-          "http://rdap.rd.me.afrinic.net/whois/AFRINIC"
         ]
       ],
       [

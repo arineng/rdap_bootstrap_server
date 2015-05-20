@@ -5,21 +5,6 @@
     "services": [
       [
         [
-          "2001:0000::/23",
-          "2001:3c00::/22",
-          "2d00:0000::/8",
-          "2e00:0000::/7",
-          "3000:0000::/4",
-          "3ffe::/16",
-          "5f00::/8"
-        ],
-        [
-          "https://rdap.iana.org",
-          "http://rdap.iana.org"
-        ]
-      ],
-      [
-        [
           "2001:0200::/23",
           "2001:0c00::/23",
           "2001:0e00::/23",
@@ -81,16 +66,6 @@
         [
           "https://rdap.lacnic.net/rdap",
           "http://rdap.lacnic.net/rdap"
-        ]
-      ],
-      [
-        [
-          "2001:4200::/23",
-          "2c00:0000::/12"
-        ],
-        [
-          "https://rdap.rd.me.afrinic.net/whois/AFRINIC",
-          "http://rdap.rd.me.afrinic.net/whois/AFRINIC"
         ]
       ]
     ]
