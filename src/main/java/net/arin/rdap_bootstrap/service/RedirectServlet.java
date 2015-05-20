@@ -62,6 +62,7 @@ public class RedirectServlet extends HttpServlet
     public void init( ServletConfig config ) throws ServletException
     {
         super.init( config );
+        statistics = new Statistics();
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
@@ -116,6 +117,7 @@ public class RedirectServlet extends HttpServlet
                 {
                     hits.hit( redirectUrl );
                 }
+                statistics.getTotalHits().incrementAndGet();
                 resp.sendRedirect( redirectUrl );
             }
         }

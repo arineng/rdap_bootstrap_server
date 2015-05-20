@@ -17,6 +17,7 @@ package net.arin.rdap_bootstrap.service;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -27,6 +28,22 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Statistics
 {
+    private static class LruMap<String,AtomicLong> extends LinkedHashMap<String, AtomicLong >
+    {
+        private final int maxEntries;
+
+        public LruMap( int maxEntries )
+        {
+            this.maxEntries = maxEntries;
+        }
+
+        @Override
+        protected boolean removeEldestEntry( Entry<String, AtomicLong> entry )
+        {
+            return super.size() > maxEntries;
+        }
+    }
+
     public enum UrlHits
     {
         IPHITS( "IP Hits" ),
@@ -36,7 +53,7 @@ public class Statistics
         DEFAULTHITS( "Default Hits" ),
         ASHITS( "Autnum Hits" );
 
-        private Map<String,AtomicLong> hitsMap = Collections.synchronizedMap( new HashMap<String, AtomicLong>(  ) );
+        private Map<String,AtomicLong> hitsMap = Collections.synchronizedMap( new LruMap<String, AtomicLong>( 100 ) );
         private String title;
 
         public void hit( String url )
