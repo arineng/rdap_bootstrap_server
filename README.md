@@ -15,6 +15,11 @@ number of 1000 so that the master branch is not re-versioned for every release.
 no usable content, and the embedded bootstrap files point to our best known locations for servers. Minor
 point release may occur to update the embedded files until the IANA files become populated with useful
 data.
+* 1.1.0 - A few small things:
+    - IANA and AFRINIC have been taken out of the bootstrap files as they do not have servers ready yet.
+    - /help now works instead of giving a 500
+    - /help shows the dates of load and dates of the bootstrap files
+    - /help limits the URLs in the statistics to 100 per category
 
 A pre-built version of is available [here](https://github.com/arinlabs/arin_rdap) for Vagrant users.
 
