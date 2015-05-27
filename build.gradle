@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'war'
 
 group = 'ARIN'
-version = '1.1.0'
+version = '1000.0-SNAPSHOT'
 
 description = """RDAP Bootstrap Server"""
 
