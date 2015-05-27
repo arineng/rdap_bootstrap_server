@@ -20,6 +20,7 @@ data.
     - /help now works instead of giving a 500
     - /help shows the dates of load and dates of the bootstrap files
     - /help limits the URLs in the statistics to 100 per category
+* 1.1.1 - Bugfixes to /help and to parsing of IANA files
 
 A pre-built version of is available [here](https://github.com/arinlabs/arin_rdap) for Vagrant users.
 
