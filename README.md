@@ -153,8 +153,8 @@ entity bootstrap file:
           "ARIN"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhoi/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhoi/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -162,8 +162,8 @@ entity bootstrap file:
           "AP"
         ],
         [
-          "https://rdap.apnic.net",
-          "http://rdap.apnic.net"
+          "https://rdap.apnic.net/",
+          "http://rdap.apnic.net/"
         ]
       ],
       [
@@ -171,8 +171,8 @@ entity bootstrap file:
           "RIPE"
         ],
         [
-          "https://rdap.db.ripe.net",
-          "http://rdap.db.ripe.net"
+          "https://rdap.db.ripe.net/",
+          "http://rdap.db.ripe.net/"
         ]
       ],
       [
@@ -180,8 +180,8 @@ entity bootstrap file:
           "AFRINIC"
         ],
         [
-          "https://rdap.rd.me.afrinic.net/whois/AFRINIC",
-          "http://rdap.rd.me.afrinic.net/whois/AFRINIC"
+          "https://rdap.rd.me.afrinic.net/whois/AFRINIC/",
+          "http://rdap.rd.me.afrinic.net/whois/AFRINIC/"
         ]
       ],
       [
@@ -189,8 +189,8 @@ entity bootstrap file:
           "LACNIC"
         ],
         [
-          "https://rdap.labs.lacnic.net/rdap",
-          "http://rdap.labs.lacnic.net/rdap"
+          "https://rdap.labs.lacnic.net/rdap/",
+          "http://rdap.labs.lacnic.net/rdap/"
         ]
       ]
     ]
@@ -216,8 +216,8 @@ following form:
           "nameserver"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -225,8 +225,8 @@ following form:
           "entity"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -234,8 +234,8 @@ following form:
           "domain"
         ],
         [
-          "https://tlab.verisign.com/COM",
-          "http://tlab.verisign.com/COM"
+          "https://tlab.verisign.com/COM/",
+          "http://tlab.verisign.com/COM/"
         ]
       ]
     ]
