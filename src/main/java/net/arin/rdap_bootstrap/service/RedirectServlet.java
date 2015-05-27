@@ -16,6 +16,7 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -329,10 +330,18 @@ public class RedirectServlet extends HttpServlet
         Notice notice = new Notice();
         notice.setTitle( stats.getTitle() );
         ArrayList<String> description = new ArrayList<String>(  );
-        for ( Entry<String, AtomicLong> entry : stats.getEntrySet() )
+        Set<Entry<String,AtomicLong>> entrySet = stats.getEntrySet();
+        if( entrySet.size() != 0 )
         {
-            description.add(
-                String.format( "%-5d = %25s", entry.getValue().get(), entry.getKey() ) );
+            for ( Entry<String, AtomicLong> entry : entrySet )
+            {
+                description.add(
+                    String.format( "%-5d = %25s", entry.getValue().get(), entry.getKey() ) );
+            }
+        }
+        else
+        {
+            description.add( "Zero queries." );
         }
         notice.setDescription( description.toArray( new String[ description.size() ] ) );
         return notice;
@@ -364,11 +373,14 @@ public class RedirectServlet extends HttpServlet
         notices.add( createPublicationDateNotice("Domain", resourceFiles.getLastModified(BootFiles.DOMAIN.getKey()), domainBootstrap.getPublication()) );
         notices.add( createPublicationDateNotice("Entity", resourceFiles.getLastModified(BootFiles.ENTITY.getKey()), entityBootstrap.getPublication()) );
         notices.add( createPublicationDateNotice("IpV4", resourceFiles.getLastModified(BootFiles.V4.getKey()), ipV4Bootstrap.getPublication()) );
-        notices.add( createPublicationDateNotice("IpV6", resourceFiles.getLastModified(BootFiles.V6.getKey()), ipV6Bootstrap.getPublication()) );
+        notices.add( createPublicationDateNotice( "IpV6",
+            resourceFiles.getLastModified( BootFiles.V6.getKey() ),
+            ipV6Bootstrap.getPublication() ) );
 
         response.setNotices( notices );
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion( Include.NON_EMPTY );
         ObjectWriter writer = mapper.writer( new DefaultPrettyPrinter(  ) );
         writer.writeValue( outputStream, response );
     }
