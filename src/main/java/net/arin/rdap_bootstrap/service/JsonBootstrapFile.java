@@ -58,6 +58,10 @@ public class JsonBootstrapFile
         {
             if( url != null )
             {
+                if( url.endsWith( "/" ) )
+                {
+                    url = url.substring( 0, url.length() - 1 );
+                }
                 urls.add( url );
                 if( url.startsWith( "http://" ) )
                 {

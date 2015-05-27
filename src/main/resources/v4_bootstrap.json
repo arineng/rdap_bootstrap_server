@@ -58,8 +58,8 @@
           "223.000.000.000/8"
         ],
         [
-          "https://rdap.apnic.net",
-          "http://rdap.apnic.net"
+          "https://rdap.apnic.net/",
+          "http://rdap.apnic.net/"
         ]
       ],
       [
@@ -105,8 +105,8 @@
           "217.000.000.000/8"
         ],
         [
-          "https://rdap.db.ripe.net",
-          "http://rdap.db.ripe.net"
+          "https://rdap.db.ripe.net/",
+          "http://rdap.db.ripe.net/"
         ]
       ],
       [
@@ -193,8 +193,8 @@
           "216.000.000.000/8"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -211,8 +211,8 @@
           "201.000.000.000/8"
         ],
         [
-          "https://rdap.lacnic.net/rdap",
-          "http://rdap.lacnic.net/rdap"
+          "https://rdap.lacnic.net/rdap/",
+          "http://rdap.lacnic.net/rdap/"
         ]
       ]
     ]

@@ -15,8 +15,8 @@
           "2400:0000::/12"
         ],
         [
-          "https://rdap.apnic.net",
-          "http://rdap.apnic.net"
+          "https://rdap.apnic.net/",
+          "http://rdap.apnic.net/"
         ]
       ],
       [
@@ -29,8 +29,8 @@
           "2620:0000::/23"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -54,8 +54,8 @@
           "2a00:0000::/12"
         ],
         [
-          "https://rdap.db.ripe.net",
-          "http://rdap.db.ripe.net"
+          "https://rdap.db.ripe.net/",
+          "http://rdap.db.ripe.net/"
         ]
       ],
       [
@@ -64,8 +64,8 @@
           "2800:0000::/12"
         ],
         [
-          "https://rdap.lacnic.net/rdap",
-          "http://rdap.lacnic.net/rdap"
+          "https://rdap.lacnic.net/rdap/",
+          "http://rdap.lacnic.net/rdap/"
         ]
       ]
     ]

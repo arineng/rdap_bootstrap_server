@@ -8,8 +8,8 @@
           "ARIN"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -17,8 +17,8 @@
           "AP"
         ],
         [
-          "https://rdap.apnic.net",
-          "http://rdap.apnic.net"
+          "https://rdap.apnic.net/",
+          "http://rdap.apnic.net/"
         ]
       ],
       [
@@ -26,8 +26,8 @@
           "RIPE"
         ],
         [
-          "https://rdap.db.ripe.net",
-          "http://rdap.db.ripe.net"
+          "https://rdap.db.ripe.net/",
+          "http://rdap.db.ripe.net/"
         ]
       ],
       [
@@ -35,8 +35,8 @@
           "LACNIC"
         ],
         [
-          "https://rdap.lacnic.net/rdap",
-          "http://rdap.lacnic.net/rdap"
+          "https://rdap.lacnic.net/rdap/",
+          "http://rdap.lacnic.net/rdap/"
         ]
       ]
     ]

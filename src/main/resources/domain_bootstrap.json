@@ -10,8 +10,8 @@
           "name"
         ],
         [
-          "https://tlab.verisign.com/COM",
-          "http://tlab.verisign.com/COM"
+          "https://tlab.verisign.com/COM/",
+          "http://tlab.verisign.com/COM/"
         ]
       ],
       [
@@ -19,8 +19,8 @@
           "org"
         ],
         [
-          "https://whois.pir.org",
-          "http://whois.pir.org"
+          "https://whois.pir.org/",
+          "http://whois.pir.org/"
         ]
       ],
       [
@@ -28,8 +28,8 @@
           "info"
         ],
         [
-          "https://rdg.afilias.info/rdap",
-          "http://rdg.afilias.info/rdap"
+          "https://rdg.afilias.info/rdap/",
+          "http://rdg.afilias.info/rdap/"
         ]
       ],
       [
@@ -37,8 +37,8 @@
           "biz"
         ],
         [
-          "https://whois.neustar.biz",
-          "http://whois.neustar.biz"
+          "https://whois.neustar.biz/",
+          "http://whois.neustar.biz/"
         ]
       ],
       [
@@ -46,8 +46,8 @@
           "cn"
         ],
         [
-          "https://rdap.restfulwhois.org",
-          "http://rdap.restfulwhois.org"
+          "https://rdap.restfulwhois.org/",
+          "http://rdap.restfulwhois.org/"
         ]
       ]
     ]

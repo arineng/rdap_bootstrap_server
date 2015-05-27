@@ -1047,8 +1047,8 @@
           "393216-394239"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -1293,8 +1293,8 @@
           "198656-199679"
         ],
         [
-          "https://rdap.db.ripe.net",
-          "http://rdap.db.ripe.net"
+          "https://rdap.db.ripe.net/",
+          "http://rdap.db.ripe.net/"
         ]
       ],
       [
@@ -1412,8 +1412,8 @@
           "132096-133119"
         ],
         [
-          "https://rdap.apnic.net",
-          "http://rdap.apnic.net"
+          "https://rdap.apnic.net/",
+          "http://rdap.apnic.net/"
         ]
       ],
       [
@@ -2098,8 +2098,8 @@
           "262144-263167"
         ],
         [
-          "https://rdap.lacnic.net/rdap",
-          "http://rdap.lacnic.net/rdap"
+          "https://rdap.lacnic.net/rdap/",
+          "http://rdap.lacnic.net/rdap/"
         ]
       ]
     ]

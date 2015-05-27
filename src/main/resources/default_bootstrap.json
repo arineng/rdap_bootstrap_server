@@ -10,8 +10,8 @@
           "nameserver"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -19,8 +19,8 @@
           "entity"
         ],
         [
-          "https://rdappilot.arin.net/restfulwhois/rdap",
-          "http://rdappilot.arin.net/restfulwhois/rdap"
+          "https://rdappilot.arin.net/restfulwhois/rdap/",
+          "http://rdappilot.arin.net/restfulwhois/rdap/"
         ]
       ],
       [
@@ -28,8 +28,8 @@
           "domain"
         ],
         [
-          "https://tlab.verisign.com/COM",
-          "http://tlab.verisign.com/COM"
+          "https://tlab.verisign.com/COM/",
+          "http://tlab.verisign.com/COM/"
         ]
       ]
     ]
