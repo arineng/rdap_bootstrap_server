@@ -68,6 +68,13 @@ Connecting to rdap.apnic.net|2001:dd8:9:2::101:43|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 ```
 
+## Getting Help
+
+If you have questions or need help with this software, you may use the issue tracker on
+[GitHub](https://github.com/arinlabs/rdap_bootstrap_server/issues) or you may use the
+[ARIN Technical Discussions ](http://lists.arin.net/mailman/listinfo/arin-tech-discuss)
+mailing list (it is a very low volume list).
+
 ## Properties and Bootstrap Files
 
 Bootstrap files may either be listed in a properties file pointed to by the system property
