@@ -21,6 +21,7 @@ data.
     - /help shows the dates of load and dates of the bootstrap files
     - /help limits the URLs in the statistics to 100 per category
 * 1.1.1 - Bugfixes to /help and to parsing of IANA files
+* 1.2.0 - Added match_scheme_on_redirect option.
 
 A pre-built version of is available [here](https://github.com/arinlabs/arin_rdap) for Vagrant users.
 
