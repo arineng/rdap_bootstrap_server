@@ -57,9 +57,10 @@ public class RedirectServlet extends HttpServlet
 
     private ResourceFiles resourceFiles;
     private Timer timer;
-    private Boolean matchSchemeOnRedirect = Boolean.FALSE;
+    Boolean matchSchemeOnRedirect = Boolean.FALSE;
 
     private static final long CHECK_CONFIG_FILES = 60000L;
+    static final String MATCH_SCHEME_ON_REDIRECT = "match_scheme_on_redirect";
 
     @Override
     public void init( ServletConfig config ) throws ServletException
@@ -68,8 +69,8 @@ public class RedirectServlet extends HttpServlet
 
         statistics = new Statistics();
 
-        matchSchemeOnRedirect = Boolean.getBoolean(
-            System.getProperty( Constants.PROPERTY_PREFIX + "match_scheme_on_redirect", matchSchemeOnRedirect.toString() ) );
+        matchSchemeOnRedirect = Boolean.valueOf(
+            System.getProperty( Constants.PROPERTY_PREFIX + MATCH_SCHEME_ON_REDIRECT, matchSchemeOnRedirect.toString() ) );
 
         try
         {
@@ -108,30 +109,7 @@ public class RedirectServlet extends HttpServlet
             }
             else
             {
-                String redirectUrl = null;
-                if( matchSchemeOnRedirect )
-                {
-                    if( req.getScheme().equals( "http" ) && urls.getHttpUrl() != null )
-                    {
-                        redirectUrl = urls.getHttpUrl() + req.getPathInfo();
-                    }
-                    else if( req.getScheme().equals( "https" ) && urls.getHttpsUrl() != null )
-                    {
-                        redirectUrl = urls.getHttpsUrl() + req.getPathInfo();
-                    }
-                    else
-                    {
-                        redirectUrl = urls.getUrls().get( 0 ) + req.getPathInfo();
-                    }
-                }
-                else
-                {
-                    redirectUrl = urls.getHttpsUrl();
-                    if( redirectUrl == null )
-                    {
-                        redirectUrl = urls.getHttpUrl();
-                    }
-                }
+                String redirectUrl = getRedirectUrl( req.getScheme(),req.getPathInfo(), urls );
                 if( hits != null )
                 {
                     hits.hit( redirectUrl );
@@ -145,6 +123,46 @@ public class RedirectServlet extends HttpServlet
             resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
         }
 
+    }
+
+    String getRedirectUrl( String scheme, String pathInfo, ServiceUrls urls )
+    {
+        String redirectUrl = null;
+        if( matchSchemeOnRedirect )
+        {
+            System.out.println( "matching scheme on redirect" );
+            System.out.println( "https=" + urls.getHttpsUrl() );
+            System.out.println( "http=" + urls.getHttpUrl() );
+            System.out.println( "scheme=" + scheme );
+            if( scheme.equals( "https" ) && urls.getHttpsUrl() != null )
+            {
+                redirectUrl = urls.getHttpsUrl() + pathInfo;
+                System.out.println( "https redirect=" + redirectUrl );
+            }
+            else if( scheme.equals( "http" ) && urls.getHttpUrl() != null )
+            {
+                redirectUrl = urls.getHttpUrl() + pathInfo;
+                System.out.println( "http redirect=" + redirectUrl );
+            }
+            else
+            {
+                redirectUrl = urls.getUrls().get( 0 ) + pathInfo;
+                System.out.println( "default redirect=" + redirectUrl );
+            }
+        }
+        else
+        {
+            redirectUrl = urls.getHttpsUrl();
+            if( redirectUrl == null )
+            {
+                redirectUrl = urls.getHttpUrl();
+            }
+            if( redirectUrl != null )
+            {
+                redirectUrl += pathInfo;
+            }
+        }
+        return redirectUrl;
     }
 
     @Override

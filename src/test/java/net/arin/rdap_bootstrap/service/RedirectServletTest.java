@@ -16,6 +16,8 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import net.arin.rdap_bootstrap.Constants;
+import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import net.arin.rdap_bootstrap.service.RedirectServlet;
 import org.junit.Test;
 
@@ -33,6 +35,126 @@ public class RedirectServletTest
     private static final String RIPE = "http://rdap.db.ripe.net";
     private static final String AFRINIC = "http://rdap.rd.me.afrinic.net/whois/AFRINIC";
     private static final String COM = "http://tlab.verisign.com/COM";
+
+    @Test
+    public void testGetRedirectUrlDefault() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "http://example.com" );
+        urls.addUrl( "https://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+    }
+
+    @Test
+    public void testGetRedirectUrlDefaultOnlyHttp() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "http://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+    }
+
+    @Test
+    public void testGetRedirectUrlDefaultOnlyHttps() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "https://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+    }
+
+    @Test
+    public void testGetRedirectUrlFalse() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+        System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "False" );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "http://example.com" );
+        urls.addUrl( "https://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+    }
+
+    @Test
+    public void testGetRedirectUrlTrue() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+        System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "http://example.com" );
+        urls.addUrl( "https://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+    }
+
+    @Test
+    public void testGetRedirectUrlTrueOnlyHttp() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+        System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "http://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+    }
+
+    @Test
+    public void testGetRedirectUrlTrueOnlyHttps() throws Exception
+    {
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+        System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
+
+        ServiceUrls urls = new ServiceUrls();
+        urls.addUrl( "https://example.com" );
+
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+
+        System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
+    }
 
     @Test
     public void testMakeAutNumInt() throws Exception

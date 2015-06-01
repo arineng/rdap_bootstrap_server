@@ -63,13 +63,13 @@ public class JsonBootstrapFile
                     url = url.substring( 0, url.length() - 1 );
                 }
                 urls.add( url );
-                if( url.startsWith( "http://" ) )
+                if( url.startsWith( "https://" ) )
                 {
-                    httpIdx = urls.size() -1;
+                    httpsIdx = urls.size() -1;
                 }
-                else if( url.startsWith( "https://" ) )
+                else if( url.startsWith( "http://" ) )
                 {
-                    httpsIdx = urls.size() - 1;
+                    httpIdx = urls.size() - 1;
                 }
             }
         }
