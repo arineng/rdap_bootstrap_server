@@ -251,3 +251,12 @@ following form:
 ```
 
 Each service type in this file represents an RDAP query type.
+
+## Redirect Scheme Matching
+
+By default, this server will always attempt to issue HTTPS redirects. This should not be a problem
+because all RDAP clients are _REQUIRED_ to support both HTTP and HTTPS. However, if it is necessary
+to try to keep the scheme (HTTP or HTTPS) for the redirect that was given in the query, this
+behavior can be set with the system property `arin.rdapbootstrap.match_scheme_on_redirect=TRUE`.
+Note that this is a system property and is not part of the `resouce_files.properties` file.
+

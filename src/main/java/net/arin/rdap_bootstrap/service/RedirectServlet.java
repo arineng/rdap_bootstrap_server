@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
+import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
 import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
@@ -56,6 +57,7 @@ public class RedirectServlet extends HttpServlet
 
     private ResourceFiles resourceFiles;
     private Timer timer;
+    private Boolean matchSchemeOnRedirect = Boolean.FALSE;
 
     private static final long CHECK_CONFIG_FILES = 60000L;
 
@@ -63,7 +65,12 @@ public class RedirectServlet extends HttpServlet
     public void init( ServletConfig config ) throws ServletException
     {
         super.init( config );
+
         statistics = new Statistics();
+
+        matchSchemeOnRedirect = Boolean.getBoolean(
+            System.getProperty( Constants.PROPERTY_PREFIX + "match_scheme_on_redirect", matchSchemeOnRedirect.toString() ) );
+
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
@@ -102,17 +109,28 @@ public class RedirectServlet extends HttpServlet
             else
             {
                 String redirectUrl = null;
-                if( req.getScheme().equals( "http" ) && urls.getHttpUrl() != null )
+                if( matchSchemeOnRedirect )
                 {
-                    redirectUrl = urls.getHttpUrl() + req.getPathInfo();
-                }
-                else if( req.getScheme().equals( "https" ) && urls.getHttpsUrl() != null )
-                {
-                    redirectUrl = urls.getHttpsUrl() + req.getPathInfo();
+                    if( req.getScheme().equals( "http" ) && urls.getHttpUrl() != null )
+                    {
+                        redirectUrl = urls.getHttpUrl() + req.getPathInfo();
+                    }
+                    else if( req.getScheme().equals( "https" ) && urls.getHttpsUrl() != null )
+                    {
+                        redirectUrl = urls.getHttpsUrl() + req.getPathInfo();
+                    }
+                    else
+                    {
+                        redirectUrl = urls.getUrls().get( 0 ) + req.getPathInfo();
+                    }
                 }
                 else
                 {
-                    redirectUrl = urls.getUrls().get( 0 ) + req.getPathInfo();
+                    redirectUrl = urls.getHttpsUrl();
+                    if( redirectUrl == null )
+                    {
+                        redirectUrl = urls.getHttpUrl();
+                    }
                 }
                 if( hits != null )
                 {
