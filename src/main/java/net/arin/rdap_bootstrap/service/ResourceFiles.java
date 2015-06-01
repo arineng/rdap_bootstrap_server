@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
  */
 package net.arin.rdap_bootstrap.service;
 
