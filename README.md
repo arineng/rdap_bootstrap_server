@@ -100,7 +100,7 @@ So there are three types of configuration.
 
 ### Configuration Setup Type 1 Example
 
-Do not thing and let the server use the bootstrap files that ship with it.
+Do nothing and let the server use the bootstrap files that ship with it.
 
 ### Configuration Setup Type 2 Example
 
