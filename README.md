@@ -37,14 +37,6 @@ gradle test
 
 which will create the build and run the unit tests. The resulting war file will be in `build/libs`.
 
-To build with Maven (being deprecated):
-
-```
-mvn package
-```
-
-which will create the build and run the unit tests. The resulting WAR file will be in `target`.
-
 ## Deploying and Testing
 
 Deploying the WAR file depends on the Servlet container/server you are using. It is usually as simple
