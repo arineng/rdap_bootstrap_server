@@ -1,37 +1,34 @@
 {
-  "rdap_bootstrap": {
-    "version": "1.0",
-    "publication": "2014-09-09T15:39:03-0400",
-    "services": [
+  "version": "1.0",
+  "publication": "2014-09-09T15:39:03-0400",
+  "services": [
+    [
       [
-        [
-          "ip",
-          "autnum",
-          "nameserver"
-        ],
-        [
-          "https://rdappilot.arin.net/restfulwhois/rdap/",
-          "http://rdappilot.arin.net/restfulwhois/rdap/"
-        ]
+        "ip",
+        "autnum",
+        "nameserver"
       ],
       [
-        [
-          "entity"
-        ],
-        [
-          "https://rdappilot.arin.net/restfulwhois/rdap/",
-          "http://rdappilot.arin.net/restfulwhois/rdap/"
-        ]
+        "https://rdap.arin.net/registry",
+        "http://rdap.arin.net/registry"
+      ]
+    ],
+    [
+      [
+        "entity"
       ],
       [
-        [
-          "domain"
-        ],
-        [
-          "https://tlab.verisign.com/COM/",
-          "http://tlab.verisign.com/COM/"
-        ]
+        "https://rdap.arin.net/registry",
+        "http://rdap.arin.net/registry"
+      ]
+    ],
+    [
+      [
+        "domain"
+      ],
+      [
+        "http://rdg.afilias.info/rdap/"
       ]
     ]
-  }
+  ]
 }

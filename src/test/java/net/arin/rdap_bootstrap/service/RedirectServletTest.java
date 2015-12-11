@@ -18,7 +18,6 @@ package net.arin.rdap_bootstrap.service;
 
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
-import net.arin.rdap_bootstrap.service.RedirectServlet;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -28,13 +27,13 @@ import static junit.framework.Assert.assertEquals;
  */
 public class RedirectServletTest
 {
-    private static final String ARIN = "http://rdappilot.arin.net/restfulwhois/rdap";
-    private static final String LACNIC = "http://rdap.lacnic.net/rdap";
+    private static final String ARIN = "http://rdap.arin.net/registry";
+    private static final String LACNIC = "https://rdap.lacnic.net/rdap";
     private static final String IANA = "http://rdap.iana.org";
-    private static final String APNIC = "http://rdap.apnic.net";
+    private static final String APNIC = "https://rdap.apnic.net";
     private static final String RIPE = "http://rdap.db.ripe.net";
     private static final String AFRINIC = "http://rdap.rd.me.afrinic.net/whois/AFRINIC";
-    private static final String COM = "http://tlab.verisign.com/COM";
+    private static final String INFO = "http://rdg.afilias.info/rdap";
 
     @Test
     public void testGetRedirectUrlDefault() throws Exception
@@ -163,7 +162,9 @@ public class RedirectServletTest
         servlet.init( null );
 
         assertEquals( ARIN, servlet.makeAutnumBase( "/autnum/10" ).getHttpUrl() );
-        assertEquals( RIPE, servlet.makeAutnumBase( "/autnum/42222" ).getHttpUrl() );
+        //TODO re-enable when their servers are put back in the bootstrap files
+        //assertEquals( "http://rdap.db.ripe.net", asBootstrap.getServiceUrls( "7" ).getHttpUrl() );
+        //assertEquals( RIPE, servlet.makeAutnumBase( "/autnum/42222" ).getHttpUrl() );
     }
 
     @Test
@@ -174,12 +175,12 @@ public class RedirectServletTest
 
         assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0" ).getHttpUrl() );
         assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0/16" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0" ).getHttpsUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpsUrl() );
         assertEquals( ARIN, servlet.makeIpBase( "/ip/2620:0000:0000:0000:0000:0000:0000:0000" ).getHttpUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( AFRINIC, servlet.makeIpBase( "/ip/2c00:0000::/12" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeIpBase( "/ip/2800:0000::/12" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/2800:0000::/12" ).getHttpsUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( IANA, servlet.makeIpBase( "/ip/2001:0000::1" ).getHttpUrl() );
     }
@@ -190,8 +191,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( COM, servlet.makeDomainBase( "/domain/example.COM" ).getHttpUrl() );
-        assertEquals( COM, servlet.makeDomainBase( "/domain/example.COM." ).getHttpUrl() );
+        assertEquals( INFO, servlet.makeDomainBase( "/domain/example.INFO" ).getHttpUrl() );
+        assertEquals( INFO, servlet.makeDomainBase( "/domain/example.INFO." ).getHttpUrl() );
         assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa." ).getHttpUrl() );
         assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa" ).getHttpUrl() );
         assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.7.in-addr.arpa" ).getHttpUrl() );
@@ -199,7 +200,7 @@ public class RedirectServletTest
         assertEquals( ARIN, servlet.makeDomainBase( "/domain/0.2.6.2.ip6.arpa" ).getHttpUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( AFRINIC, servlet.makeDomainBase( "/domain/0.c.2.ip6.arpa" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ).getHttpUrl() );
+        assertEquals( LACNIC, servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ).getHttpsUrl() );
     }
 
     @Test
@@ -208,8 +209,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( COM, servlet.makeNameserverBase( "/nameserver/ns1.example.COM" ).getHttpUrl() );
-        assertEquals( COM, servlet.makeNameserverBase( "/nameserver/ns1.example.COM." ).getHttpUrl() );
+        assertEquals( INFO, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpUrl() );
+        assertEquals( INFO, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpUrl() );
     }
 
     @Test
@@ -220,8 +221,8 @@ public class RedirectServletTest
 
         assertEquals( ARIN, servlet.makeEntityBase( "/entity/ABC123-ARIN" ).getHttpUrl() );
         assertEquals( RIPE, servlet.makeEntityBase( "/entity/ABC123-RIPE" ).getHttpUrl() );
-        assertEquals( APNIC, servlet.makeEntityBase( "/entity/ABC123-AP" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeEntityBase( "/entity/ABC123-LACNIC" ).getHttpUrl() );
+        assertEquals( APNIC, servlet.makeEntityBase( "/entity/ABC123-AP" ).getHttpsUrl() );
+        assertEquals( LACNIC, servlet.makeEntityBase( "/entity/ABC123-LACNIC" ).getHttpsUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( AFRINIC, servlet.makeEntityBase( "/entity/ABC123-AFRINIC" ).getHttpUrl() );
     }

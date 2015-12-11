@@ -43,6 +43,7 @@ public class JsonBootstrapFile
         public void addServiceEntry( String entry );
         public void addServiceUrl( String url );
         public void setPublication( String publication );
+        public void setDescription( String description );
     }
 
     /**
@@ -117,96 +118,94 @@ public class JsonBootstrapFile
         while( jsonParser.nextToken() != JsonToken.END_OBJECT )
         {
             if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                jsonParser.getCurrentName().equals( "rdap_bootstrap" ) )
+                jsonParser.getCurrentName().equals( "version" ) )
             {
-                if( jsonParser.nextToken() != JsonToken.START_OBJECT )
+                if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
                 {
-                    throw new RuntimeException( "'rdap_bootstrap' is not an ojbect." );
+                    throw new RuntimeException( "'version' is not a string" );
                 }
                 //else
-                while( jsonParser.nextToken() != JsonToken.END_OBJECT )
+                String version = jsonParser.getValueAsString();
+                if( version == null || !version.equals( "1.0" ) )
                 {
-                    if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                        jsonParser.getCurrentName().equals( "version" ) )
-                    {
-                        if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
-                        {
-                            throw new RuntimeException( "'version' is not a string" );
-                        }
-                        //else
-                        String version = jsonParser.getValueAsString();
-                        if( version == null || !version.equals( "1.0" ) )
-                        {
-                            throw new RuntimeException( "'version' is not '1.0'" );
-                        }
-                    }
-                    else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                            jsonParser.getCurrentName().equals( "publication" ) )
-                    {
-                        // These are dates, but since we're outputting them as Strings anyway, and not really doing
-                        // anything else with them leaving them as Strings should be okay.
-                        if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
-                        {
-                            throw new RuntimeException( "'publication' is not a string" );
-                        }
+                    throw new RuntimeException( "'version' is not '1.0'" );
+                }
+            }
+            else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
+                    jsonParser.getCurrentName().equals( "publication" ) )
+            {
+                // These are dates, but since we're outputting them as Strings anyway, and not really doing
+                // anything else with them leaving them as Strings should be okay.
+                if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
+                {
+                    throw new RuntimeException( "'publication' is not a string" );
+                }
 
-                        handler.setPublication( jsonParser.getValueAsString() );
-                    }
-                    else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                        jsonParser.getCurrentName().equals( "services" ) )
+                handler.setPublication( jsonParser.getValueAsString() );
+            }
+            else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
+                jsonParser.getCurrentName().equals( "description" ) )
+            {
+                if( jsonParser.nextToken() != JsonToken.VALUE_STRING )
+                {
+                    throw new RuntimeException( "'description' is not a string" );
+                }
+
+                handler.setDescription( jsonParser.getValueAsString() );
+            }
+            else if( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
+                jsonParser.getCurrentName().equals( "services" ) )
+            {
+                if( jsonParser.nextToken() != JsonToken.START_ARRAY )
+                {
+                    throw new RuntimeException( "'services' is not an array" );
+                }
+                //else
+                handler.startServices();
+                while( jsonParser.nextToken() != JsonToken.END_ARRAY )
+                {
+                    if( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
                     {
-                        if( jsonParser.nextToken() != JsonToken.START_ARRAY )
+                        throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
+                    }
+                    //else
+                    handler.startService();
+                    while( jsonParser.nextToken() != JsonToken.END_ARRAY )
+                    {
+                        if( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
                         {
-                            throw new RuntimeException( "'services' is not an array" );
+                            throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
                         }
                         //else
-                        handler.startServices();
                         while( jsonParser.nextToken() != JsonToken.END_ARRAY )
                         {
-                            if( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
+                            if( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
                             {
-                                throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
+                                throw new RuntimeException( "service entry at " +
+                                    jsonParser.getCurrentLocation() + " is not a string" );
                             }
                             //else
-                            handler.startService();
-                            while( jsonParser.nextToken() != JsonToken.END_ARRAY )
-                            {
-                                if( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
-                                {
-                                    throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
-                                }
-                                //else
-                                while( jsonParser.nextToken() != JsonToken.END_ARRAY )
-                                {
-                                    if( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
-                                    {
-                                        throw new RuntimeException( "service entry at " +
-                                            jsonParser.getCurrentLocation() + " is not a string" );
-                                    }
-                                    //else
-                                    handler.addServiceEntry( jsonParser.getValueAsString() );
-                                }
-                                if( jsonParser.nextToken() != JsonToken.START_ARRAY )
-                                {
-                                    throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
-                                }
-                                //else
-                                while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
-                                {
-                                    if ( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
-                                    {
-                                        throw new RuntimeException( "service URL at " +
-                                            jsonParser.getCurrentLocation() + " is not a string" );
-                                    }
-                                    //else
-                                    handler.addServiceUrl( jsonParser.getValueAsString() );
-                                }
-                            }
-                            handler.endService();
+                            handler.addServiceEntry( jsonParser.getValueAsString() );
                         }
-                        handler.endServices();
+                        if( jsonParser.nextToken() != JsonToken.START_ARRAY )
+                        {
+                            throw new RuntimeException( "expected array at " + jsonParser.getCurrentLocation() );
+                        }
+                        //else
+                        while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
+                        {
+                            if ( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                            {
+                                throw new RuntimeException( "service URL at " +
+                                    jsonParser.getCurrentLocation() + " is not a string" );
+                            }
+                            //else
+                            handler.addServiceUrl( jsonParser.getValueAsString() );
+                        }
                     }
+                    handler.endService();
                 }
+                handler.endServices();
             }
         }
     }

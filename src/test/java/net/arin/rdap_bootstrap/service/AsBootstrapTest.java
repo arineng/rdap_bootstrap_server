@@ -32,19 +32,18 @@ public class AsBootstrapTest
         AsBootstrap asBootstrap = new AsBootstrap();
         asBootstrap.loadData( new ResourceFiles() );
 
-        assertEquals( "http://rdappilot.arin.net/restfulwhois/rdap", asBootstrap.getServiceUrls( "1" ).getHttpUrl() );
-        assertEquals( "http://rdappilot.arin.net/restfulwhois/rdap", asBootstrap.getServiceUrls( "2" ).getHttpUrl() );
-        assertEquals( "http://rdap.db.ripe.net", asBootstrap.getServiceUrls( "7" ).getHttpUrl() );
-        assertEquals( "http://rdap.apnic.net", asBootstrap.getServiceUrls( "173" ).getHttpUrl() );
-        assertEquals( "http://rdap.db.ripe.net", asBootstrap.getServiceUrls( "248" ).getHttpUrl() );
-        assertEquals( "http://rdap.db.ripe.net", asBootstrap.getServiceUrls( "251" ).getHttpUrl() );
-        assertEquals( "http://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11450" ).getHttpUrl() );
-        assertEquals( "http://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11451" ).getHttpUrl() );
-        //TODO renable when their server are put back in the bootstrap files
-        //assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", asBootstrap.getServiceUrls( "11569" ).getHttpUrl() );
-        assertEquals( "http://rdap.apnic.net", asBootstrap.getServiceUrls( "17408" ).getHttpUrl() );
-        assertEquals( "http://rdap.apnic.net", asBootstrap.getServiceUrls( "18431" ).getHttpUrl() );
-        assertNull( asBootstrap.getServiceUrls( "394240" ) );
+        assertEquals( "http://rdap.arin.net/registry", asBootstrap.getServiceUrls( "1" ).getHttpUrl() );
+        assertEquals( "http://rdap.arin.net/registry", asBootstrap.getServiceUrls( "2" ).getHttpUrl() );
+        assertEquals( "https://rdap.db.ripe.net", asBootstrap.getServiceUrls( "7" ).getHttpsUrl() );
+        assertEquals( "https://rdap.apnic.net", asBootstrap.getServiceUrls( "173" ).getHttpsUrl() );
+        assertEquals( "https://rdap.db.ripe.net", asBootstrap.getServiceUrls( "7" ).getHttpsUrl() );
+        assertEquals( "https://rdap.db.ripe.net", asBootstrap.getServiceUrls( "248" ).getHttpsUrl() );
+        assertEquals( "https://rdap.db.ripe.net", asBootstrap.getServiceUrls( "251" ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11450" ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap", asBootstrap.getServiceUrls( "11451" ).getHttpsUrl() );
+        assertEquals( "http://rdap.afrinic.net/rdap", asBootstrap.getServiceUrls( "11569" ).getHttpUrl() );
+        assertEquals( "https://rdap.apnic.net", asBootstrap.getServiceUrls( "17408" ).getHttpsUrl() );
+        assertEquals( "https://rdap.apnic.net", asBootstrap.getServiceUrls( "18431" ).getHttpsUrl() );
         assertNull( asBootstrap.getServiceUrls( "4294967294" ) );
     }
 
