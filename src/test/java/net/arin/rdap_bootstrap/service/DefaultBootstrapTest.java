@@ -32,8 +32,8 @@ public class DefaultBootstrapTest
         DefaultBootstrap d = new DefaultBootstrap();
         d.loadData( new ResourceFiles() );
 
-        assertEquals( "http://rdappilot.arin.net/restfulwhois/rdap",
+        assertEquals( "http://rdap.arin.net/registry",
             d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
-        assertEquals( "http://tlab.verisign.com/COM", d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
+        assertEquals( "http://rdg.afilias.info/rdap", d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
     }
 }

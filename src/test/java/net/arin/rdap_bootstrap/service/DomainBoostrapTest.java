@@ -31,7 +31,7 @@ public class DomainBoostrapTest
         DomainBootstrap domain = new DomainBootstrap();
         domain.loadData( new ResourceFiles() );
 
-        assertEquals( "http://tlab.verisign.com/COM", domain.getServiceUrls( "foo.COM" ).getHttpUrl() );
-        assertEquals( "http://whois.pir.org", domain.getServiceUrls( "org" ).getHttpUrl() );
+        assertEquals( "http://rdg.afilias.info/rdap", domain.getServiceUrls( "foo.info" ).getHttpUrl() );
+        assertEquals( "http://rdg.afilias.info/rdap", domain.getServiceUrls( "info" ).getHttpUrl() );
     }
 }

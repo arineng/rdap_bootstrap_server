@@ -21,9 +21,6 @@ import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 
 import java.util.HashMap;
 
-/**
- * @version $Rev$, $Date$
- */
 public class DefaultBootstrap implements JsonBootstrapFile.Handler
 {
     public enum Type {
@@ -50,6 +47,7 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
 
     private ServiceUrls serviceUrls;
     private String publication;
+    private String description;
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
@@ -103,4 +101,13 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
     public void setPublication( String publication ) { this.publication = publication; }
     public String getPublication() { return publication; }
 
+    @Override
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+    public String getDescription()
+    {
+        return description;
+    }
 }

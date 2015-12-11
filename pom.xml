@@ -4,7 +4,7 @@
   <groupId>ARIN</groupId>
   <artifactId>rdap_bootstrap_server</artifactId>
   <packaging>war</packaging>
-  <version>1000.0-SNAPSHOT</version>
+  <version>1.2.1</version>
   <name>RDAP Bootstrap Server</name>
   <url>http://maven.apache.org</url>
   <build>

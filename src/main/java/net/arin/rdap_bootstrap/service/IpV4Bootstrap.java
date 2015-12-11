@@ -31,6 +31,7 @@ public class IpV4Bootstrap implements JsonBootstrapFile.Handler
 
     private ServiceUrls serviceUrls;
     private String publication;
+    private String description;
 
     public void loadData( ResourceFiles resourceFiles )
         throws Exception
@@ -84,4 +85,15 @@ public class IpV4Bootstrap implements JsonBootstrapFile.Handler
     @Override
     public void setPublication( String publication ) { this.publication = publication; }
     public String getPublication() { return publication; }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    @Override
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
 }

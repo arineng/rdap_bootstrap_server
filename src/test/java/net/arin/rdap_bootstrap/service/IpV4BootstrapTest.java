@@ -32,18 +32,15 @@ public class IpV4BootstrapTest
         IpV4Bootstrap v4 = new IpV4Bootstrap();
         v4.loadData( new ResourceFiles() );
 
-        assertNull( v4.getServiceUrls( 3 ) );
-        assertEquals( "http://rdap.apnic.net", v4.getServiceUrls( 1 ).getHttpUrl() );
+        assertEquals( "https://rdap.apnic.net", v4.getServiceUrls( 1 ).getHttpsUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( "http://rdap.iana.org", v4.getServiceUrls( 0 ).getHttpUrl() );
-        assertEquals( "http://rdap.apnic.net", v4.getServiceUrls( 27 ).getHttpUrl() );
-        assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 31 ).getHttpUrl() );
-        //TODO renable when their server are put back in the bootstrap files
-        //assertEquals( "http://rdap.rd.me.afrinic.net/whois/AFRINIC", v4.getServiceUrls( 41 ).getHttpUrl() );
-        assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 177 ).getHttpUrl() );
-        assertEquals( "http://rdap.db.ripe.net", v4.getServiceUrls( 188 ).getHttpUrl() );
-        assertEquals( "http://rdap.lacnic.net/rdap", v4.getServiceUrls( 191 ).getHttpUrl() );
-        assertNull( v4.getServiceUrls( 224 ) );
+        assertEquals( "https://rdap.apnic.net", v4.getServiceUrls( 27 ).getHttpsUrl() );
+        assertEquals( "https://rdap.db.ripe.net", v4.getServiceUrls( 31 ).getHttpsUrl() );
+        assertEquals( "http://rdap.afrinic.net/rdap", v4.getServiceUrls( 41 ).getHttpUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( 177 ).getHttpsUrl() );
+        assertEquals( "https://rdap.db.ripe.net", v4.getServiceUrls( 188 ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( 191 ).getHttpsUrl() );
     }
 
 }

@@ -39,6 +39,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
 
     private ServiceUrls serviceUrls;
     private String publication;
+    private String description;
 
     @Override
     public void startServices()
@@ -110,4 +111,14 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     public void setPublication( String publication ) { this.publication = publication; }
     public String getPublication() { return publication; }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
+    @Override
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
 }
