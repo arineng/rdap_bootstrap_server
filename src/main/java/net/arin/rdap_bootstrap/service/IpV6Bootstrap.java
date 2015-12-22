@@ -16,18 +16,14 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import com.googlecode.ipv6.IPv6Address;
-import com.googlecode.ipv6.IPv6Network;
-import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
-import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.util.Map;
 import java.util.TreeMap;
+
+import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
+import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
+
+import com.googlecode.ipv6.IPv6Address;
+import com.googlecode.ipv6.IPv6Network;
 
 /**
  * @version $Rev$, $Date$
