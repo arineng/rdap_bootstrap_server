@@ -73,11 +73,21 @@ public class IpV4Bootstrap implements JsonBootstrapFile.Handler {
 	public ServiceUrls getServiceUrls(String prefix) {
 		
 		UniqueIpResource start;
-		try {
+		
+		if(!prefix.contains("/") && prefix.contains(".")) {
+			// single host
+			start = UniqueIpResource.parse(prefix);
+		} else if (!prefix.contains("/")) {
 			// /8 single int behaviour
-			new Integer(prefix);
-			start = IpRange.parse(prefix + ".0.0.0/8").getStart();
-		} catch (NumberFormatException e) {
+			try {
+				new Integer(prefix);
+				start = IpRange.parse(prefix + ".0.0.0/8").getStart();
+			} catch (NumberFormatException e) {
+				// network
+				start = IpRange.parse(prefix).getStart();
+			}
+		} else {
+			// network
 			start = IpRange.parse(prefix).getStart();
 		}
 		
