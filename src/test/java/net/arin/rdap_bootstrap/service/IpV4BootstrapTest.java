@@ -46,5 +46,6 @@ public class IpV4BootstrapTest
         
         // Testing for host addresses
         assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177.0.0.1/32" ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177.0.0.1" ).getHttpsUrl() );
     }
 }
