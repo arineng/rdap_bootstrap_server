@@ -30,8 +30,8 @@ import com.googlecode.ipv6.IPv6Network;
  */
 public class IpV6Bootstrap implements JsonBootstrapFile.Handler
 {
-    private volatile TreeMap<Long,ServiceUrls> allocations = new TreeMap<Long, ServiceUrls>(  );
-    private TreeMap<Long,ServiceUrls> _allocations;
+    private volatile TreeMap<Long, ServiceUrls> allocations = new TreeMap<Long, ServiceUrls>();
+    private TreeMap<Long, ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
     private String publication;
@@ -40,7 +40,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     @Override
     public void startServices()
     {
-        _allocations = new TreeMap<Long, ServiceUrls>(  );
+        _allocations = new TreeMap<Long, ServiceUrls>();
     }
 
     @Override
@@ -85,8 +85,8 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     public ServiceUrls getServiceUrls( long prefix )
     {
         ServiceUrls retval = null;
-        Map.Entry<Long,ServiceUrls> entry = allocations.floorEntry( prefix );
-        if( entry != null )
+        Map.Entry<Long, ServiceUrls> entry = allocations.floorEntry( prefix );
+        if ( entry != null )
         {
             retval = entry.getValue();
         }
@@ -104,8 +104,15 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     }
 
     @Override
-    public void setPublication( String publication ) { this.publication = publication; }
-    public String getPublication() { return publication; }
+    public void setPublication( String publication )
+    {
+        this.publication = publication;
+    }
+
+    public String getPublication()
+    {
+        return publication;
+    }
 
     public String getDescription()
     {

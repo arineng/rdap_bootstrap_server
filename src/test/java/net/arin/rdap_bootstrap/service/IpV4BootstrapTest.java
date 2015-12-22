@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013, 2015 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -30,7 +30,7 @@ public class IpV4BootstrapTest
     {
         IpV4Bootstrap v4 = new IpV4Bootstrap();
         v4.loadData( new ResourceFiles() );
-        
+
         assertEquals( "https://rdap.apnic.net", v4.getServiceUrls( "1" ).getHttpsUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( "http://rdap.iana.org", v4.getServiceUrls( 0 ).getHttpUrl() );
@@ -40,12 +40,15 @@ public class IpV4BootstrapTest
         assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177" ).getHttpsUrl() );
         assertEquals( "https://rdap.db.ripe.net", v4.getServiceUrls( "188" ).getHttpsUrl() );
         assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "191" ).getHttpsUrl() );
-        
+
         // Testing for full prefixes
-        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177.0.0.0/8" ).getHttpsUrl() );
-        
+        assertEquals( "https://rdap.lacnic.net/rdap",
+            v4.getServiceUrls( "177.0.0.0/8" ).getHttpsUrl() );
+
         // Testing for host addresses
-        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177.0.0.1/32" ).getHttpsUrl() );
-        assertEquals( "https://rdap.lacnic.net/rdap", v4.getServiceUrls( "177.0.0.1" ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap",
+            v4.getServiceUrls( "177.0.0.1/32" ).getHttpsUrl() );
+        assertEquals( "https://rdap.lacnic.net/rdap",
+            v4.getServiceUrls( "177.0.0.1" ).getHttpsUrl() );
     }
 }
