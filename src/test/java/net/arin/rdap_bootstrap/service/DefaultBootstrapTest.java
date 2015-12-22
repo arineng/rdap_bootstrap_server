@@ -32,8 +32,7 @@ public class DefaultBootstrapTest
         DefaultBootstrap d = new DefaultBootstrap();
         d.loadData( new ResourceFiles() );
 
-        assertEquals( "http://rdap.arin.net/registry",
-            d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
+        assertEquals( "http://rdap.arin.net/registry", d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
         assertEquals( "http://rdg.afilias.info/rdap", d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
     }
 }

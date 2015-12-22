@@ -173,9 +173,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0" ).getHttpUrl() );
+        assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0/8" ).getHttpUrl() );
         assertEquals( ARIN, servlet.makeIpBase( "/ip/7.0.0.0/16" ).getHttpUrl() );
-        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0" ).getHttpsUrl() );
         assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpsUrl() );
         assertEquals( ARIN, servlet.makeIpBase( "/ip/2620:0000:0000:0000:0000:0000:0000:0000" ).getHttpUrl() );
         //TODO renable when their server are put back in the bootstrap files
@@ -183,6 +182,9 @@ public class RedirectServletTest
         assertEquals( LACNIC, servlet.makeIpBase( "/ip/2800:0000::/12" ).getHttpsUrl() );
         //TODO renable when their server are put back in the bootstrap files
         //assertEquals( IANA, servlet.makeIpBase( "/ip/2001:0000::1" ).getHttpUrl() );
+        
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.1/32" ).getHttpsUrl() );
+        assertEquals( LACNIC, servlet.makeIpBase( "/ip/191.0.1.1" ).getHttpsUrl() );
     }
 
     @Test

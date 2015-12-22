@@ -9,7 +9,7 @@ description = """RDAP Bootstrap Server"""
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-
+apply plugin: 'eclipse'
 
 repositories {
         
@@ -20,4 +20,8 @@ dependencies {
     compile group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.13'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.2.0'
+}
+
+dependencies {
+	compile group: 'net.ripe.ipresource', name: 'ipresource', version:'1.46'
 }
