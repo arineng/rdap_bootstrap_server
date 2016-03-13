@@ -170,36 +170,47 @@ public class RedirectServlet extends HttpServlet
     protected void service( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        String pathInfo = req.getPathInfo();
-        if ( pathInfo.startsWith( "/domain/" ) )
+        if( req == null )
         {
-            serve( UrlHits.DOMAINHITS, new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
+            resp.sendError( HttpServletResponse.SC_BAD_REQUEST );
         }
-        else if ( pathInfo.startsWith( "/nameserver/" ) )
+        else if( req.getPathInfo() == null )
         {
-            serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req,
-                resp );
-        }
-        else if ( pathInfo.startsWith( "/ip/" ) )
-        {
-            serve( UrlHits.IPHITS, new MakeIpBase(), Type.IP, pathInfo, req, resp );
-        }
-        else if ( pathInfo.startsWith( "/entity/" ) )
-        {
-            serve( UrlHits.ENTITYHITS, new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
-        }
-        else if ( pathInfo.startsWith( "/autnum/" ) )
-        {
-            serve( UrlHits.ASHITS, new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
-        }
-        else if ( pathInfo.startsWith( "/help" ) )
-        {
-            resp.setContentType( "application/rdap+json" );
-            makeHelp( resp.getOutputStream() );
+            resp.sendError( HttpServletResponse.SC_BAD_REQUEST );
         }
         else
         {
-            resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+            String pathInfo = req.getPathInfo();
+            if ( pathInfo.startsWith( "/domain/" ) )
+            {
+                serve( UrlHits.DOMAINHITS, new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
+            }
+            else if ( pathInfo.startsWith( "/nameserver/" ) )
+            {
+                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req,
+                    resp );
+            }
+            else if ( pathInfo.startsWith( "/ip/" ) )
+            {
+                serve( UrlHits.IPHITS, new MakeIpBase(), Type.IP, pathInfo, req, resp );
+            }
+            else if ( pathInfo.startsWith( "/entity/" ) )
+            {
+                serve( UrlHits.ENTITYHITS, new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
+            }
+            else if ( pathInfo.startsWith( "/autnum/" ) )
+            {
+                serve( UrlHits.ASHITS, new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
+            }
+            else if ( pathInfo.startsWith( "/help" ) )
+            {
+                resp.setContentType( "application/rdap+json" );
+                makeHelp( resp.getOutputStream() );
+            }
+            else
+            {
+                resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+            }
         }
     }
 
