@@ -1,20 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
 
 group = 'ARIN'
 version = '1000.0-SNAPSHOT'
-
 description = """RDAP Bootstrap Server"""
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-apply plugin: 'eclipse'
-
 repositories {
-        
      maven { url "http://repo.maven.apache.org/maven2" }
 }
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.8.2'
     compile group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.13'
@@ -24,4 +23,18 @@ dependencies {
 
 dependencies {
 	compile group: 'net.ripe.ipresource', name: 'ipresource', version:'1.46'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        if (project.version.endsWith('SNAPSHOT')) {
+            snapshotRepository(url: project.properties.mavenRepository) {
+                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+            }
+        } else {
+            repository(url: project.properties.mavenRepository) {
+                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+            }
+        }
+    }
 }
