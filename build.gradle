@@ -1,3 +1,8 @@
+plugins {
+    id 'com.palantir.docker' version '0.22.1'
+    id 'com.palantir.docker-run' version '0.22.1'
+}
+
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'eclipse'
@@ -7,11 +12,11 @@ group = 'ARIN'
 version = '1000.0-SNAPSHOT'
 description = """RDAP Bootstrap Server"""
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
-     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://repo.maven.apache.org/maven2" }
 }
 
 dependencies {
@@ -19,10 +24,7 @@ dependencies {
     compile group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.13'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.2.0'
-}
-
-dependencies {
-	compile group: 'net.ripe.ipresource', name: 'ipresource', version:'1.46'
+    compile group: 'net.ripe.ipresource', name: 'ipresource', version:'1.46'
 }
 
 uploadArchives {
@@ -37,4 +39,17 @@ uploadArchives {
             }
         }
     }
+}
+
+docker {
+    name 'arin/rdap_bootstrap'
+    files tasks.war.outputs
+    copySpec.into("build/libs")
+}
+
+dockerRun {
+    name 'arin-rdap-bootstrap'
+    image 'arin/rdap_bootstrap'
+    ports '8081:8080'
+    daemonize false
 }
