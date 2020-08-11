@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,30 +16,19 @@
 package net.arin.rdap_bootstrap.json;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An RDAP JSON response.
- * @version $Rev$, $Date$
  */
 public class Response
 {
     private String[] rdapConformance;
     private Notice[] notices;
 
-    public Response()
-    {
-    }
-
     public Response( String[] rdapConformance )
     {
-        if( rdapConformance != null )
-        {
-            this.rdapConformance = rdapConformance;
-        }
-        else
-        {
-            this.rdapConformance = new String[]{ "rdap_level_0" };
-        }
+        this.rdapConformance = Objects.requireNonNullElseGet( rdapConformance, () -> new String[]{ "rdap_level_0" } );
     }
 
     public String[] getRdapConformance()
@@ -64,6 +53,6 @@ public class Response
 
     public void setNotices( List<Notice> notices )
     {
-        this.notices = notices.toArray( new Notice[ notices.size() ] );
+        this.notices = notices.toArray( new Notice[0] );
     }
 }

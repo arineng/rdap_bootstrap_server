@@ -1,6 +1,6 @@
 <jboss-web>
     <!--
-    ~ Copyright (c) 2013. American Registry for Internet Numbers
+    ~ Copyright (c) 2013-2020. American Registry for Internet Numbers
     -->
     <context-root>rdapbootstrap</context-root>
 </jboss-web>

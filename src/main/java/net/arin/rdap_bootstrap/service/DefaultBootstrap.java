@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,15 +23,17 @@ import java.util.HashMap;
 
 public class DefaultBootstrap implements JsonBootstrapFile.Handler
 {
-    public enum Type {
-        NAMESERVER("nameserver"),
-        IP("ip"),
-        AUTNUM("autnum"),
-        ENTITY("entity"),
-        DOMAIN("domain");
+    public enum Type
+    {
+        NAMESERVER( "nameserver" ),
+        IP( "ip" ),
+        AUTNUM( "autnum" ),
+        ENTITY( "entity" ),
+        DOMAIN( "domain" );
 
-        private String pValue;
-        private Type( String pValue )
+        private final String pValue;
+
+        Type( String pValue )
         {
             this.pValue = pValue;
         }
@@ -42,15 +44,15 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
         }
     }
 
-    private volatile HashMap<String,ServiceUrls> allocations = new HashMap<String, ServiceUrls>(  );
-    private HashMap<String,ServiceUrls> _allocations;
+    private volatile HashMap<String, ServiceUrls> allocations = new HashMap<>();
+    private HashMap<String, ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
     private String publication;
     private String description;
 
     public void loadData( ResourceFiles resourceFiles )
-        throws Exception
+            throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
         bsFile.loadData( resourceFiles.getInputStream( BootFiles.DEFAULT.getKey() ), this );
@@ -59,7 +61,7 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void startServices()
     {
-        _allocations = new HashMap<String, ServiceUrls>(  );
+        _allocations = new HashMap<>();
     }
 
     @Override
@@ -77,7 +79,7 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void endService()
     {
-        //Nothing to do
+        // Nothing to do.
     }
 
     @Override
@@ -98,14 +100,22 @@ public class DefaultBootstrap implements JsonBootstrapFile.Handler
     }
 
     @Override
-    public void setPublication( String publication ) { this.publication = publication; }
-    public String getPublication() { return publication; }
+    public void setPublication( String publication )
+    {
+        this.publication = publication;
+    }
+
+    public String getPublication()
+    {
+        return publication;
+    }
 
     @Override
     public void setDescription( String description )
     {
         this.description = description;
     }
+
     public String getDescription()
     {
         return description;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -17,7 +17,6 @@ package net.arin.rdap_bootstrap.json;
 
 /**
  * An RDAP JSON notice.
- * @version $Rev$, $Date$
  */
 public class Notice
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,19 +16,15 @@
 package net.arin.rdap_bootstrap.service;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @version $Rev$, $Date$
- */
 public class Statistics
 {
-    private static class LruMap<String,AtomicLong> extends LinkedHashMap<String, AtomicLong >
+    private static class LruMap<String, AtomicLong> extends LinkedHashMap<String, AtomicLong>
     {
         private final int maxEntries;
 
@@ -53,13 +49,13 @@ public class Statistics
         DEFAULTHITS( "Default Hits" ),
         ASHITS( "Autnum Hits" );
 
-        private Map<String,AtomicLong> hitsMap = Collections.synchronizedMap( new LruMap<String, AtomicLong>( 100 ) );
-        private String title;
+        private final Map<String, AtomicLong> hitsMap = Collections.synchronizedMap( new LruMap<>( 100 ) );
+        private final String title;
 
         public void hit( String url )
         {
             AtomicLong counter = hitsMap.get( url );
-            if( counter == null )
+            if ( counter == null )
             {
                 hitsMap.put( url, new AtomicLong( 1 ) );
             }
@@ -69,7 +65,7 @@ public class Statistics
             }
         }
 
-        public Set<Entry<String,AtomicLong>> getEntrySet()
+        public Set<Entry<String, AtomicLong>> getEntrySet()
         {
             return hitsMap.entrySet();
         }
@@ -79,14 +75,14 @@ public class Statistics
             return title;
         }
 
-        private UrlHits( String title )
+        UrlHits( String title )
         {
             this.title = title;
         }
     }
 
-    private AtomicLong totalHits = new AtomicLong( 0 );
-    private AtomicLong totalMisses = new AtomicLong( 0 );
+    private final AtomicLong totalHits = new AtomicLong( 0 );
+    private final AtomicLong totalMisses = new AtomicLong( 0 );
 
     public AtomicLong getTotalHits()
     {

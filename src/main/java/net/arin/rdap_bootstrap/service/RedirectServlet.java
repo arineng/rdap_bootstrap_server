@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -48,22 +48,18 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 
-/**
- * @version $Rev$, $Date$
- */
 public class RedirectServlet extends HttpServlet
 {
-    private AsBootstrap asBootstrap = new AsBootstrap();
-    private IpV6Bootstrap ipV6Bootstrap = new IpV6Bootstrap();
-    private IpV4Bootstrap ipV4Bootstrap = new IpV4Bootstrap();
-    private DomainBootstrap domainBootstrap = new DomainBootstrap();
-    private DefaultBootstrap defaultBootstrap = new DefaultBootstrap();
-    private EntityBootstrap entityBootstrap = new EntityBootstrap();
+    private final AsBootstrap asBootstrap = new AsBootstrap();
+    private final IpV6Bootstrap ipV6Bootstrap = new IpV6Bootstrap();
+    private final IpV4Bootstrap ipV4Bootstrap = new IpV4Bootstrap();
+    private final DomainBootstrap domainBootstrap = new DomainBootstrap();
+    private final DefaultBootstrap defaultBootstrap = new DefaultBootstrap();
+    private final EntityBootstrap entityBootstrap = new EntityBootstrap();
 
     private volatile Statistics statistics;
 
     private ResourceFiles resourceFiles;
-    private Timer timer;
     Boolean matchSchemeOnRedirect = Boolean.FALSE;
 
     private static final long CHECK_CONFIG_FILES = 60000L;
@@ -76,9 +72,8 @@ public class RedirectServlet extends HttpServlet
 
         statistics = new Statistics();
 
-        matchSchemeOnRedirect = Boolean.valueOf( System
-            .getProperty( Constants.PROPERTY_PREFIX + MATCH_SCHEME_ON_REDIRECT,
-                matchSchemeOnRedirect.toString() ) );
+        matchSchemeOnRedirect = Boolean.valueOf( System.getProperty(
+                Constants.PROPERTY_PREFIX + MATCH_SCHEME_ON_REDIRECT, matchSchemeOnRedirect.toString() ) );
 
         try
         {
@@ -87,7 +82,7 @@ public class RedirectServlet extends HttpServlet
 
             if ( config != null )
             {
-                timer = new Timer();
+                Timer timer = new Timer();
                 timer.schedule( loadConfigTask, CHECK_CONFIG_FILES, CHECK_CONFIG_FILES );
             }
         }
@@ -99,7 +94,7 @@ public class RedirectServlet extends HttpServlet
 
     protected void serve( UrlHits urlHits, BaseMaker baseMaker, DefaultBootstrap.Type defaultType,
                           String pathInfo, HttpServletRequest req, HttpServletResponse resp )
-        throws IOException
+            throws IOException
     {
         try
         {
@@ -135,7 +130,7 @@ public class RedirectServlet extends HttpServlet
 
     String getRedirectUrl( String scheme, String pathInfo, ServiceUrls urls )
     {
-        String redirectUrl = null;
+        String redirectUrl;
         if ( matchSchemeOnRedirect )
         {
             if ( scheme.equals( "https" ) && urls.getHttpsUrl() != null )
@@ -168,13 +163,13 @@ public class RedirectServlet extends HttpServlet
 
     @Override
     protected void service( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
+            throws IOException
     {
-        if( req == null )
+        if ( req == null )
         {
             resp.sendError( HttpServletResponse.SC_BAD_REQUEST );
         }
-        else if( req.getPathInfo() == null )
+        else if ( req.getPathInfo() == null )
         {
             resp.sendError( HttpServletResponse.SC_BAD_REQUEST );
         }
@@ -187,8 +182,7 @@ public class RedirectServlet extends HttpServlet
             }
             else if ( pathInfo.startsWith( "/nameserver/" ) )
             {
-                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req,
-                    resp );
+                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
             }
             else if ( pathInfo.startsWith( "/ip/" ) )
             {
@@ -216,7 +210,7 @@ public class RedirectServlet extends HttpServlet
 
     public interface BaseMaker
     {
-        public ServiceUrls makeBase( String pathInfo );
+        ServiceUrls makeBase( String pathInfo );
     }
 
     public ServiceUrls makeAutnumBase( String pathInfo )
@@ -241,16 +235,15 @@ public class RedirectServlet extends HttpServlet
     {
         public ServiceUrls makeBase( String pathInfo )
         {
-            // strip leading "/ip/"
+            // Strip leading "/ip/".
             pathInfo = pathInfo.substring( 4 );
-            if ( pathInfo.indexOf( ":" ) == -1 ) // is not ipv6
+            if ( !pathInfo.contains( ":" ) ) // is not IPv6
             {
-                // String firstOctet = pathInfo.split( "\\." )[ 0 ];
                 return ipV4Bootstrap.getServiceUrls( pathInfo );
             }
             // else
-            IPv6Address addr = null;
-            if ( pathInfo.indexOf( "/" ) == -1 )
+            IPv6Address addr;
+            if ( !pathInfo.contains( "/" ) )
             {
                 addr = IPv6Address.fromString( pathInfo );
             }
@@ -272,9 +265,9 @@ public class RedirectServlet extends HttpServlet
     {
         public ServiceUrls makeBase( String pathInfo )
         {
-            // strip leading "/domain/"
+            // Strip leading "/domain/".
             pathInfo = pathInfo.substring( 8 );
-            // strip possible trailing period
+            // Strip possible trailing period.
             if ( pathInfo.endsWith( "." ) )
             {
                 pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
@@ -290,27 +283,23 @@ public class RedirectServlet extends HttpServlet
                 final String[] _split = pathInfo.split( "\\." );
                 int n = _split.length - 2;
 
-                String s = "", _s = "";
+                StringBuilder s = new StringBuilder();
+                StringBuilder _s = new StringBuilder();
                 for ( int i = n - 1, j = 1; i >= 0; i--, j++ )
                 {
-                    _s += _split[i];
-                    if ( j % MIVAR == 0 )
-                    {
-                        words[j / MIVAR - 1] = _s;// índice posicional
-                        _s = "";
-                    }
+                    _s.append( _split[i] );
+                    words[j / MIVAR - 1] = _s.toString();
+                    _s = new StringBuilder();
                 }
 
                 for ( int i = 0; i < words.length - 1; i++ )
-                {// todos menos el
-                    // último
-                    s += words[i] + DELIMITER;
+                {
+                    s.append( words[i] ).append( DELIMITER );
                 }
-                s += words[words.length - 1];// el último sin DELIMITER
-                s += "/" + BITS_PER_WORD * n;
+                s.append( words[words.length - 1] );
+                s.append( "/" ).append( BITS_PER_WORD * n );
 
-                return ipV4Bootstrap.getServiceUrls( s );
-
+                return ipV4Bootstrap.getServiceUrls( s.toString() );
             }
             else if ( pathInfo.endsWith( ".ip6.arpa" ) )
             {
@@ -405,36 +394,35 @@ public class RedirectServlet extends HttpServlet
     {
         Notice notice = new Notice();
         notice.setTitle( stats.getTitle() );
-        ArrayList<String> description = new ArrayList<String>();
+        ArrayList<String> description = new ArrayList<>();
         Set<Entry<String, AtomicLong>> entrySet = stats.getEntrySet();
         if ( entrySet.size() != 0 )
         {
             for ( Entry<String, AtomicLong> entry : entrySet )
             {
-                description
-                    .add( String.format( "%-5d = %25s", entry.getValue().get(), entry.getKey() ) );
+                description.add( String.format( "%-5d = %25s", entry.getValue().get(), entry.getKey() ) );
             }
         }
         else
         {
             description.add( "Zero queries." );
         }
-        notice.setDescription( description.toArray( new String[description.size()] ) );
+        notice.setDescription( description.toArray( new String[0] ) );
         return notice;
     }
 
     public void makeHelp( OutputStream outputStream ) throws IOException
     {
         Response response = new Response( null );
-        ArrayList<Notice> notices = new ArrayList<Notice>();
+        ArrayList<Notice> notices = new ArrayList<>();
 
-        // do statistics
+        // Do statistics.
         for ( Statistics.UrlHits stats : Statistics.UrlHits.values() )
         {
             notices.add( makeStatsNotice( stats ) );
         }
 
-        // totals
+        // Totals.
         Notice notice = new Notice();
         notice.setTitle( "Totals" );
         String[] description = new String[2];
@@ -443,26 +431,25 @@ public class RedirectServlet extends HttpServlet
         notice.setDescription( description );
         notices.add( notice );
 
-        // Modified dates for various bootstrap files, done this way so that
-        // Publication dates can be published as well.
+        // Modified dates for various bootstrap files, done this way so that Publication dates can be published as well.
         notices.add( createPublicationDateNotice( "Default",
-            resourceFiles.getLastModified( BootFiles.DEFAULT.getKey() ),
-            defaultBootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.DEFAULT.getKey() ),
+                defaultBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "As",
-            resourceFiles.getLastModified( BootFiles.AS.getKey() ),
-            asBootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.AS.getKey() ),
+                asBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "Domain",
-            resourceFiles.getLastModified( BootFiles.DOMAIN.getKey() ),
-            domainBootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.DOMAIN.getKey() ),
+                domainBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "Entity",
-            resourceFiles.getLastModified( BootFiles.ENTITY.getKey() ),
-            entityBootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.ENTITY.getKey() ),
+                entityBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "IpV4",
-            resourceFiles.getLastModified( BootFiles.V4.getKey() ),
-            ipV4Bootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.V4.getKey() ),
+                ipV4Bootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "IpV6",
-            resourceFiles.getLastModified( BootFiles.V6.getKey() ),
-            ipV6Bootstrap.getPublication() ) );
+                resourceFiles.getLastModified( BootFiles.V6.getKey() ),
+                ipV6Bootstrap.getPublication() ) );
 
         response.setNotices( notices );
 
@@ -477,10 +464,9 @@ public class RedirectServlet extends HttpServlet
     {
         Notice bootFileModifiedNotice = new Notice();
 
-        bootFileModifiedNotice
-            .setTitle( String.format( "%s Bootstrap File Modified and Published Dates", file ) );
+        bootFileModifiedNotice.setTitle( String.format( "%s Bootstrap File Modified and Published Dates", file ) );
         String[] bootFileModifiedDescription = new String[2];
-        // Date format as 2015-05-15T17:04:06-0500 (Y-m-d'T'H:M:Sz)
+        // Date format as 2015-05-15T17:04:06-0500 (Y-m-d'T'H:M:Sz).
         bootFileModifiedDescription[0] = String.format( "%1$tFT%1$tT%1$tz", lastModified );
         bootFileModifiedDescription[1] = publicationDate;
         bootFileModifiedNotice.setDescription( bootFileModifiedDescription );
@@ -492,12 +478,7 @@ public class RedirectServlet extends HttpServlet
     {
         private boolean isModified( long currentTime, long lastModified )
         {
-            if ( ( currentTime - CHECK_CONFIG_FILES ) < lastModified )
-            {
-                return true;
-            }
-            // else
-            return false;
+            return ( currentTime - CHECK_CONFIG_FILES ) < lastModified;
         }
 
         @Override
@@ -507,12 +488,10 @@ public class RedirectServlet extends HttpServlet
             long currentTime = System.currentTimeMillis();
             for ( BootFiles bootFiles : BootFiles.values() )
             {
-                if ( isModified( currentTime,
-                    resourceFiles.getLastModified( bootFiles.getKey() ) ) )
+                if ( isModified( currentTime, resourceFiles.getLastModified( bootFiles.getKey() ) ) )
                 {
-                    getServletContext().log( String
-                        .format( "%s was last modified at %s", bootFiles.getKey(),
-                            new Date( resourceFiles.getLastModified( bootFiles.getKey() ) ) ) );
+                    getServletContext().log( String.format( "%s was last modified at %s", bootFiles.getKey(),
+                                    new Date( resourceFiles.getLastModified( bootFiles.getKey() ) ) ) );
                     load = true;
                 }
             }

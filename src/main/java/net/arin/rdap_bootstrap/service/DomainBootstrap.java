@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,23 +20,18 @@ import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Properties;
 
-/**
- * @version $Rev$, $Date$
- */
 public class DomainBootstrap implements JsonBootstrapFile.Handler
 {
-    private volatile HashMap<String,ServiceUrls> allocations = new HashMap<String, ServiceUrls>(  );
-    private HashMap<String,ServiceUrls> _allocations;
+    private volatile HashMap<String, ServiceUrls> allocations = new HashMap<>();
+    private HashMap<String, ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
     private String publication;
     private String description;
 
     public void loadData( ResourceFiles resourceFiles )
-        throws Exception
+            throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
         bsFile.loadData( resourceFiles.getInputStream( BootFiles.DOMAIN.getKey() ), this );
@@ -45,7 +40,7 @@ public class DomainBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void startServices()
     {
-        _allocations = new HashMap<String, ServiceUrls>(  );
+        _allocations = new HashMap<>();
     }
 
     @Override
@@ -63,7 +58,7 @@ public class DomainBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void endService()
     {
-        //Nothing to do
+        // Nothing to do.
     }
 
     @Override
@@ -83,16 +78,16 @@ public class DomainBootstrap implements JsonBootstrapFile.Handler
         domain = domain.toUpperCase();
         int idx = 0;
         ServiceUrls retval = null;
-        while( idx != -1 )
+        while ( idx != -1 )
         {
             retval = allocations.get( domain.substring( idx ) );
-            if( retval != null )
+            if ( retval != null )
             {
                 break;
             }
-            //else
+            // else
             idx = domain.indexOf( ".", idx );
-            if( idx != -1 )
+            if ( idx != -1 )
             {
                 idx++;
             }
@@ -101,8 +96,15 @@ public class DomainBootstrap implements JsonBootstrapFile.Handler
     }
 
     @Override
-    public void setPublication( String publication ) { this.publication = publication; }
-    public String getPublication() { return publication; }
+    public void setPublication( String publication )
+    {
+        this.publication = publication;
+    }
+
+    public String getPublication()
+    {
+        return publication;
+    }
 
     public String getDescription()
     {

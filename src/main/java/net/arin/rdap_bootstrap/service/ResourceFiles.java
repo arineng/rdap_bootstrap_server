@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -28,7 +28,6 @@ import java.util.Properties;
 
 /**
  * Manages getting resource files.
- * @version $Rev$, $Date$
  */
 public class ResourceFiles
 {
@@ -41,47 +40,47 @@ public class ResourceFiles
         V6( "v6_bootstrap" ),
         ENTITY( "entity_bootstrap" );
 
-        private String key;
+        private final String key;
 
         public String getKey()
         {
             return key;
         }
 
-        private BootFiles( String key )
+        BootFiles( String key )
         {
             this.key = key;
         }
     }
 
-    private Properties resourceFiles;
-    private HashMap<String,Boolean> isFile;
+    private final Properties resourceFiles;
+    private final HashMap<String, Boolean> isFile;
 
     public ResourceFiles() throws IOException
     {
         String extFileName = System.getProperty( Constants.PROPERTY_PREFIX + "resource_files" );
-        resourceFiles = new Properties(  );
+        resourceFiles = new Properties();
         File file;
-        if( extFileName == null )
+        if ( extFileName == null )
         {
             InputStream inputStream = getClass().getResourceAsStream( "/resource_files.properties" );
             resourceFiles.load( inputStream );
         }
-        else if( ( file = new File( extFileName ) ).isFile() )
+        else if ( ( file = new File( extFileName ) ).isFile() )
         {
             InputStream inputStream = new FileInputStream( file );
             resourceFiles.load( inputStream );
         }
-        //override with explicitly set system properties
+        // Override with explicitly set system properties.
         for ( BootFiles bootFiles : BootFiles.values() )
         {
             String value = System.getProperty( Constants.PROPERTY_PREFIX + "bootfile." + bootFiles.key );
-            if( value != null && value.length() > 0 )
+            if ( value != null && value.length() > 0 )
             {
                 resourceFiles.put( bootFiles.key, value );
             }
         }
-        isFile = new HashMap<String, Boolean>(  );
+        isFile = new HashMap<>();
         for ( Entry<Object, Object> entry : resourceFiles.entrySet() )
         {
             file = new File( entry.getValue().toString() );
@@ -91,22 +90,22 @@ public class ResourceFiles
 
     public InputStream getInputStream( String key ) throws FileNotFoundException
     {
-        if( isFile.get( key ) )
+        if ( isFile.get( key ) )
         {
             File file = new File( resourceFiles.getProperty( key ) );
             return new FileInputStream( file );
         }
-        //else
+        // else
         return getClass().getResourceAsStream( resourceFiles.getProperty( key ) );
     }
 
     public long getLastModified( String key )
     {
-        if( !isFile.get( key ) )
+        if ( !isFile.get( key ) )
         {
             return System.currentTimeMillis();
         }
-        //else
+        // else
         File file = new File( resourceFiles.getProperty( key ) );
         return file.lastModified();
     }

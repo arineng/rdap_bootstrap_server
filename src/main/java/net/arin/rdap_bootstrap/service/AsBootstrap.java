@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,19 +22,15 @@ import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * @version $Rev$, $Date$
- */
 public class AsBootstrap implements JsonBootstrapFile.Handler
 {
     private class AsRangeInfo
     {
-        private Long asStart;
-        private Long asEnd;
-        private ServiceUrls serviceUrls;
+        private final Long asStart;
+        private final Long asEnd;
+        private final ServiceUrls serviceUrls;
 
-        public AsRangeInfo( Long asStart, Long asEnd,
-                            ServiceUrls serviceUrls )
+        public AsRangeInfo( Long asStart, Long asEnd, ServiceUrls serviceUrls )
         {
             this.asStart = asStart;
             this.asEnd = asEnd;
@@ -57,8 +53,8 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
         }
     }
 
-    private volatile TreeMap<Long,AsRangeInfo> allocations = new TreeMap<Long, AsRangeInfo>(  );
-    private TreeMap<Long,AsRangeInfo> _allocations;
+    private volatile TreeMap<Long, AsRangeInfo> allocations = new TreeMap<>();
+    private TreeMap<Long, AsRangeInfo> _allocations;
 
     private JsonBootstrapFile.ServiceUrls serviceUrls;
     private String publication;
@@ -67,7 +63,7 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void startServices()
     {
-        _allocations = new TreeMap<Long, AsRangeInfo>();
+        _allocations = new TreeMap<>();
     }
 
     @Override
@@ -85,20 +81,20 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
     @Override
     public void endService()
     {
-        //nothing to do
+        // Nothing to do.
     }
 
     @Override
     public void addServiceEntry( String entry )
     {
-        if( entry != null )
+        if ( entry != null )
         {
-            String[] arr = entry.split("-");
+            String[] arr = entry.split( "-" );
             long key = Long.parseLong( arr[0] );
-            if( !_allocations.containsKey( key ) )
+            if ( !_allocations.containsKey( key ) )
             {
                 long max = key;
-                if( arr.length ==2 )
+                if ( arr.length == 2 )
                 {
                     max = Long.parseLong( arr[1] );
                 }
@@ -115,7 +111,7 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
     }
 
     public void loadData( ResourceFiles resourceFiles )
-        throws Exception
+            throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
         bsFile.loadData( resourceFiles.getInputStream( BootFiles.AS.getKey() ), this );
@@ -124,22 +120,29 @@ public class AsBootstrap implements JsonBootstrapFile.Handler
     public ServiceUrls getServiceUrls( String autnum )
     {
         long number = Long.parseLong( autnum );
-        Map.Entry<Long,AsRangeInfo> entry = allocations.floorEntry( number );
-        if( entry != null )
+        Map.Entry<Long, AsRangeInfo> entry = allocations.floorEntry( number );
+        if ( entry != null )
         {
             AsRangeInfo asRangeInfo = entry.getValue();
-            if( number <= asRangeInfo.getAsEnd() )
+            if ( number <= asRangeInfo.getAsEnd() )
             {
                 return asRangeInfo.getServiceUrls();
             }
         }
-        //else
+        // else
         return null;
     }
 
     @Override
-    public void setPublication( String publication ) { this.publication = publication; }
-    public String getPublication() { return publication; }
+    public void setPublication( String publication )
+    {
+        this.publication = publication;
+    }
+
+    public String getPublication()
+    {
+        return publication;
+    }
 
     public String getDescription()
     {

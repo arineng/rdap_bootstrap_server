@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -25,12 +25,9 @@ import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 
-/**
- * @version $Rev$, $Date$
- */
 public class IpV6Bootstrap implements JsonBootstrapFile.Handler
 {
-    private volatile TreeMap<Long, ServiceUrls> allocations = new TreeMap<Long, ServiceUrls>();
+    private volatile TreeMap<Long, ServiceUrls> allocations = new TreeMap<>();
     private TreeMap<Long, ServiceUrls> _allocations;
 
     private ServiceUrls serviceUrls;
@@ -40,7 +37,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     @Override
     public void startServices()
     {
-        _allocations = new TreeMap<Long, ServiceUrls>();
+        _allocations = new TreeMap<>();
     }
 
     @Override
@@ -58,7 +55,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     @Override
     public void endService()
     {
-        // Nothing to do
+        // Nothing to do.
     }
 
     @Override
@@ -76,7 +73,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     }
 
     public void loadData( ResourceFiles resourceFiles )
-        throws Exception
+            throws Exception
     {
         JsonBootstrapFile bsFile = new JsonBootstrapFile();
         bsFile.loadData( resourceFiles.getInputStream( BootFiles.V6.getKey() ), this );

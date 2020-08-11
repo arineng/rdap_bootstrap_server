@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2015-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,7 +16,7 @@
 package net.arin.rdap_bootstrap;
 
 /**
- * Holds app-wide constants
+ * Holds app-wide constants.
  */
 public class Constants
 {
