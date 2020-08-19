@@ -20,6 +20,8 @@ import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTP;
 
 public class DefaultBootstrapTest
 {
@@ -29,7 +31,7 @@ public class DefaultBootstrapTest
         DefaultBootstrap d = new DefaultBootstrap();
         d.loadData( new ResourceFiles() );
 
-        assertEquals( "http://rdap.arin.net/registry", d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
-        assertEquals( "http://rdg.afilias.info/rdap", d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
+        assertEquals( ARIN_HTTP, d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
+        assertEquals( INFO_HTTP, d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
     }
 }

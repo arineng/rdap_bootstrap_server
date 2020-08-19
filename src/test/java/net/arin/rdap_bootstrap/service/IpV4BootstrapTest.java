@@ -17,17 +17,16 @@
 package net.arin.rdap_bootstrap.service;
 
 import static junit.framework.Assert.assertEquals;
+import static net.arin.rdap_bootstrap.service.TestConstants.AFRINIC_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
+import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
+import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
 
 import org.junit.Test;
 
 public class IpV4BootstrapTest
 {
-    private static final String ARIN_HTTP = "http://rdap.arin.net/registry";
-    private static final String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
-    private static final String APNIC_HTTPS = "https://rdap.apnic.net";
-    private static final String RIPE_HTTPS = "https://rdap.db.ripe.net";
-    private static final String AFRINIC_HTTP = "http://rdap.afrinic.net/rdap";
-
     @Test
     public void testAllocations() throws Exception
     {

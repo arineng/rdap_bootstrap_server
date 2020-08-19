@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,20 +16,15 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import org.junit.Test;
-
-import static junit.framework.Assert.assertEquals;
-import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTP;
-
-public class DomainBootstrapTest
+public class TestConstants
 {
-    @Test
-    public void testAllocations() throws Exception
-    {
-        DomainBootstrap domain = new DomainBootstrap();
-        domain.loadData( new ResourceFiles() );
-
-        assertEquals( INFO_HTTP, domain.getServiceUrls( "foo.info" ).getHttpUrl() );
-        assertEquals( INFO_HTTP, domain.getServiceUrls( "info" ).getHttpUrl() );
-    }
+    public final static String AFRINIC_HTTP = "http://rdap.afrinic.net/rdap";
+    public final static String APNIC_HTTPS = "https://rdap.apnic.net";
+    public final static String ARIN_HTTP = "http://rdap.arin.net/registry";
+    public final static String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
+    public final static String RIPE_HTTP = "http://rdap.db.ripe.net";
+    public final static String RIPE_HTTPS = "https://rdap.db.ripe.net";
+    public static final String INFO_HTTP = "http://rdg.afilias.info/rdap";
+    public static final String EXAMPLE_HTTP = "http://example.com";
+    public static final String EXAMPLE_HTTPS = "https://example.com";
 }

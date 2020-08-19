@@ -21,30 +21,31 @@ import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
+import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.EXAMPLE_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.EXAMPLE_HTTPS;
+import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
+import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
 
 public class RedirectServletTest
 {
-    private static final String ARIN_HTTP = "http://rdap.arin.net/registry";
-    private static final String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
-    private static final String APNIC_HTTPS = "https://rdap.apnic.net";
-    private static final String RIPE_HTTP = "http://rdap.db.ripe.net";
-    private static final String RIPE_HTTPS = "https://rdap.db.ripe.net";
-    private static final String INFO_HTTP = "http://rdg.afilias.info/rdap";
-
     @Test
     public void testGetRedirectUrlDefault() throws Exception
     {
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "http://example.com" );
-        urls.addUrl( "https://example.com" );
+        urls.addUrl( EXAMPLE_HTTP );
+        urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
     }
 
     @Test
@@ -53,13 +54,13 @@ public class RedirectServletTest
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "http://example.com" );
+        urls.addUrl( EXAMPLE_HTTP );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
     }
 
     @Test
@@ -68,13 +69,13 @@ public class RedirectServletTest
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "https://example.com" );
+        urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
     }
 
     @Test
@@ -84,14 +85,14 @@ public class RedirectServletTest
         System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "False" );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "http://example.com" );
-        urls.addUrl( "https://example.com" );
+        urls.addUrl( EXAMPLE_HTTP );
+        urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
 
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
     }
@@ -103,14 +104,14 @@ public class RedirectServletTest
         System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "http://example.com" );
-        urls.addUrl( "https://example.com" );
+        urls.addUrl( EXAMPLE_HTTP );
+        urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
 
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
     }
@@ -122,13 +123,13 @@ public class RedirectServletTest
         System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "http://example.com" );
+        urls.addUrl( EXAMPLE_HTTP );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "http://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
 
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
     }
@@ -140,13 +141,13 @@ public class RedirectServletTest
         System.setProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT, "true" );
 
         ServiceUrls urls = new ServiceUrls();
-        urls.addUrl( "https://example.com" );
+        urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
-        assertEquals( "https://example.com/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
+        assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
 
         System.clearProperty( Constants.PROPERTY_PREFIX + RedirectServlet.MATCH_SCHEME_ON_REDIRECT );
     }
