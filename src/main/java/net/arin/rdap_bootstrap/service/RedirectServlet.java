@@ -358,9 +358,9 @@ public class RedirectServlet extends HttpServlet
     {
         public ServiceUrls makeBase( String pathInfo )
         {
-            // strip leading "/nameserver/"
+            // Strip leading "/nameserver/".
             pathInfo = pathInfo.substring( 12 );
-            // strip possible trailing period
+            // Strip possible trailing period.
             if ( pathInfo.endsWith( "." ) )
             {
                 pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
@@ -387,7 +387,6 @@ public class RedirectServlet extends HttpServlet
             // else
             return null;
         }
-
     }
 
     private Notice makeStatsNotice( Statistics.UrlHits stats )
@@ -431,7 +430,7 @@ public class RedirectServlet extends HttpServlet
         notice.setDescription( description );
         notices.add( notice );
 
-        // Modified dates for various bootstrap files, done this way so that Publication dates can be published as well.
+        // Modified dates for various bootstrap files. Done this way so that Publication dates can be published as well.
         notices.add( createPublicationDateNotice( "Default",
                 resourceFiles.getLastModified( BootFiles.DEFAULT.getKey() ),
                 defaultBootstrap.getPublication() ) );
@@ -512,7 +511,7 @@ public class RedirectServlet extends HttpServlet
         {
             if ( getServletConfig() != null )
             {
-                getServletContext().log( "Loading resource files." );
+                getServletContext().log( "Loading resource files" );
             }
             resourceFiles = new ResourceFiles();
             asBootstrap.loadData( resourceFiles );

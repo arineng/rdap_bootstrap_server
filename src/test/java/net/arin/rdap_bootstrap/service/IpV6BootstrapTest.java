@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,18 +22,13 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * @version $Rev$, $Date$
- */
 public class IpV6BootstrapTest
 {
-
-    private static final String ARIN = "http://rdap.arin.net/registry";
-    private static final String LACNIC = "https://rdap.lacnic.net/rdap";
-    private static final String IANA = "http://rdap.iana.org";
-    private static final String APNIC = "https://rdap.apnic.net";
-    private static final String RIPE = "https://rdap.db.ripe.net";
-    private static final String AFRINIC = "http://rdap.afrinic.net/rdap";
+    private static final String ARIN_HTTP = "http://rdap.arin.net/registry";
+    private static final String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
+    private static final String APNIC_HTTPS = "https://rdap.apnic.net";
+    private static final String RIPE_HTTPS = "https://rdap.db.ripe.net";
+    private static final String AFRINIC_HTTP = "http://rdap.afrinic.net/rdap";
 
     @Test
     public void testAllocations() throws Exception
@@ -41,20 +36,18 @@ public class IpV6BootstrapTest
         IpV6Bootstrap v6 = new IpV6Bootstrap();
         v6.loadData( new ResourceFiles() );
 
-        assertEquals( ARIN, v6.getServiceUrls( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpUrl() );
-        assertEquals( ARIN, v6.getServiceUrls( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:ffff" ) ).getHttpUrl() );
-        assertEquals( ARIN, v6.getServiceUrls( IPv6Address.fromString( "2620:01ff:ffff:ffff:ffff:ffff:ffff:0000" ) ).getHttpUrl() );
-        assertEquals( ARIN, v6.getServiceUrls( IPv6Address.fromString( "2620:01ff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpUrl() );
-        assertEquals( LACNIC, v6.getServiceUrls( IPv6Address.fromString( "2800:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpsUrl() );
-        assertEquals( LACNIC, v6.getServiceUrls( IPv6Address.fromString( "2800:0000:0000:0000:0000:0000:0000:ffff" ) ).getHttpsUrl() );
-        assertEquals( LACNIC, v6.getServiceUrls( IPv6Address.fromString( "280f:ffff:ffff:ffff:ffff:ffff:ffff:0000" ) ).getHttpsUrl() );
-        assertEquals( LACNIC, v6.getServiceUrls( IPv6Address.fromString( "280f:ffff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpsUrl() );
-        //TODO renable when their server are put back in the bootstrap files
-        //assertEquals( IANA, v6.getServiceUrls( IPv6Address.fromString( "2001:0000::1" ) ).getHttpUrl() );
-        assertEquals( APNIC, v6.getServiceUrls( IPv6Network.fromString( "2001:0200::/23" ) ).getHttpsUrl() );
-        assertEquals( RIPE, v6.getServiceUrls( IPv6Address.fromString( "2a00:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpsUrl() );
-        assertEquals( RIPE, v6.getServiceUrls( IPv6Address.fromString( "2a0f:ffff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpsUrl() );
-        assertEquals( AFRINIC, v6.getServiceUrls( IPv6Network.fromString( "2c00:0000::/12" ) ).getHttpUrl() );
-        assertEquals( LACNIC, v6.getServiceUrls( IPv6Network.fromString( "2800:0000::/12" ) ).getHttpsUrl() );
+        assertEquals( ARIN_HTTP, v6.getServiceUrls( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpUrl() );
+        assertEquals( ARIN_HTTP, v6.getServiceUrls( IPv6Address.fromString( "2620:0000:0000:0000:0000:0000:0000:ffff" ) ).getHttpUrl() );
+        assertEquals( ARIN_HTTP, v6.getServiceUrls( IPv6Address.fromString( "2620:01ff:ffff:ffff:ffff:ffff:ffff:0000" ) ).getHttpUrl() );
+        assertEquals( ARIN_HTTP, v6.getServiceUrls( IPv6Address.fromString( "2620:01ff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpUrl() );
+        assertEquals( LACNIC_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "2800:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpsUrl() );
+        assertEquals( LACNIC_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "2800:0000:0000:0000:0000:0000:0000:ffff" ) ).getHttpsUrl() );
+        assertEquals( LACNIC_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "280f:ffff:ffff:ffff:ffff:ffff:ffff:0000" ) ).getHttpsUrl() );
+        assertEquals( LACNIC_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "280f:ffff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpsUrl() );
+        assertEquals( APNIC_HTTPS, v6.getServiceUrls( IPv6Network.fromString( "2001:0200::/23" ) ).getHttpsUrl() );
+        assertEquals( RIPE_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "2a00:0000:0000:0000:0000:0000:0000:0000" ) ).getHttpsUrl() );
+        assertEquals( RIPE_HTTPS, v6.getServiceUrls( IPv6Address.fromString( "2a0f:ffff:ffff:ffff:ffff:ffff:ffff:ffff" ) ).getHttpsUrl() );
+        assertEquals( AFRINIC_HTTP, v6.getServiceUrls( IPv6Network.fromString( "2c00:0000::/12" ) ).getHttpUrl() );
+        assertEquals( LACNIC_HTTPS, v6.getServiceUrls( IPv6Network.fromString( "2800:0000::/12" ) ).getHttpsUrl() );
     }
 }

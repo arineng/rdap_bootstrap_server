@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2015 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,9 +21,6 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
-/**
- * @version $Rev$, $Date$
- */
 public class AsBootstrapTest
 {
     @Test
@@ -46,5 +43,4 @@ public class AsBootstrapTest
         assertEquals( "https://rdap.apnic.net", asBootstrap.getServiceUrls( "18431" ).getHttpsUrl() );
         assertNull( asBootstrap.getServiceUrls( "4294967294" ) );
     }
-
 }

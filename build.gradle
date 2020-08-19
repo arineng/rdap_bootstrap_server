@@ -1,11 +1,13 @@
+plugins {
+    id 'java-library'
+    id 'war'
+    id 'eclipse'
+    id 'maven'
+}
+
 import org.gradle.internal.jvm.Jvm
 
 assert Jvm.current().javaVersion >= JavaVersion.VERSION_11: 'This project requires Java 11+'
-
-apply plugin: 'java'
-apply plugin: 'war'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
 
 group = 'ARIN'
 version = '1000.0-SNAPSHOT'
