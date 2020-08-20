@@ -1,7 +1,8 @@
 plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java-library'
     id 'war'
-    id 'eclipse'
     id 'maven'
 }
 
@@ -11,7 +12,7 @@ assert Jvm.current().javaVersion >= JavaVersion.VERSION_11: 'This project requir
 
 group = 'ARIN'
 version = '1000.0-SNAPSHOT'
-description = """RDAP Bootstrap Server"""
+description = 'RDAP Bootstrap Server'
 
 repositories {
      maven { url 'https://repo.maven.apache.org/maven2' }
@@ -39,4 +40,12 @@ uploadArchives {
             }
         }
     }
+}
+
+bootJar {
+    mainClassName = 'net.arin.rdap_bootstrap.service.RedirectServlet'
+}
+
+war {
+    enabled = true
 }
