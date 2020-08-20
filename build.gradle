@@ -2,8 +2,6 @@ plugins {
     id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java-library'
-    id 'war'
-    id 'maven'
 }
 
 import org.gradle.internal.jvm.Jvm
@@ -19,33 +17,13 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.13'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.2.0'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version:'1.46'
-
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
 
     testImplementation group: 'junit', name: 'junit', version:'4.8.2'
 }
 
-uploadArchives {
-    repositories.mavenDeployer {
-        if (project.version.endsWith('SNAPSHOT')) {
-            snapshotRepository(url: project.properties.mavenRepository) {
-                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
-            }
-        } else {
-            repository(url: project.properties.mavenRepository) {
-                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
-            }
-        }
-    }
-}
-
 bootJar {
-    mainClassName = 'net.arin.rdap_bootstrap.service.RedirectServlet'
-}
-
-war {
-    enabled = true
+    mainClassName = 'net.arin.rdap_bootstrap.service.RdapBootstrapApp'
 }
