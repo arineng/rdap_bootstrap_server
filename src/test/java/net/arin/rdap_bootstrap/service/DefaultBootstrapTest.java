@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
-import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 
 public class DefaultBootstrapTest
 {
@@ -32,6 +32,6 @@ public class DefaultBootstrapTest
         d.loadData( new ResourceFiles() );
 
         assertEquals( ARIN_HTTP, d.getServiceUrls( Type.AUTNUM ).getHttpUrl() );
-        assertEquals( INFO_HTTP, d.getServiceUrls( Type.DOMAIN ).getHttpUrl() );
+        assertEquals( INFO_HTTPS, d.getServiceUrls( Type.DOMAIN ).getHttpsUrl() );
     }
 }

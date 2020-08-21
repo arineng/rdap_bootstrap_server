@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "publication": "2014-09-09T15:39:03-0400",
+  "publication": "2020-08-21T11:51:00-0400",
   "services": [
     [
       [
@@ -9,8 +9,8 @@
         "nameserver"
       ],
       [
-        "https://rdap.arin.net/registry",
-        "http://rdap.arin.net/registry"
+        "https://rdap.arin.net/registry/",
+        "http://rdap.arin.net/registry/"
       ]
     ],
     [
@@ -18,8 +18,8 @@
         "entity"
       ],
       [
-        "https://rdap.arin.net/registry",
-        "http://rdap.arin.net/registry"
+        "https://rdap.arin.net/registry/",
+        "http://rdap.arin.net/registry/"
       ]
     ],
     [
@@ -27,7 +27,7 @@
         "domain"
       ],
       [
-        "http://rdg.afilias.info/rdap/"
+        "https://rdap.afilias.net/rdap/info/"
       ]
     ]
   ]

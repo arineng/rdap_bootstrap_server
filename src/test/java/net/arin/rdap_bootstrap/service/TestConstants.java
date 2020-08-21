@@ -31,7 +31,7 @@ public class TestConstants
     public final static String RIPE_HTTP = "http://rdap.db.ripe.net";
     public final static String RIPE_HTTPS = "https://rdap.db.ripe.net";
 
-    public static final String INFO_HTTP = "http://rdg.afilias.info/rdap";
+    public static final String INFO_HTTPS = "https://rdap.afilias.net/rdap/info";
 
     public static final String EXAMPLE_HTTP = "http://example.com";
     public static final String EXAMPLE_HTTPS = "https://example.com";

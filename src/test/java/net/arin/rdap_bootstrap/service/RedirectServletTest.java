@@ -25,7 +25,7 @@ import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.EXAMPLE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.EXAMPLE_HTTPS;
-import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTP;
+import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
@@ -183,8 +183,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( INFO_HTTP, servlet.makeDomainBase( "/domain/example.INFO" ).getHttpUrl() );
-        assertEquals( INFO_HTTP, servlet.makeDomainBase( "/domain/example.INFO." ).getHttpUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO" ).getHttpsUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO." ).getHttpsUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa." ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.7.in-addr.arpa" ).getHttpUrl() );
@@ -199,8 +199,8 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( INFO_HTTP, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpUrl() );
-        assertEquals( INFO_HTTP, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpsUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpsUrl() );
     }
 
     @Test
