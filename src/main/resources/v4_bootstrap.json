@@ -1,5 +1,6 @@
 {
-  "publication": "2015-08-11T00:09:31Z",
+  "description": "RDAP bootstrap file for IPv4 address allocations",
+  "publication": "2019-06-07T19:00:02Z",
   "services": [
     [
       [
@@ -188,8 +189,8 @@
         "216.0.0.0/8"
       ],
       [
-        "https://rdap.arin.net/registry",
-        "http://rdap.arin.net/registry"
+        "https://rdap.arin.net/registry/",
+        "http://rdap.arin.net/registry/"
       ]
     ],
     [
