@@ -19,12 +19,20 @@ package net.arin.rdap_bootstrap.service;
 public class TestConstants
 {
     public final static String AFRINIC_HTTP = "http://rdap.afrinic.net/rdap";
+    public final static String AFRINIC_HTTPS = "https://rdap.afrinic.net/rdap";
+
     public final static String APNIC_HTTPS = "https://rdap.apnic.net";
+
     public final static String ARIN_HTTP = "http://rdap.arin.net/registry";
+    public final static String ARIN_HTTPS = "https://rdap.arin.net/registry";
+
     public final static String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
+
     public final static String RIPE_HTTP = "http://rdap.db.ripe.net";
     public final static String RIPE_HTTPS = "https://rdap.db.ripe.net";
+
     public static final String INFO_HTTP = "http://rdg.afilias.info/rdap";
+
     public static final String EXAMPLE_HTTP = "http://example.com";
     public static final String EXAMPLE_HTTPS = "https://example.com";
 }
