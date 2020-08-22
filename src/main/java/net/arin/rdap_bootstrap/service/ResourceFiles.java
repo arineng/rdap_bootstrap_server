@@ -33,10 +33,10 @@ public class ResourceFiles
 {
     public enum BootFiles
     {
-        AS( "as_bootstrap" ),
         DOMAIN( "domain_bootstrap" ),
         V4( "v4_bootstrap" ),
         V6( "v6_bootstrap" ),
+        AS( "as_bootstrap" ),
         ENTITY( "entity_bootstrap" );
 
         private final String key;

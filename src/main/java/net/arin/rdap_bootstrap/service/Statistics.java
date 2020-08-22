@@ -42,12 +42,10 @@ public class Statistics
 
     public enum UrlHits
     {
-        IPHITS( "IP Hits" ),
         DOMAINHITS( "Domain Hits" ),
-        ENTITYHITS( "Entity Hits" ),
-        NAMESERVERHITS( "Nameserver Hits" ),
-        DEFAULTHITS( "Default Hits" ),
-        ASHITS( "Autnum Hits" );
+        IPHITS( "IP Hits" ),
+        ASHITS( "Autnum Hits" ),
+        ENTITYHITS( "Entity Hits" );
 
         private final Map<String, AtomicLong> hitsMap = Collections.synchronizedMap( new LruMap<>( 100 ) );
         private final String title;

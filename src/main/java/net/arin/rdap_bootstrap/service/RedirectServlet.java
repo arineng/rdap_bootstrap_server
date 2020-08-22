@@ -413,13 +413,13 @@ public class RedirectServlet extends HttpServlet
         notices.add( createPublicationDateNotice( "Domain",
                 resourceFiles.getLastModified( BootFiles.DOMAIN.getKey() ),
                 domainBootstrap.getPublication() ) );
-        notices.add( createPublicationDateNotice( "IpV4",
+        notices.add( createPublicationDateNotice( "IPv4",
                 resourceFiles.getLastModified( BootFiles.V4.getKey() ),
                 ipV4Bootstrap.getPublication() ) );
-        notices.add( createPublicationDateNotice( "IpV6",
+        notices.add( createPublicationDateNotice( "IPv6",
                 resourceFiles.getLastModified( BootFiles.V6.getKey() ),
                 ipV6Bootstrap.getPublication() ) );
-        notices.add( createPublicationDateNotice( "As",
+        notices.add( createPublicationDateNotice( "AS",
                 resourceFiles.getLastModified( BootFiles.AS.getKey() ),
                 asBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "Entity",
