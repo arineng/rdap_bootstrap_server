@@ -24,7 +24,7 @@ import java.util.TreeMap;
 
 public class AsBootstrap implements JsonBootstrapFile.Handler
 {
-    private class AsRangeInfo
+    private static class AsRangeInfo
     {
         private final Long asStart;
         private final Long asEnd;

@@ -27,7 +27,7 @@ import com.googlecode.ipv6.IPv6Network;
 
 public class IpV6Bootstrap implements JsonBootstrapFile.Handler
 {
-    private class HighBitsRangeInfo
+    private static class HighBitsRangeInfo
     {
         private final Long highBitsStart;
         private final Long highBitsEnd;
