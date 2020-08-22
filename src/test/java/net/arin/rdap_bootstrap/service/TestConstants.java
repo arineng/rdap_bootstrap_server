@@ -26,6 +26,8 @@ public class TestConstants
     public final static String ARIN_HTTP = "http://rdap.arin.net/registry";
     public final static String ARIN_HTTPS = "https://rdap.arin.net/registry";
 
+    public final static String GOOGLE_HTTPS = "https://www.registry.google/rdap";
+
     public final static String LACNIC_HTTPS = "https://rdap.lacnic.net/rdap";
 
     public final static String RIPE_HTTP = "http://rdap.db.ripe.net";

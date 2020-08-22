@@ -19,6 +19,7 @@ package net.arin.rdap_bootstrap.service;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static net.arin.rdap_bootstrap.service.TestConstants.GOOGLE_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 
 public class DomainBootstrapTest
@@ -28,6 +29,8 @@ public class DomainBootstrapTest
     {
         DomainBootstrap domain = new DomainBootstrap();
         domain.loadData( new ResourceFiles() );
+
+        assertEquals( GOOGLE_HTTPS, domain.getServiceUrls( "xn--flw351e" ).getHttpsUrl() );
 
         assertEquals( INFO_HTTPS, domain.getServiceUrls( "foo.info" ).getHttpsUrl() );
         assertEquals( INFO_HTTPS, domain.getServiceUrls( "info" ).getHttpsUrl() );

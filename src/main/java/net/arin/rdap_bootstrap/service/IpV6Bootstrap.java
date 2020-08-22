@@ -93,7 +93,7 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
         IPv6Network v6net = IPv6Network.fromString( entry );
         long key = v6net.getFirst().getHighBits();
         int prefixLength = v6net.getNetmask().asPrefixLength();
-        _allocations.put( key, new HighBitsRangeInfo( key, ( long ) ( key + Math.pow( 2, 64 - prefixLength ) - 1 ), serviceUrls ) );
+        _allocations.put( key, new HighBitsRangeInfo( key, key + ( long ) ( Math.pow( 2, 64 - prefixLength ) - 1 ), serviceUrls ) );
     }
 
     @Override

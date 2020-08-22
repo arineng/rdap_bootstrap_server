@@ -29,6 +29,7 @@ import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
+import static org.junit.Assert.assertNull;
 
 public class RedirectServletTest
 {
@@ -159,6 +160,7 @@ public class RedirectServletTest
         servlet.init( null );
 
         assertEquals( ARIN_HTTP, servlet.makeAutnumBase( "/autnum/10" ).getHttpUrl() );
+
         assertEquals( RIPE_HTTPS, servlet.makeAutnumBase( "/autnum/42222" ).getHttpsUrl() );
     }
 
@@ -170,8 +172,9 @@ public class RedirectServletTest
 
         assertEquals( ARIN_HTTP, servlet.makeIpBase( "/ip/7.0.0.0/8" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeIpBase( "/ip/7.0.0.0/16" ).getHttpUrl() );
-        assertEquals( LACNIC_HTTPS, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpsUrl() );
         assertEquals( ARIN_HTTP, servlet.makeIpBase( "/ip/2620:0000:0000:0000:0000:0000:0000:0000" ).getHttpUrl() );
+
+        assertEquals( LACNIC_HTTPS, servlet.makeIpBase( "/ip/191.0.1.0/24" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, servlet.makeIpBase( "/ip/2800:0000::/12" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, servlet.makeIpBase( "/ip/191.0.1.1/32" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, servlet.makeIpBase( "/ip/191.0.1.1" ).getHttpsUrl() );
@@ -183,13 +186,15 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO" ).getHttpsUrl() );
-        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO." ).getHttpsUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa." ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.7.in-addr.arpa" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/7.in-addr.arpa" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.2.6.2.ip6.arpa" ).getHttpUrl() );
+
+        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO" ).getHttpsUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeDomainBase( "/domain/example.INFO." ).getHttpsUrl() );
+
         assertEquals( LACNIC_HTTPS, servlet.makeDomainBase( "/domain/0.0.8.2.ip6.arpa" ).getHttpsUrl() );
     }
 
@@ -201,6 +206,8 @@ public class RedirectServletTest
 
         assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpsUrl() );
         assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpsUrl() );
+
+        assertNull( servlet.makeNameserverBase( "/nameserver/ns1.5.in-addr.arpa." ) );
     }
 
     @Test
@@ -209,9 +216,12 @@ public class RedirectServletTest
         RedirectServlet servlet = new RedirectServlet();
         servlet.init( null );
 
-        assertEquals( ARIN_HTTP, servlet.makeEntityBase( "/entity/ABC123-ARIN" ).getHttpUrl() );
-        assertEquals( RIPE_HTTP, servlet.makeEntityBase( "/entity/ABC123-RIPE" ).getHttpUrl() );
         assertEquals( APNIC_HTTPS, servlet.makeEntityBase( "/entity/ABC123-AP" ).getHttpsUrl() );
+
+        assertEquals( ARIN_HTTP, servlet.makeEntityBase( "/entity/ABC123-ARIN" ).getHttpUrl() );
+
         assertEquals( LACNIC_HTTPS, servlet.makeEntityBase( "/entity/ABC123-LACNIC" ).getHttpsUrl() );
+
+        assertEquals( RIPE_HTTP, servlet.makeEntityBase( "/entity/ABC123-RIPE" ).getHttpUrl() );
     }
 }

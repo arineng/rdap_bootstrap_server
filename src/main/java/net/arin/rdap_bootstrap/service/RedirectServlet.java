@@ -171,7 +171,7 @@ public class RedirectServlet extends HttpServlet
             {
                 serve( UrlHits.DOMAINHITS, new MakeDomainBase(), pathInfo, req, resp );
             }
-            // The /nameserver path leverages the domain bootstrap data to provide redirection for the nameserver
+            // The /nameserver path leverages the domain bootstrap logic to provide redirection for the nameserver
             // queries.
             else if ( pathInfo.startsWith( "/nameserver/" ) )
             {
@@ -228,8 +228,9 @@ public class RedirectServlet extends HttpServlet
             }
             if ( pathInfo.endsWith( ".in-addr.arpa" ) )
             {
-                final int BITS_PER_WORD = 8, MIVAR = 1;
-                final String DELIMITER = ".";
+                final int bitsPerWord = 8;
+                final int divisor = 1;
+                final String delimiter = ".";
 
                 String[] words = new String[4];
                 Arrays.fill( words, "0" );
@@ -242,17 +243,17 @@ public class RedirectServlet extends HttpServlet
                 for ( int i = n - 1, j = 1; i >= 0; i--, j++ )
                 {
                     _s.append( _split[i] );
-                    words[j / MIVAR - 1] = _s.toString();
+                    words[j / divisor - 1] = _s.toString();
                     _s = new StringBuilder();
                 }
 
+                // Get the CIDR string (prefix slash prefix length) to query the IPv4 bootstrap.
                 for ( int i = 0; i < words.length - 1; i++ )
                 {
-                    s.append( words[i] ).append( DELIMITER );
+                    s.append( words[i] ).append( delimiter );
                 }
                 s.append( words[words.length - 1] );
-                s.append( "/" ).append( BITS_PER_WORD * n );
-
+                s.append( "/" ).append( bitsPerWord * n );
                 return ipV4Bootstrap.getServiceUrls( s.toString() );
             }
             else if ( pathInfo.endsWith( ".ip6.arpa" ) )
@@ -296,13 +297,13 @@ public class RedirectServlet extends HttpServlet
                 }
                 return ipV6Bootstrap.getServiceUrls( IPv6Address.fromByteArray( bytes ) );
             }
-            // else
+            // else a forward domain
             String[] labels = pathInfo.split( "\\." );
             return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
         }
     }
 
-    // Nameservers.
+    // Nameservers. Only for forward domains.
 
     public ServiceUrls makeNameserverBase( String pathInfo )
     {
@@ -386,6 +387,7 @@ public class RedirectServlet extends HttpServlet
             int i = pathInfo.lastIndexOf( '-' );
             if ( i != -1 && i + 1 < pathInfo.length() )
             {
+                // Use the RIR label in the entity handle tp get the redirection URL.
                 return entityBootstrap.getServiceUrls( pathInfo.substring( i + 1 ) );
             }
             // else

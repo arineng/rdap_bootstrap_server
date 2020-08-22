@@ -23,6 +23,7 @@ public class Link
     private String value;
     private String rel;
     private String type;
+    private String href;
 
     public String getValue()
     {
@@ -63,6 +64,4 @@ public class Link
     {
         this.href = href;
     }
-
-    private String href;
 }
