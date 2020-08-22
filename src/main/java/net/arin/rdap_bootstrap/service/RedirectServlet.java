@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
-import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import net.arin.rdap_bootstrap.service.Statistics.UrlHits;
@@ -50,11 +49,10 @@ import com.googlecode.ipv6.IPv6Network;
 
 public class RedirectServlet extends HttpServlet
 {
-    private final AsBootstrap asBootstrap = new AsBootstrap();
+    private final DomainBootstrap domainBootstrap = new DomainBootstrap();
     private final IpV6Bootstrap ipV6Bootstrap = new IpV6Bootstrap();
     private final IpV4Bootstrap ipV4Bootstrap = new IpV4Bootstrap();
-    private final DomainBootstrap domainBootstrap = new DomainBootstrap();
-    private final DefaultBootstrap defaultBootstrap = new DefaultBootstrap();
+    private final AsBootstrap asBootstrap = new AsBootstrap();
     private final EntityBootstrap entityBootstrap = new EntityBootstrap();
 
     private volatile Statistics statistics;
@@ -62,7 +60,7 @@ public class RedirectServlet extends HttpServlet
     private ResourceFiles resourceFiles;
     Boolean matchSchemeOnRedirect = Boolean.FALSE;
 
-    private static final long CHECK_CONFIG_FILES = 60000L;
+    private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
     static final String MATCH_SCHEME_ON_REDIRECT = "match_scheme_on_redirect";
 
     @Override
@@ -92,19 +90,13 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    protected void serve( UrlHits urlHits, BaseMaker baseMaker, DefaultBootstrap.Type defaultType,
-                          String pathInfo, HttpServletRequest req, HttpServletResponse resp )
+    protected void serve( UrlHits urlHits, BaseMaker baseMaker, String pathInfo, HttpServletRequest req,
+                          HttpServletResponse resp )
             throws IOException
     {
         try
         {
-            UrlHits hits = urlHits;
             ServiceUrls urls = baseMaker.makeBase( pathInfo );
-            if ( urls == null && defaultType != null )
-            {
-                urls = defaultBootstrap.getServiceUrls( defaultType );
-                hits = UrlHits.DEFAULTHITS;
-            }
             if ( urls == null )
             {
                 resp.sendError( HttpServletResponse.SC_NOT_FOUND );
@@ -113,9 +105,9 @@ public class RedirectServlet extends HttpServlet
             else
             {
                 String redirectUrl = getRedirectUrl( req.getScheme(), req.getPathInfo(), urls );
-                if ( hits != null )
+                if ( urlHits != null )
                 {
-                    hits.hit( redirectUrl );
+                    urlHits.hit( redirectUrl );
                 }
                 statistics.getTotalHits().incrementAndGet();
                 resp.sendRedirect( redirectUrl );
@@ -125,7 +117,6 @@ public class RedirectServlet extends HttpServlet
         {
             resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
         }
-
     }
 
     String getRedirectUrl( String scheme, String pathInfo, ServiceUrls urls )
@@ -178,24 +169,24 @@ public class RedirectServlet extends HttpServlet
             String pathInfo = req.getPathInfo();
             if ( pathInfo.startsWith( "/domain/" ) )
             {
-                serve( UrlHits.DOMAINHITS, new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
-            }
-            else if ( pathInfo.startsWith( "/nameserver/" ) )
-            {
-                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
+                serve( UrlHits.DOMAINHITS, new MakeDomainBase(), pathInfo, req, resp );
             }
             else if ( pathInfo.startsWith( "/ip/" ) )
             {
-                serve( UrlHits.IPHITS, new MakeIpBase(), Type.IP, pathInfo, req, resp );
-            }
-            else if ( pathInfo.startsWith( "/entity/" ) )
-            {
-                serve( UrlHits.ENTITYHITS, new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
+                serve( UrlHits.IPHITS, new MakeIpBase(), pathInfo, req, resp );
             }
             else if ( pathInfo.startsWith( "/autnum/" ) )
             {
-                serve( UrlHits.ASHITS, new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
+                serve( UrlHits.ASHITS, new MakeAutnumBase(), pathInfo, req, resp );
             }
+            // The /entity path is not part of the RDAP Bootstrap standard. It has been implemented to provide
+            // redirection for the RIR entity queries.
+            else if ( pathInfo.startsWith( "/entity/" ) )
+            {
+                serve( UrlHits.ENTITYHITS, new MakeEntityBase(), pathInfo, req, resp );
+            }
+            // The /help path is not part of the RDAP Bootstrap standard. It has been implemented to return statistics
+            // for ARIN's RDAP Bootstrap service.
             else if ( pathInfo.startsWith( "/help" ) )
             {
                 resp.setContentType( "application/rdap+json" );
@@ -213,48 +204,7 @@ public class RedirectServlet extends HttpServlet
         ServiceUrls makeBase( String pathInfo );
     }
 
-    public ServiceUrls makeAutnumBase( String pathInfo )
-    {
-        return new MakeAutnumBase().makeBase( pathInfo );
-    }
-
-    public class MakeAutnumBase implements BaseMaker
-    {
-        public ServiceUrls makeBase( String pathInfo )
-        {
-            return asBootstrap.getServiceUrls( pathInfo.split( "/" )[2] );
-        }
-    }
-
-    public ServiceUrls makeIpBase( String pathInfo )
-    {
-        return new MakeIpBase().makeBase( pathInfo );
-    }
-
-    public class MakeIpBase implements BaseMaker
-    {
-        public ServiceUrls makeBase( String pathInfo )
-        {
-            // Strip leading "/ip/".
-            pathInfo = pathInfo.substring( 4 );
-            if ( !pathInfo.contains( ":" ) ) // is not IPv6
-            {
-                return ipV4Bootstrap.getServiceUrls( pathInfo );
-            }
-            // else
-            IPv6Address addr;
-            if ( !pathInfo.contains( "/" ) )
-            {
-                addr = IPv6Address.fromString( pathInfo );
-            }
-            else
-            {
-                IPv6Network net = IPv6Network.fromString( pathInfo );
-                addr = net.getFirst();
-            }
-            return ipV6Bootstrap.getServiceUrls( addr );
-        }
-    }
+    // Domain names.
 
     public ServiceUrls makeDomainBase( String pathInfo )
     {
@@ -346,29 +296,56 @@ public class RedirectServlet extends HttpServlet
             String[] labels = pathInfo.split( "\\." );
             return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
         }
-
     }
 
-    public ServiceUrls makeNameserverBase( String pathInfo )
+    // IP addresses.
+
+    public ServiceUrls makeIpBase( String pathInfo )
     {
-        return new MakeNameserverBase().makeBase( pathInfo );
+        return new MakeIpBase().makeBase( pathInfo );
     }
 
-    public class MakeNameserverBase implements BaseMaker
+    public class MakeIpBase implements BaseMaker
     {
         public ServiceUrls makeBase( String pathInfo )
         {
-            // Strip leading "/nameserver/".
-            pathInfo = pathInfo.substring( 12 );
-            // Strip possible trailing period.
-            if ( pathInfo.endsWith( "." ) )
+            // Strip leading "/ip/".
+            pathInfo = pathInfo.substring( 4 );
+            if ( !pathInfo.contains( ":" ) ) // is not IPv6
             {
-                pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
+                return ipV4Bootstrap.getServiceUrls( pathInfo );
             }
-            String[] labels = pathInfo.split( "\\." );
-            return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
+            // else
+            IPv6Address addr;
+            if ( !pathInfo.contains( "/" ) )
+            {
+                addr = IPv6Address.fromString( pathInfo );
+            }
+            else
+            {
+                IPv6Network net = IPv6Network.fromString( pathInfo );
+                addr = net.getFirst();
+            }
+            return ipV6Bootstrap.getServiceUrls( addr );
         }
     }
+
+    // AS numbers.
+
+    public ServiceUrls makeAutnumBase( String pathInfo )
+    {
+        return new MakeAutnumBase().makeBase( pathInfo );
+    }
+
+    public class MakeAutnumBase implements BaseMaker
+    {
+        public ServiceUrls makeBase( String pathInfo )
+        {
+            return asBootstrap.getServiceUrls( pathInfo.split( "/" )[2] );
+        }
+    }
+
+    // Entities.
 
     public ServiceUrls makeEntityBase( String pathInfo )
     {
@@ -388,6 +365,8 @@ public class RedirectServlet extends HttpServlet
             return null;
         }
     }
+
+    // Statistics.
 
     private Notice makeStatsNotice( Statistics.UrlHits stats )
     {
@@ -431,24 +410,21 @@ public class RedirectServlet extends HttpServlet
         notices.add( notice );
 
         // Modified dates for various bootstrap files. Done this way so that Publication dates can be published as well.
-        notices.add( createPublicationDateNotice( "Default",
-                resourceFiles.getLastModified( BootFiles.DEFAULT.getKey() ),
-                defaultBootstrap.getPublication() ) );
-        notices.add( createPublicationDateNotice( "As",
-                resourceFiles.getLastModified( BootFiles.AS.getKey() ),
-                asBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "Domain",
                 resourceFiles.getLastModified( BootFiles.DOMAIN.getKey() ),
                 domainBootstrap.getPublication() ) );
-        notices.add( createPublicationDateNotice( "Entity",
-                resourceFiles.getLastModified( BootFiles.ENTITY.getKey() ),
-                entityBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "IpV4",
                 resourceFiles.getLastModified( BootFiles.V4.getKey() ),
                 ipV4Bootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "IpV6",
                 resourceFiles.getLastModified( BootFiles.V6.getKey() ),
                 ipV6Bootstrap.getPublication() ) );
+        notices.add( createPublicationDateNotice( "As",
+                resourceFiles.getLastModified( BootFiles.AS.getKey() ),
+                asBootstrap.getPublication() ) );
+        notices.add( createPublicationDateNotice( "Entity",
+                resourceFiles.getLastModified( BootFiles.ENTITY.getKey() ),
+                entityBootstrap.getPublication() ) );
 
         response.setNotices( notices );
 
@@ -490,7 +466,7 @@ public class RedirectServlet extends HttpServlet
                 if ( isModified( currentTime, resourceFiles.getLastModified( bootFiles.getKey() ) ) )
                 {
                     getServletContext().log( String.format( "%s was last modified at %s", bootFiles.getKey(),
-                                    new Date( resourceFiles.getLastModified( bootFiles.getKey() ) ) ) );
+                            new Date( resourceFiles.getLastModified( bootFiles.getKey() ) ) ) );
                     load = true;
                 }
             }
@@ -514,12 +490,11 @@ public class RedirectServlet extends HttpServlet
                 getServletContext().log( "Loading resource files" );
             }
             resourceFiles = new ResourceFiles();
-            asBootstrap.loadData( resourceFiles );
+            domainBootstrap.loadData( resourceFiles );
             ipV4Bootstrap.loadData( resourceFiles );
             ipV6Bootstrap.loadData( resourceFiles );
-            domainBootstrap.loadData( resourceFiles );
+            asBootstrap.loadData( resourceFiles );
             entityBootstrap.loadData( resourceFiles );
-            defaultBootstrap.loadData( resourceFiles );
         }
     }
 }

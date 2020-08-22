@@ -33,7 +33,6 @@ public class ResourceFiles
 {
     public enum BootFiles
     {
-        DEFAULT( "default_bootstrap" ),
         AS( "as_bootstrap" ),
         DOMAIN( "domain_bootstrap" ),
         V4( "v4_bootstrap" ),
