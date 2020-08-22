@@ -43,6 +43,7 @@ public class Statistics
     public enum UrlHits
     {
         DOMAINHITS( "Domain Hits" ),
+        NAMESERVERHITS( "Nameserver Hits" ),
         IPHITS( "IP Hits" ),
         ASHITS( "Autnum Hits" ),
         ENTITYHITS( "Entity Hits" );

@@ -194,6 +194,16 @@ public class RedirectServletTest
     }
 
     @Test
+    public void testMakeNameserverBase() throws Exception
+    {
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( null );
+
+        assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpsUrl() );
+        assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpsUrl() );
+    }
+
+    @Test
     public void testMakeEntityBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();

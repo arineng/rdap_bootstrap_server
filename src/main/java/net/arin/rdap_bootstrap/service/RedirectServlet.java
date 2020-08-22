@@ -171,6 +171,12 @@ public class RedirectServlet extends HttpServlet
             {
                 serve( UrlHits.DOMAINHITS, new MakeDomainBase(), pathInfo, req, resp );
             }
+            // The /nameserver path leverages the domain bootstrap data to provide redirection for the nameserver
+            // queries.
+            else if ( pathInfo.startsWith( "/nameserver/" ) )
+            {
+                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), pathInfo, req, resp );
+            }
             else if ( pathInfo.startsWith( "/ip/" ) )
             {
                 serve( UrlHits.IPHITS, new MakeIpBase(), pathInfo, req, resp );
@@ -179,14 +185,12 @@ public class RedirectServlet extends HttpServlet
             {
                 serve( UrlHits.ASHITS, new MakeAutnumBase(), pathInfo, req, resp );
             }
-            // The /entity path is not part of the RDAP Bootstrap standard. It has been implemented to provide
-            // redirection for the RIR entity queries.
+            // The /entity path provides redirection for the RIR entity queries.
             else if ( pathInfo.startsWith( "/entity/" ) )
             {
                 serve( UrlHits.ENTITYHITS, new MakeEntityBase(), pathInfo, req, resp );
             }
-            // The /help path is not part of the RDAP Bootstrap standard. It has been implemented to return statistics
-            // for ARIN's RDAP Bootstrap service.
+            // The /help path returns statistics for ARIN's RDAP Bootstrap service.
             else if ( pathInfo.startsWith( "/help" ) )
             {
                 resp.setContentType( "application/rdap+json" );
@@ -293,6 +297,29 @@ public class RedirectServlet extends HttpServlet
                 return ipV6Bootstrap.getServiceUrls( IPv6Address.fromByteArray( bytes ) );
             }
             // else
+            String[] labels = pathInfo.split( "\\." );
+            return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
+        }
+    }
+
+    // Nameservers.
+
+    public ServiceUrls makeNameserverBase( String pathInfo )
+    {
+        return new MakeNameserverBase().makeBase( pathInfo );
+    }
+
+    public class MakeNameserverBase implements BaseMaker
+    {
+        public ServiceUrls makeBase( String pathInfo )
+        {
+            // Strip leading "/nameserver/".
+            pathInfo = pathInfo.substring( 12 );
+            // Strip possible trailing period.
+            if ( pathInfo.endsWith( "." ) )
+            {
+                pathInfo = pathInfo.substring( 0, pathInfo.length() - 1 );
+            }
             String[] labels = pathInfo.split( "\\." );
             return domainBootstrap.getServiceUrls( labels[labels.length - 1] );
         }
