@@ -34,16 +34,22 @@ public class IpV4BootstrapTest
         v4.loadData( new ResourceFiles() );
 
         // Test prefixes.
+
+        assertEquals( AFRINIC_HTTP, v4.getServiceUrls( "41" ).getHttpUrl() );
+
         assertEquals( APNIC_HTTPS, v4.getServiceUrls( "1" ).getHttpsUrl() );
         assertEquals( APNIC_HTTPS, v4.getServiceUrls( "27" ).getHttpsUrl() );
-        assertEquals( RIPE_HTTPS, v4.getServiceUrls( "31" ).getHttpsUrl() );
-        assertEquals( AFRINIC_HTTP, v4.getServiceUrls( "41" ).getHttpUrl() );
+
         assertEquals( LACNIC_HTTPS, v4.getServiceUrls( "177" ).getHttpsUrl() );
-        assertEquals( RIPE_HTTPS, v4.getServiceUrls( "188" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, v4.getServiceUrls( "191" ).getHttpsUrl() );
 
+        assertEquals( RIPE_HTTPS, v4.getServiceUrls( "31" ).getHttpsUrl() );
+        assertEquals( RIPE_HTTPS, v4.getServiceUrls( "188" ).getHttpsUrl() );
+
         // Test full prefixes.
+
         assertEquals( ARIN_HTTP, v4.getServiceUrls( "216.0.0.0/8" ).getHttpUrl() );
+
         assertEquals( LACNIC_HTTPS, v4.getServiceUrls( "177.0.0.0/8" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, v4.getServiceUrls( "177.0.0.1/32" ).getHttpsUrl() );
         assertEquals( LACNIC_HTTPS, v4.getServiceUrls( "177.0.0.1" ).getHttpsUrl() );

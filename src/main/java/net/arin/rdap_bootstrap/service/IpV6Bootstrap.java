@@ -27,8 +27,37 @@ import com.googlecode.ipv6.IPv6Network;
 
 public class IpV6Bootstrap implements JsonBootstrapFile.Handler
 {
-    private volatile TreeMap<Long, ServiceUrls> allocations = new TreeMap<>();
-    private TreeMap<Long, ServiceUrls> _allocations;
+    private class HighBitsRangeInfo
+    {
+        private final Long highBitsStart;
+        private final Long highBitsEnd;
+        private final ServiceUrls serviceUrls;
+
+        public HighBitsRangeInfo( Long highBitsStart, Long highBitsEnd, ServiceUrls serviceUrls )
+        {
+            this.highBitsStart = highBitsStart;
+            this.highBitsEnd = highBitsEnd;
+            this.serviceUrls = serviceUrls;
+        }
+
+        public Long getHighBitsStart()
+        {
+            return highBitsStart;
+        }
+
+        public Long getHighBitsEnd()
+        {
+            return highBitsEnd;
+        }
+
+        public ServiceUrls getServiceUrls()
+        {
+            return serviceUrls;
+        }
+    }
+
+    private volatile TreeMap<Long, HighBitsRangeInfo> allocations = new TreeMap<>();
+    private TreeMap<Long, HighBitsRangeInfo> _allocations;
 
     private ServiceUrls serviceUrls;
     private String publication;
@@ -63,7 +92,8 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
     {
         IPv6Network v6net = IPv6Network.fromString( entry );
         long key = v6net.getFirst().getHighBits();
-        _allocations.put( key, serviceUrls );
+        int prefixLength = v6net.getNetmask().asPrefixLength();
+        _allocations.put( key, new HighBitsRangeInfo( key, ( long ) ( key + Math.pow( 2, 64 - prefixLength ) - 1 ), serviceUrls ) );
     }
 
     @Override
@@ -79,25 +109,32 @@ public class IpV6Bootstrap implements JsonBootstrapFile.Handler
         bsFile.loadData( resourceFiles.getInputStream( BootFiles.V6.getKey() ), this );
     }
 
-    public ServiceUrls getServiceUrls( long prefix )
+    public ServiceUrls getServiceUrls( long prefixStart, long prefixEnd )
     {
         ServiceUrls retval = null;
-        Map.Entry<Long, ServiceUrls> entry = allocations.floorEntry( prefix );
+        Map.Entry<Long, HighBitsRangeInfo> entry = allocations.floorEntry( prefixStart );
         if ( entry != null )
         {
-            retval = entry.getValue();
+            HighBitsRangeInfo highBitsRangeInfo = entry.getValue();
+            if ( highBitsRangeInfo.getHighBitsStart() <= prefixStart && prefixEnd <= highBitsRangeInfo.getHighBitsEnd() )
+            {
+                retval = highBitsRangeInfo.getServiceUrls();
+            }
         }
         return retval;
     }
 
     public ServiceUrls getServiceUrls( IPv6Address addr )
     {
-        return getServiceUrls( addr.getHighBits() );
+        return getServiceUrls( addr.getHighBits(), addr.getHighBits() );
     }
 
     public ServiceUrls getServiceUrls( IPv6Network net )
     {
-        return getServiceUrls( net.getFirst().getHighBits() );
+        long prefixStart = net.getFirst().getHighBits();
+        int prefixLength = net.getNetmask().asPrefixLength();
+        long prefixEnd = prefixStart + ( long ) ( Math.pow( 2, 64 - prefixLength ) - 1 );
+        return getServiceUrls( prefixStart, prefixEnd );
     }
 
     @Override

@@ -347,13 +347,13 @@ public class RedirectServlet extends HttpServlet
             if ( !pathInfo.contains( "/" ) )
             {
                 addr = IPv6Address.fromString( pathInfo );
+                return ipV6Bootstrap.getServiceUrls( addr );
             }
             else
             {
                 IPv6Network net = IPv6Network.fromString( pathInfo );
-                addr = net.getFirst();
+                return ipV6Bootstrap.getServiceUrls( net );
             }
-            return ipV6Bootstrap.getServiceUrls( addr );
         }
     }
 
