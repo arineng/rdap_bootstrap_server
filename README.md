@@ -254,3 +254,56 @@ to try to keep the scheme (HTTP or HTTPS) for the redirect that was given in the
 behavior can be set with the system property `arin.rdapbootstrap.match_scheme_on_redirect=TRUE`.
 Note that this is a system property and is not part of the `resouce_files.properties` file.
 
+## Spring Boot Application
+
+### Gradle Build, Test, and Boot Run
+
+    git clone https://github.com/arineng/rdap_bootstrap_server.git
+    cd rdap_bootstrap_server
+    git checkout springboot
+    ./gradlew clean build test bootRun --info
+
+### Sample Queries
+
+This section covers the RDAP Bootstrap queries as per [RFC 7484](https://tools.ietf.org/html/rfc7484). The
+[IANA RDAP Bootstrap Registry](https://data.iana.org/rdap/) publishes JSON files for domains, IP addresses, and AS
+numbers which respectively map to the `/domain`, `/ip`, and `/autnum` queries. The `/nameserver` queries only work for
+forward domains and leverage IANA's domain bootstrap data. The `/entity` queries only support redirections for RIR
+entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
+
+#### /domain
+
+    http://localhost:8080/rdapbootstrap/domain/google.com (302 to https://rdap.verisign.com/com/v1)
+    http://localhost:8080/rdapbootstrap/domain/google.foo (302 to https://www.registry.google/rdap)
+    http://localhost:8080/rdapbootstrap/domain/xn--flw351e (302 to https://www.registry.google/rdap)
+    http://localhost:8080/rdapbootstrap/domain/2.in-addr.arpa (302 to https://rdap.db.ripe.net)
+    http://localhost:8080/rdapbootstrap/domain/15.in-addr.arpa (302 to https://rdap.arin.net/registry)
+    http://localhost:8080/rdapbootstrap/domain/0.0.e.0.1.0.0.2.ip6.arpa (302 to https://rdap.apnic.net)
+
+#### /nameserver
+
+    http://localhost:8080/rdapbootstrap/nameserver/cnn.com (302 to https://rdap.verisign.com/com/v1)
+    http://localhost:8080/rdapbootstrap/nameserver/15.in-addr.arpa (404 because only for forward domains)
+
+#### /ip
+
+    http://localhost:8080/rdapbootstrap/ip/2.0.0.0/8 (302 to https://rdap.db.ripe.net)
+    http://localhost:8080/rdapbootstrap/ip/15.0.0.0/8 (302 to https://rdap.arin.net/registry)
+    http://localhost:8080/rdapbootstrap/ip/2c00::/12 (302 to https://rdap.afrinic.net/rdap)
+    http://localhost:8080/rdapbootstrap/ip/2c00::/13 (302 to https://rdap.afrinic.net/rdap)
+    http://localhost:8080/rdapbootstrap/ip/3c00::/12 (404 because non-existent in the IANA RDAP Bootstrap registry)
+
+#### /autnum
+
+    http://localhost:8080/rdapbootstrap/autnum/1 (302 to https://rdap.arin.net/registry)
+    http://localhost:8080/rdapbootstrap/autnum/272796 (302 to https://rdap.lacnic.net/rdap)
+    http://localhost:8080/rdapbootstrap/autnum/272797 (404 because non-existent in the IANA RDAP Bootstrap registry)
+
+#### /entity
+
+    http://localhost:8080/rdapbootstrap/entity/ODIN19-ARIN (302 to https://rdap.arin.net/registry)
+    http://localhost:8080/rdapbootstrap/entity/IRT-APNIC-AP (302 to https://rdap.apnic.net)
+
+#### /help
+
+    http://localhost:8080/rdapbootstrap/help (200 returning ARIN RDAP Bootstrap service statistics)
