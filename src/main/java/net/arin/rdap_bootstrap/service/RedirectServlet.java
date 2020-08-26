@@ -66,9 +66,11 @@ public class RedirectServlet extends HttpServlet
 
     private ResourceFiles resourceFiles;
     Boolean matchSchemeOnRedirect = Boolean.FALSE;
+    Boolean downloadBootstrapFiles = Boolean.FALSE;
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
     static final String MATCH_SCHEME_ON_REDIRECT = "match_scheme_on_redirect";
+    static final String DOWNLOAD_BOOTSTRAP_FILES = "download_bootstrap_files";
 
     @Override
     public void init( ServletConfig config ) throws ServletException
@@ -80,6 +82,28 @@ public class RedirectServlet extends HttpServlet
         matchSchemeOnRedirect = Boolean.valueOf( System.getProperty(
                 Constants.PROPERTY_PREFIX + MATCH_SCHEME_ON_REDIRECT, matchSchemeOnRedirect.toString() ) );
 
+        downloadBootstrapFiles = Boolean.valueOf( System.getProperty(
+                Constants.PROPERTY_PREFIX + DOWNLOAD_BOOTSTRAP_FILES, downloadBootstrapFiles.toString() ) );
+        if ( downloadBootstrapFiles )
+        {
+            try
+            {
+                DownloadBootstrapFilesTask downloadBootstrapFilesTask = new DownloadBootstrapFilesTask();
+                if ( config != null )
+                {
+                    Timer timer = new Timer();
+                    // TODO: Start immediately. Get period from a property - once a day.
+                    timer.schedule( downloadBootstrapFilesTask, 0L, 120000L );
+                }
+
+                Thread.sleep( 2000L );
+            }
+            catch ( Exception e )
+            {
+                throw new ServletException( e );
+            }
+        }
+
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
@@ -90,21 +114,6 @@ public class RedirectServlet extends HttpServlet
                 Timer timer = new Timer();
                 timer.schedule( loadConfigTask, CHECK_CONFIG_FILES, CHECK_CONFIG_FILES );
             }
-        }
-        catch ( Exception e )
-        {
-            throw new ServletException( e );
-        }
-
-        // TODO:
-        //   Download bootstrap files only if download_bootstrap_files property is set to true.
-        //   Schedule as properties. Start after a day. Once a day subsequently.
-
-        try
-        {
-            DownloadBootstrapFilesTask downloadBootstrapFilesTask = new DownloadBootstrapFilesTask();
-            Timer timer = new Timer();
-            timer.schedule( downloadBootstrapFilesTask, 10000L, 120000L );
         }
         catch ( Exception e )
         {

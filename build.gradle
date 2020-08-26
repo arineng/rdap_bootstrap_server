@@ -28,3 +28,7 @@ dependencies {
 bootJar {
     mainClassName = 'net.arin.rdap_bootstrap.service.RdapBootstrapApp'
 }
+
+bootRun {
+    systemProperties System.properties
+}

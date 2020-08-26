@@ -36,6 +36,7 @@ public class RdapBootstrapApp
         ServletRegistrationBean<Servlet> registrationBean = new ServletRegistrationBean<>();
         registrationBean.setServlet( ( Servlet ) Class.forName( "net.arin.rdap_bootstrap.service.RedirectServlet" ).getConstructor().newInstance() );
         registrationBean.addUrlMappings( "/rdapbootstrap/*" );
+        registrationBean.setLoadOnStartup( 1 );
         return registrationBean;
     }
 }

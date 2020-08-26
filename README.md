@@ -261,7 +261,8 @@ Note that this is a system property and is not part of the `resouce_files.proper
     git clone https://github.com/arineng/rdap_bootstrap_server.git
     cd rdap_bootstrap_server
     git checkout springboot
-    ./gradlew clean build test bootRun --info
+    ./gradlew clean build test --info
+    ./gradlew bootRun [-Dproperty=value ...] --info
 
 ### Sample Queries
 
@@ -307,3 +308,12 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
 #### /help
 
     http://localhost:8080/rdapbootstrap/help (200 returning ARIN RDAP Bootstrap service statistics)
+
+### System Properties
+
+    arin.rdapbootstrap.match_scheme_on_redirect=true|false (default: false)
+    arin.rdapbootstrap.download_bootstrap_files=true|false (default: false)
+    arin.rdapbootstrap.bootfile.as_bootstrap=FULL_FILE_PATH
+    arin.rdapbootstrap.bootfile.domain_bootstrap=FULL_FILE_PATH
+    arin.rdapbootstrap.bootfile.v4_bootstrap=FULL_FILE_PATH
+    arin.rdapbootstrap.bootfile.v6_bootstrap=FULL_FILE_PATH
