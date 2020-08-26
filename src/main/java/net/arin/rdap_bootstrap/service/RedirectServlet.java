@@ -16,8 +16,14 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,6 +52,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
+import org.apache.commons.io.FileUtils;
 
 public class RedirectServlet extends HttpServlet
 {
@@ -83,6 +90,21 @@ public class RedirectServlet extends HttpServlet
                 Timer timer = new Timer();
                 timer.schedule( loadConfigTask, CHECK_CONFIG_FILES, CHECK_CONFIG_FILES );
             }
+        }
+        catch ( Exception e )
+        {
+            throw new ServletException( e );
+        }
+
+        // TODO:
+        //   Download bootstrap files only if download_bootstrap_files property is set to true.
+        //   Schedule as properties. Start after a day. Once a day subsequently.
+
+        try
+        {
+            DownloadBootstrapFilesTask downloadBootstrapFilesTask = new DownloadBootstrapFilesTask();
+            Timer timer = new Timer();
+            timer.schedule( downloadBootstrapFilesTask, 10000L, 120000L );
         }
         catch ( Exception e )
         {
@@ -387,7 +409,7 @@ public class RedirectServlet extends HttpServlet
             int i = pathInfo.lastIndexOf( '-' );
             if ( i != -1 && i + 1 < pathInfo.length() )
             {
-                // Use the RIR label in the entity handle tp get the redirection URL.
+                // Use the RIR label in the entity handle to get the redirection URL.
                 return entityBootstrap.getServiceUrls( pathInfo.substring( i + 1 ) );
             }
             // else
@@ -524,6 +546,65 @@ public class RedirectServlet extends HttpServlet
             ipV6Bootstrap.loadData( resourceFiles );
             asBootstrap.loadData( resourceFiles );
             entityBootstrap.loadData( resourceFiles );
+        }
+    }
+
+    // TODO:
+    //  Specify the download dir as a property.
+    //  Specify the base download URL as a property.
+
+    private class DownloadBootstrapFilesTask extends TimerTask
+    {
+        @Override
+        public void run()
+        {
+            try
+            {
+                getServletContext().log( "Downloading files from IANA RDAP Bootstrap registry" );
+
+                String downloadDir = "/Users/jasdips/misc/rdapbootstrap";
+                Path downloadDirPath = Paths.get( downloadDir );
+                Files.createDirectories( downloadDirPath );
+
+                String baseDownloadURL = "https://data.iana.org/rdap";
+
+                downloadFileSafely( baseDownloadURL, downloadDir, "asn.json" );
+                downloadFileSafely( baseDownloadURL, downloadDir, "dns.json" );
+                downloadFileSafely( baseDownloadURL, downloadDir, "ipv4.json" );
+                downloadFileSafely( baseDownloadURL, downloadDir, "ipv6.json" );
+            }
+            catch ( IOException e )
+            {
+                getServletContext().log( "Problem downloading files from IANA RDAP Bootstrap registry", e );
+            }
+        }
+
+        private void downloadFileSafely( String baseDownloadURL, String downloadDir, String fileName )
+                throws IOException
+        {
+            getServletContext().log( "Downloading " + fileName );
+
+            Path filePath = Paths.get( downloadDir + "/" + fileName );
+            String newFilePathname = downloadDir + "/" + fileName + ".new";
+            Path newFilePath = Paths.get( newFilePathname );
+            Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
+            Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
+
+            FileUtils.copyURLToFile( new URL( baseDownloadURL + "/" + fileName ),
+                    new File( newFilePathname ), 10000, 10000 );
+
+            Files.deleteIfExists( oldFilePath );
+
+            if ( Files.exists( curFilePath ) )
+            {
+                Files.copy( curFilePath, oldFilePath, StandardCopyOption.REPLACE_EXISTING );
+                Files.deleteIfExists( filePath );
+                Files.createSymbolicLink( filePath, oldFilePath );
+            }
+
+            Files.copy( newFilePath, curFilePath, StandardCopyOption.REPLACE_EXISTING );
+            Files.deleteIfExists( filePath );
+            Files.createSymbolicLink( filePath, curFilePath );
         }
     }
 }
