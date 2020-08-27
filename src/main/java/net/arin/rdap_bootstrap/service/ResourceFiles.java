@@ -15,6 +15,7 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import net.arin.rdap_bootstrap.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
 
 import java.io.File;
@@ -57,7 +58,7 @@ public class ResourceFiles
 
     public ResourceFiles() throws IOException
     {
-        String extFileName = System.getProperty( Constants.PROPERTY_PREFIX + "resource_files" );
+        String extFileName = AppProperties.getProperty( Constants.PROPERTY_PREFIX + "resource_files" );
         resourceFiles = new Properties();
         File file;
         if ( extFileName == null )
@@ -73,7 +74,7 @@ public class ResourceFiles
         // Override with explicitly set system properties.
         for ( BootFiles bootFiles : BootFiles.values() )
         {
-            String value = System.getProperty( Constants.PROPERTY_PREFIX + "bootfile." + bootFiles.key );
+            String value = AppProperties.getProperty( Constants.PROPERTY_PREFIX + "bootfile." + bootFiles.key );
             if ( value != null && value.length() > 0 )
             {
                 resourceFiles.put( bootFiles.key, value );

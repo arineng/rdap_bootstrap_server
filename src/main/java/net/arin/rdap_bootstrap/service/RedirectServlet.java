@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.arin.rdap_bootstrap.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
@@ -66,8 +67,11 @@ public class RedirectServlet extends HttpServlet
     private volatile Statistics statistics;
 
     private ResourceFiles resourceFiles;
+
+    // Defaults for system properties.
     Boolean matchSchemeOnRedirect = Boolean.FALSE;
     Boolean downloadBootstrapFiles = Boolean.FALSE;
+    long downloadInterval = 86400; // a day
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
 
@@ -78,11 +82,9 @@ public class RedirectServlet extends HttpServlet
 
         statistics = new Statistics();
 
-        matchSchemeOnRedirect = Boolean.valueOf( System.getProperty(
-                Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY, matchSchemeOnRedirect.toString() ) );
+        matchSchemeOnRedirect = AppProperties.lookupBoolean( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY, matchSchemeOnRedirect );
 
-        downloadBootstrapFiles = Boolean.valueOf( System.getProperty(
-                Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY, downloadBootstrapFiles.toString() ) );
+        downloadBootstrapFiles = AppProperties.lookupBoolean( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY, downloadBootstrapFiles );
         if ( downloadBootstrapFiles )
         {
             try
@@ -91,12 +93,12 @@ public class RedirectServlet extends HttpServlet
                 if ( config != null )
                 {
                     Timer timer = new Timer();
-                    long downloadInterval = Long.parseLong( System.getProperty( Constants.DOWNLOAD_INTERVAL_PROPERTY ) );
+                    downloadInterval = AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval );
                     timer.schedule( downloadBootstrapFilesTask, 0L, downloadInterval * 1000L );
                 }
 
                 // Pause for the download to complete before loading the config.
-                Thread.sleep( 2000L );
+                Thread.sleep( 10000L ); // 10 seconds
             }
             catch ( Exception e )
             {
@@ -568,7 +570,11 @@ public class RedirectServlet extends HttpServlet
             {
                 getServletContext().log( "Downloading files from IANA RDAP Bootstrap registry" );
 
-                String downloadDir = System.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY );
+                String downloadDir = AppProperties.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY );
+                if ( downloadDir == null )
+                {
+                    throw new IOException( "Specify download directory" );
+                }
                 Path downloadDirPath = Paths.get( downloadDir );
                 if ( !downloadDirPath.isAbsolute() )
                 {
@@ -576,10 +582,10 @@ public class RedirectServlet extends HttpServlet
                 }
                 Files.createDirectories( downloadDirPath );
 
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ), downloadDir );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ), downloadDir );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir );
             }
             catch ( IOException e )
             {
@@ -601,7 +607,7 @@ public class RedirectServlet extends HttpServlet
             Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
             Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
 
-            FileUtils.copyURLToFile( downloadUrl, new File( newFilePathname ), 10000, 10000 );
+            FileUtils.copyURLToFile( downloadUrl, new File( newFilePathname ), 5000, 5000 ); // 10 seconds wait
 
             Files.deleteIfExists( oldFilePath );
 
