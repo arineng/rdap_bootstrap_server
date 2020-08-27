@@ -538,6 +538,7 @@ public class RedirectServlet extends HttpServlet
                 catch ( Exception e )
                 {
                     getServletContext().log( "Problem loading config", e );
+                    System.exit( 1 );
                 }
             }
         }
@@ -557,10 +558,6 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    // TODO:
-    //  Specify the download dir as a property.
-    //  Specify the base download URL as a property.
-
     private class DownloadBootstrapFilesTask extends TimerTask
     {
         @Override
@@ -570,24 +567,27 @@ public class RedirectServlet extends HttpServlet
             {
                 getServletContext().log( "Downloading files from IANA RDAP Bootstrap registry" );
 
-                String downloadDir = "/Users/jasdips/misc/rdapbootstrap";
+                String downloadDir = System.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY );
                 Path downloadDirPath = Paths.get( downloadDir );
+                if ( !downloadDirPath.isAbsolute() )
+                {
+                    throw new IOException( "Specify absolute path of the download directory: " + downloadDir );
+                }
                 Files.createDirectories( downloadDirPath );
 
-                String baseDownloadURL = "https://data.iana.org/rdap";
-
-                downloadFileSafely( baseDownloadURL, downloadDir, "asn.json" );
-                downloadFileSafely( baseDownloadURL, downloadDir, "dns.json" );
-                downloadFileSafely( baseDownloadURL, downloadDir, "ipv4.json" );
-                downloadFileSafely( baseDownloadURL, downloadDir, "ipv6.json" );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ), downloadDir, "asn.json" );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ), downloadDir, "dns.json" );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir, "ipv4.json" );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir, "ipv6.json" );
             }
             catch ( IOException e )
             {
                 getServletContext().log( "Problem downloading files from IANA RDAP Bootstrap registry", e );
+                System.exit( 1 );
             }
         }
 
-        private void downloadFileSafely( String baseDownloadURL, String downloadDir, String fileName )
+        private void downloadFileSafely( String downloadUrl, String downloadDir, String fileName )
                 throws IOException
         {
             getServletContext().log( "Downloading " + fileName );
@@ -598,8 +598,7 @@ public class RedirectServlet extends HttpServlet
             Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
             Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
 
-            FileUtils.copyURLToFile( new URL( baseDownloadURL + "/" + fileName ),
-                    new File( newFilePathname ), 10000, 10000 );
+            FileUtils.copyURLToFile( new URL( downloadUrl ), new File( newFilePathname ), 10000, 10000 );
 
             Files.deleteIfExists( oldFilePath );
 
