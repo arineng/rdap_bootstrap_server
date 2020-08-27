@@ -53,6 +53,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 public class RedirectServlet extends HttpServlet
 {
@@ -575,10 +576,10 @@ public class RedirectServlet extends HttpServlet
                 }
                 Files.createDirectories( downloadDirPath );
 
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ), downloadDir, "asn.json" );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ), downloadDir, "dns.json" );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir, "ipv4.json" );
-                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir, "ipv6.json" );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir );
+                downloadFileSafely( System.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir );
             }
             catch ( IOException e )
             {
@@ -587,18 +588,20 @@ public class RedirectServlet extends HttpServlet
             }
         }
 
-        private void downloadFileSafely( String downloadUrl, String downloadDir, String fileName )
+        private void downloadFileSafely( String downloadUrlStr, String downloadDir )
                 throws IOException
         {
-            getServletContext().log( "Downloading " + fileName );
+            getServletContext().log( "Downloading " + downloadUrlStr );
 
+            URL downloadUrl = new URL( downloadUrlStr );
+            String fileName = FilenameUtils.getName( downloadUrl.getPath() );
             Path filePath = Paths.get( downloadDir + "/" + fileName );
             String newFilePathname = downloadDir + "/" + fileName + ".new";
             Path newFilePath = Paths.get( newFilePathname );
             Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
             Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
 
-            FileUtils.copyURLToFile( new URL( downloadUrl ), new File( newFilePathname ), 10000, 10000 );
+            FileUtils.copyURLToFile( downloadUrl, new File( newFilePathname ), 10000, 10000 );
 
             Files.deleteIfExists( oldFilePath );
 
