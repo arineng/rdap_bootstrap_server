@@ -34,6 +34,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +80,11 @@ public class RedirectServlet extends HttpServlet
     public void init( ServletConfig config ) throws ServletException
     {
         super.init( config );
+
+        if ( config != null )
+        {
+            logProperties();
+        }
 
         statistics = new Statistics();
 
@@ -622,5 +628,36 @@ public class RedirectServlet extends HttpServlet
             Files.deleteIfExists( filePath );
             Files.createSymbolicLink( filePath, curFilePath );
         }
+    }
+
+    private void logProperties()
+    {
+        ServletContext servletContext = getServletContext();
+
+        servletContext.log( "RDAP Bootstrap server properties: " );
+
+        servletContext.log( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY + "=" +
+                AppProperties.lookupBoolean( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY, matchSchemeOnRedirect ) );
+
+        servletContext.log( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY + "=" +
+                AppProperties.lookupBoolean( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY, downloadBootstrapFiles ) );
+
+        servletContext.log( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY + "=" +
+                AppProperties.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ) );
+
+        servletContext.log( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY + "=" +
+                AppProperties.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ) );
+
+        servletContext.log( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY + "=" +
+                AppProperties.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ) );
+
+        servletContext.log( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY + "=" +
+                AppProperties.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ) );
+
+        servletContext.log( Constants.DOWNLOAD_DIRECTORY_PROPERTY + "=" +
+                AppProperties.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY ) );
+
+        servletContext.log( Constants.DOWNLOAD_INTERVAL_PROPERTY + "=" +
+                AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval ) );
     }
 }
