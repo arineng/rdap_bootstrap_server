@@ -69,8 +69,6 @@ public class RedirectServlet extends HttpServlet
     Boolean downloadBootstrapFiles = Boolean.FALSE;
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
-    static final String MATCH_SCHEME_ON_REDIRECT = "match_scheme_on_redirect";
-    static final String DOWNLOAD_BOOTSTRAP_FILES = "download_bootstrap_files";
 
     @Override
     public void init( ServletConfig config ) throws ServletException
@@ -80,10 +78,10 @@ public class RedirectServlet extends HttpServlet
         statistics = new Statistics();
 
         matchSchemeOnRedirect = Boolean.valueOf( System.getProperty(
-                Constants.PROPERTY_PREFIX + MATCH_SCHEME_ON_REDIRECT, matchSchemeOnRedirect.toString() ) );
+                Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY, matchSchemeOnRedirect.toString() ) );
 
         downloadBootstrapFiles = Boolean.valueOf( System.getProperty(
-                Constants.PROPERTY_PREFIX + DOWNLOAD_BOOTSTRAP_FILES, downloadBootstrapFiles.toString() ) );
+                Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY, downloadBootstrapFiles.toString() ) );
         if ( downloadBootstrapFiles )
         {
             try
@@ -92,10 +90,11 @@ public class RedirectServlet extends HttpServlet
                 if ( config != null )
                 {
                     Timer timer = new Timer();
-                    // TODO: Start immediately. Get period from a property - once a day.
-                    timer.schedule( downloadBootstrapFilesTask, 0L, 120000L );
+                    long downloadInterval = Long.parseLong( System.getProperty( Constants.DOWNLOAD_INTERVAL_PROPERTY ) );
+                    timer.schedule( downloadBootstrapFilesTask, 0L, downloadInterval * 1000L );
                 }
 
+                // Pause for the download to complete before loading the config.
                 Thread.sleep( 2000L );
             }
             catch ( Exception e )
