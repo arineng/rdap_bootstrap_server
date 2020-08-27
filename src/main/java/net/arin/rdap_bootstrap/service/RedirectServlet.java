@@ -659,5 +659,11 @@ public class RedirectServlet extends HttpServlet
 
         servletContext.log( Constants.DOWNLOAD_INTERVAL_PROPERTY + "=" +
                 AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval ) );
+
+        for ( BootFiles bootFiles : BootFiles.values() )
+        {
+            String property = Constants.PROPERTY_PREFIX + "bootfile." + bootFiles.getKey();
+            servletContext.log( property + "=" + AppProperties.getProperty( property ) );
+        }
     }
 }
