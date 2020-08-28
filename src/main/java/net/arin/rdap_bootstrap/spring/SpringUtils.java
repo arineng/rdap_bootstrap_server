@@ -35,7 +35,7 @@ public abstract class SpringUtils
     {
         if ( ctx == null )
         {
-            throw new IllegalArgumentException( "application context cannot be null" );
+            throw new IllegalArgumentException( "Application context cannot be null" );
         }
         else
         {
