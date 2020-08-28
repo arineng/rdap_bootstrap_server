@@ -12,6 +12,9 @@ group = 'ARIN'
 version = '1000.0-SNAPSHOT'
 description = 'RDAP Bootstrap Server'
 
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
 repositories {
      maven { url 'https://repo.maven.apache.org/maven2' }
 }
