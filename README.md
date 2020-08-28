@@ -318,7 +318,7 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
     arin.rdapbootstrap.download_ipv4_file_url=URL
     arin.rdapbootstrap.download_ipv6_file_url=URL
     arin.rdapbootstrap.download_directory=FULL_DIRECTORY_PATH
-    arin.rdapbootstrap.download_interval=86400 (default) (in seconds)
+    arin.rdapbootstrap.download_interval=86400 (default) | positive long (seconds)
     arin.rdapbootstrap.bootfile.domain_bootstrap=FULL_FILE_PATH
     arin.rdapbootstrap.bootfile.v4_bootstrap=FULL_FILE_PATH
     arin.rdapbootstrap.bootfile.v6_bootstrap=FULL_FILE_PATH
