@@ -15,7 +15,7 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import net.arin.rdap_bootstrap.AppProperties;
+import net.arin.rdap_bootstrap.spring.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
 
 import java.io.File;

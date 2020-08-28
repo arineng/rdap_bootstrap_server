@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.arin.rdap_bootstrap.AppProperties;
+import net.arin.rdap_bootstrap.spring.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;

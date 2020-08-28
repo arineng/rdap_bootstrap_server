@@ -1,4 +1,4 @@
-package net.arin.rdap_bootstrap;
+package net.arin.rdap_bootstrap.spring;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;

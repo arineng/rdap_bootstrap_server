@@ -13,11 +13,10 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package net.arin.rdap_bootstrap.service;
+package net.arin.rdap_bootstrap.spring;
 
 import javax.servlet.Servlet;
 
-import net.arin.rdap_bootstrap.SpringUtils;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
