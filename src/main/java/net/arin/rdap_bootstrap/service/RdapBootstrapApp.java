@@ -17,17 +17,28 @@ package net.arin.rdap_bootstrap.service;
 
 import javax.servlet.Servlet;
 
+import net.arin.rdap_bootstrap.SpringUtils;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
+@PropertySource( { "classpath:rdap_bootstrap.properties" } )
 @SpringBootApplication
 public class RdapBootstrapApp
 {
     public static void main( String[] args )
     {
         SpringApplication.run( RdapBootstrapApp.class, args );
+    }
+
+    @Bean
+    public static BeanPostProcessor postProcessor( ConfigurableApplicationContext ctx )
+    {
+        return SpringUtils.createInitBean( ctx );
     }
 
     @Bean
