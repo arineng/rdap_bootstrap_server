@@ -29,7 +29,7 @@ dependencies {
 }
 
 bootJar {
-    mainClassName = 'net.arin.rdap_bootstrap.service.RdapBootstrapApp'
+    mainClassName = 'net.arin.rdap_bootstrap.spring.RdapBootstrapApp'
 }
 
 bootRun {

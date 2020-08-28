@@ -256,13 +256,16 @@ Note that this is a system property and is not part of the `resouce_files.proper
 
 ## Spring Boot Application
 
-### Gradle Build, Test, and Boot Run
+### Build, Test, and Run
 
     git clone https://github.com/arineng/rdap_bootstrap_server.git
     cd rdap_bootstrap_server
     git checkout springboot
     ./gradlew clean build test --info
     ./gradlew bootRun [-Dproperty=value ...] --info
+    [export env=value; ...] java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
+
+For a system property, the `-D` option takes precedence over setting its environment variable.
 
 ### Sample Queries
 
@@ -324,3 +327,19 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
     arin.rdapbootstrap.bootfile.v6_bootstrap=FULL_FILE_PATH
     arin.rdapbootstrap.bootfile.as_bootstrap=FULL_FILE_PATH
     arin.rdapbootstrap.bootfile.entity_bootstrap=FULL_FILE_PATH
+
+### Environment Variables
+
+    RDAPBOOTSTRAP_MATCH_SCHEME_ON_REDIRECT
+    RDAPBOOTSTRAP_DOWNLOAD_BOOTSTRAP_FILES
+    RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL
+    RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL
+    RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL
+    RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL
+    RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY
+    RDAPBOOTSTRAP_DOWNLOAD_INTERVAL
+    RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP
+    RDAPBOOTSTRAP_BOOTFILE_V4_BOOTSTRAP
+    RDAPBOOTSTRAP_BOOTFILE_V6_BOOTSTRAP
+    RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
+    RDAPBOOTSTRAP_BOOTFILE_ENTITY_BOOTSTRAP
