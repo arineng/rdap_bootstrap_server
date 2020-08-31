@@ -34,7 +34,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -633,8 +632,6 @@ public class RedirectServlet extends HttpServlet
 
     private void logProperties()
     {
-        ServletContext servletContext = getServletContext();
-
         logger.info( "RDAP Bootstrap server properties: " );
 
         logger.info( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY + "=" +
