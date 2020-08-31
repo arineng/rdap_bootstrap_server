@@ -56,6 +56,8 @@ import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RedirectServlet extends HttpServlet
 {
@@ -75,6 +77,8 @@ public class RedirectServlet extends HttpServlet
     long downloadInterval = 86400; // a day
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
+
+    private static final Logger logger = LogManager.getLogger( RedirectServlet.class );
 
     @Override
     public void init( ServletConfig config ) throws ServletException
@@ -533,7 +537,7 @@ public class RedirectServlet extends HttpServlet
             {
                 if ( isModified( currentTime, resourceFiles.getLastModified( bootFiles.getKey() ) ) )
                 {
-                    getServletContext().log( String.format( "%s was last modified at %s", bootFiles.getKey(),
+                    logger.info( String.format( "%s was last modified at %s", bootFiles.getKey(),
                             new Date( resourceFiles.getLastModified( bootFiles.getKey() ) ) ) );
                     load = true;
                 }
@@ -546,7 +550,7 @@ public class RedirectServlet extends HttpServlet
                 }
                 catch ( Exception e )
                 {
-                    getServletContext().log( "Problem loading config", e );
+                    logger.error( "Problem loading config", e );
                     System.exit( 1 );
                 }
             }
@@ -554,10 +558,7 @@ public class RedirectServlet extends HttpServlet
 
         public void loadData() throws Exception
         {
-            if ( getServletConfig() != null )
-            {
-                getServletContext().log( "Loading resource files" );
-            }
+            logger.info( "Loading resource files" );
             resourceFiles = new ResourceFiles();
             domainBootstrap.loadData( resourceFiles );
             ipV4Bootstrap.loadData( resourceFiles );
@@ -567,14 +568,14 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    private class DownloadBootstrapFilesTask extends TimerTask
+    private static class DownloadBootstrapFilesTask extends TimerTask
     {
         @Override
         public void run()
         {
             try
             {
-                getServletContext().log( "Downloading files from IANA RDAP Bootstrap registry" );
+                logger.info( "Downloading files from IANA RDAP Bootstrap registry" );
 
                 String downloadDir = AppProperties.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY );
                 if ( downloadDir == null )
@@ -595,7 +596,7 @@ public class RedirectServlet extends HttpServlet
             }
             catch ( IOException e )
             {
-                getServletContext().log( "Problem downloading files from IANA RDAP Bootstrap registry", e );
+                logger.error( "Problem downloading files from IANA RDAP Bootstrap registry", e );
                 System.exit( 1 );
             }
         }
@@ -603,7 +604,7 @@ public class RedirectServlet extends HttpServlet
         private void downloadFileSafely( String downloadUrlStr, String downloadDir )
                 throws IOException
         {
-            getServletContext().log( "Downloading " + downloadUrlStr );
+            logger.info( "Downloading " + downloadUrlStr );
 
             URL downloadUrl = new URL( downloadUrlStr );
             String fileName = FilenameUtils.getName( downloadUrl.getPath() );
@@ -634,36 +635,36 @@ public class RedirectServlet extends HttpServlet
     {
         ServletContext servletContext = getServletContext();
 
-        servletContext.log( "RDAP Bootstrap server properties: " );
+        logger.info( "RDAP Bootstrap server properties: " );
 
-        servletContext.log( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY + "=" +
+        logger.info( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY + "=" +
                 AppProperties.lookupBoolean( Constants.MATCH_SCHEME_ON_REDIRECT_PROPERTY, matchSchemeOnRedirect ) );
 
-        servletContext.log( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY + "=" +
                 AppProperties.lookupBoolean( Constants.DOWNLOAD_BOOTSTRAP_FILES_PROPERTY, downloadBootstrapFiles ) );
 
-        servletContext.log( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY + "=" +
                 AppProperties.getProperty( Constants.DOWNLOAD_ASN_FILE_URL_PROPERTY ) );
 
-        servletContext.log( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY + "=" +
                 AppProperties.getProperty( Constants.DOWNLOAD_DOMAIN_FILE_URL_PROPERTY ) );
 
-        servletContext.log( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY + "=" +
                 AppProperties.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ) );
 
-        servletContext.log( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY + "=" +
                 AppProperties.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ) );
 
-        servletContext.log( Constants.DOWNLOAD_DIRECTORY_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_DIRECTORY_PROPERTY + "=" +
                 AppProperties.getProperty( Constants.DOWNLOAD_DIRECTORY_PROPERTY ) );
 
-        servletContext.log( Constants.DOWNLOAD_INTERVAL_PROPERTY + "=" +
+        logger.info( Constants.DOWNLOAD_INTERVAL_PROPERTY + "=" +
                 AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval ) );
 
         for ( BootFiles bootFiles : BootFiles.values() )
         {
             String property = Constants.PROPERTY_PREFIX + "bootfile." + bootFiles.getKey();
-            servletContext.log( property + "=" + AppProperties.getProperty( property ) );
+            logger.info( property + "=" + AppProperties.getProperty( property ) );
         }
     }
 }
