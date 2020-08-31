@@ -258,12 +258,22 @@ Note that this is a system property and is not part of the `resouce_files.proper
 
 ### Build, Test, and Run
 
+Checkout the code:
+
     git clone https://github.com/arineng/rdap_bootstrap_server.git
     cd rdap_bootstrap_server
     git checkout springboot
+
+Build a WAR and run it either using Gradle's `bootRun` command or running the `java` command:
+
     ./gradlew clean build test --info
-    ./gradlew bootRun [-Dproperty=value ...] --info
-    [export env=value; ...] java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
+    [export env=value; ...] ./gradlew bootRun [-Dproperty=value ...] --info
+    [export env=value; ...] java -jar [-Dproperty=value ...] build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.war
+
+Beside a WAR, build a JAR using the `bootJar` task and run it using the `java` command:
+
+    ./gradlew clean build test bootJar --info
+    [export env=value; ...] java -jar [-Dproperty=value ...] build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
 
 For a system property, the `-D` option takes precedence over setting its environment variable.
 

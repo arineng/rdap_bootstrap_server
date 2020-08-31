@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java-library'
+    id 'war'
 }
 
 import org.gradle.internal.jvm.Jvm
@@ -24,6 +25,8 @@ dependencies {
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.17'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version:'1.47'
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     testImplementation group: 'junit', name: 'junit', version:'4.8.2'
 }
