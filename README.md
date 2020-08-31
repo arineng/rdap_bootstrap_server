@@ -277,6 +277,35 @@ Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `
 
 For a system property, the `-D` option takes precedence over setting its environment variable.
 
+### Docker
+
+Build a docker image using the Gradle `bootBuildImage` command:
+
+    ./gradlew clean build test bootBuildImage --imageName=harbor.arin.net/k8s/rdap-bootstrap-server --info
+
+Run the docker image:
+
+    docker rm -f rdap-bootstrap-server;
+    docker run -e "RDAPBOOTSTRAP_DOWNLOAD_BOOTSTRAP_FILES=true" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY=/tmp/rdapbootstrap" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_INTERVAL=120" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL=https://data.iana.org/rdap/asn.json" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL=https://data.iana.org/rdap/dns.json" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL=https://data.iana.org/rdap/ipv4.json" \
+               -e "RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL=https://data.iana.org/rdap/ipv6.json" \
+               -e "TZ=America/New_York" \
+               -p 8080:8080 \
+               --name rdap-bootstrap-server \
+               -ti harbor.arin.net/k8s/rdap-bootstrap-server
+
+Test the docker container:
+
+    curl -v http://localhost:8080/rdapbootstrap/autnum/1
+
+Log into the docker container:
+
+     docker exec -ti --env COLUMNS=`tput cols` --env LINES=`tput lines` rdap-bootstrap-server /bin/bash
+
 ### Sample Queries
 
 This section covers the RDAP Bootstrap queries as per [RFC 7484](https://tools.ietf.org/html/rfc7484). The
