@@ -264,13 +264,13 @@ Checkout the code:
     cd rdap_bootstrap_server
     git checkout springboot
 
-Build a WAR and run it either using Gradle's `bootRun` command or running the `java` command:
+Build a WAR and run it using either the Gradle `bootRun` command or the `java` command:
 
     ./gradlew clean build test --info
     [export env=value; ...] ./gradlew bootRun [-Dproperty=value ...] --info
     [export env=value; ...] java -jar [-Dproperty=value ...] build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.war
 
-Beside a WAR, build a JAR using the `bootJar` task and run it using the `java` command:
+Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `java` command:
 
     ./gradlew clean build test bootJar --info
     [export env=value; ...] java -jar [-Dproperty=value ...] build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
