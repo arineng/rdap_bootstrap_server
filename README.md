@@ -24,17 +24,34 @@ become populated with useful data.
 IANA files.
 * 1.2.0 - Added `match_scheme_on_redirect` option.
 * 1.2.1 - Fix to using IANA bootstrapping files according to current RFCs.
+* 1.3.0
+    - Upgraded to build against Java 11 or higher.
+    - Replaced default redirection with a `404` response for entries that do not exist in any of the bootstrap files.
+    - Fixed IPv6 redirection for non-existent space.
+    - Updated the default bootstrap files to the latest IANA files.
+    - Can run as a Spring Boot application.
+    - Can build a Docker image.
+    - [A built-in timer to download IANA files](https://github.com/arineng/rdap_bootstrap_server/issues/1).
 
-This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher. It should build
-against Java 11 or higher.
+This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
+application, or as a Docker container. It should build against Java 11 or higher.
 
 To build using Gradle:
 
-```
-gradle test
-```
+    ./gradlew clean build test
 
-which will create the build and run the unit tests. The resulting WAR file will be in `build/libs`.
+This will produce a WAR file in `build/libs` after running the unit tests. The WAR can be directly run from the command
+line using either the `java` command or the Gradle `bootRun` command:
+
+    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.war
+    ./gradlew bootRun
+
+Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `java` command:
+
+    ./gradlew bootJar
+    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
+
+System properties can be passed in as `-D` options and/or environment variables.
 
 ## Deploying and Testing
 
