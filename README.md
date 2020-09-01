@@ -314,7 +314,7 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
     Environment Variable: RDAPBOOTSTRAP_LOG_LEVEL
     System Properties: logging.level.org.springframework.web, logging.level.net.arin.rdap_bootstrap
-    Description:
+    Description: Adjust the log level
     Type: LOG_LEVEL
     Required: No
     Default Value: INFO
