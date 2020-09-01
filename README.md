@@ -60,7 +60,7 @@ file to a particular directory. The WAR file comes bundled with some bootstrap f
 fully configuring the bootstrap.
 
 The URL path for querying the servlet will depend on your Servlet container and the configuration you have given to the
-container for this servlet. If you are using JBoss, the URL path defaults to `/rdapbootstrap`.
+container for this servlet. It defaults to `/rdapbootstrap`.
 
 To test the bootstrap server, issue an RDAP query such as `ip/1.1.1.1`. You should see a redirect to APNIC's RDAP
 server.
@@ -77,6 +77,16 @@ Resolving rdap.apnic.net... 2001:dd8:9:2::101:43, 203.119.101.43
 Connecting to rdap.apnic.net|2001:dd8:9:2::101:43|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 ```
+
+## Docker
+
+Build a docker image using the Gradle `bootBuildImage` command:
+
+    ./gradlew bootBuildImage --imageName=NAME[:TAG]
+
+Run the docker image:
+
+    docker run -p 8080:8080 -ti NAME[:TAG]
 
 ## Getting Help
 
@@ -213,6 +223,105 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 `arin.rdapbootstrap.match_scheme_on_redirect=true`. Note that this is a system property and is not part of the
 `resouce_files.properties` file.
 
+## Environment Variables / System Properties Mapping
+
+    Environment Variable: RDAPBOOTSTRAP_MATCH_SCHEME_ON_REDIRECT
+    System Property: arin.rdapbootstrap.match_scheme_on_redirect
+    Description: Keep the scheme (HTTP or HTTPS) for the redirect that was given in the query or not
+    Type: BOOLEAN
+    Required: No
+    Default Value: false
+    Possible Values: false | true
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_BOOTSTRAP_FILES
+    System Property: arin.rdapbootstrap.download_bootstrap_files
+    Description: Download bootstrap files from IANA or not
+    Type: BOOLEAN
+    Required: No
+    Default Value: false
+    Possible Values: false | true
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL
+    System Property: arin.rdapbootstrap.download_asn_file_url
+    Description: Download URL for the AS file
+    Type: URL
+    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Default Value: https://data.iana.org/rdap/asn.json
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL
+    System Property: arin.rdapbootstrap.download_domain_file_url
+    Description: Download URL for the domain file
+    Type: URL
+    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Default Value: https://data.iana.org/rdap/dns.json
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL
+    System Property: arin.rdapbootstrap.download_ipv4_file_url
+    Description: Download URL for the v4 file
+    Type: URL
+    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Default Value: https://data.iana.org/rdap/ipv4.json
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL
+    System Property: arin.rdapbootstrap.download_ipv6_file_url
+    Description: Download URL for the v6 file
+    Type: URL
+    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Default Value: https://data.iana.org/rdap/ipv6.json
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY
+    System Property: arin.rdapbootstrap.download_directory
+    Description: Directory to download IANA files into
+    Type: DIRECTORY_PATH
+    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_INTERVAL
+    System Property: arin.rdapbootstrap.download_interval
+    Description: Download interval in seconds
+    Type: POSITIVE_LONG
+    Required: No
+    Default Value: 86400 (a day)
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.domain_bootstrap
+    Description: Location of the domain file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V4_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.v4_bootstrap
+    Description: Location of the v4 file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V6_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.v6_bootstrap
+    Description: Location of the v6 file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.as_bootstrap
+    Description: Location of the AS file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_ENTITY_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.entity_bootstrap
+    Description: Location of the entity file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
+    Environment Variable: RDAPBOOTSTRAP_LOG_LEVEL
+    System Properties: logging.level.org.springframework.web, logging.level.net.arin.rdap_bootstrap
+    Description:
+    Type: LOG_LEVEL
+    Required: No
+    Default Value: INFO
+    Possible Values: TRACE | DEBUG | INFO | WARN | ERROR | FATAL
+
+[ FOR ARIN INTERNAL EYES ONLY ]
+
 ## Spring Boot Application
 
 ### Build, Test, and Run
@@ -342,3 +451,5 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
     RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP=FULL_FILE_PATH
     RDAPBOOTSTRAP_BOOTFILE_ENTITY_BOOTSTRAP=FULL_FILE_PATH
     RDAPBOOTSTRAP_LOG_LEVEL=TRACE | DEBUG | INFO | WARN | ERROR | FATAL
+
+[ / FOR ARIN INTERNAL EYES ONLY ]
