@@ -10,25 +10,29 @@ import org.gradle.internal.jvm.Jvm
 assert Jvm.current().javaVersion >= JavaVersion.VERSION_11: 'This project requires Java 11+'
 
 group = 'ARIN'
-version = '1000.0-SNAPSHOT'
 description = 'RDAP Bootstrap Server'
+
+version = '1000.0-SNAPSHOT'
+if (project.hasProperty('artifactVersion')) {
+    version = "${project.properties.artifactVersion}"
+}
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
-     maven { url 'https://repo.maven.apache.org/maven2' }
+    maven { url 'https://repo.maven.apache.org/maven2' }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version:'0.17'
-    implementation group: 'net.ripe.ipresource', name: 'ipresource', version:'1.47'
+    implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
+    implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.47'
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-    testImplementation group: 'junit', name: 'junit', version:'4.8.2'
+    testImplementation group: 'junit', name: 'junit', version: '4.8.2'
 }
 
 bootJar {
