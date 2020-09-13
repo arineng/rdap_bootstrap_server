@@ -121,6 +121,7 @@ public class RedirectServlet extends HttpServlet
 
             // Load data initially.
             loadConfigTask.loadData();
+            logger.info( "Initial data load successful" );
 
             if ( config != null )
             {
