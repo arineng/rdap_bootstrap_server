@@ -98,10 +98,9 @@ volume list).
 ## Properties and Bootstrap Files
 
 Bootstrap files may either be listed in a properties file pointed to by the system property
-`arin.rdapbootstrap.resource_files` or they may be listed using system properties directly. Here is an example of a
-properties file pointed to by `arin.rdapbootstrap.resource_files`:
+`arin.rdapbootstrap.resource_files` or they may be listed using system properties directly or indirectly. Here is an
+example of a properties file pointed to by `arin.rdapbootstrap.resource_files`:
 
-    default_bootstrap = /default_bootstrap.json
     as_bootstrap = /as_bootstrap.json
     domain_bootstrap = /domain_bootstrap.json
     v4_bootstrap = /v4_bootstrap.json
@@ -115,7 +114,7 @@ The server ships with a properties file that points to a set of built-in bootstr
 useful for getting the server up and running, but ultimately will need to be replaced with files that are updated
 periodically from the IANA.
 
-So there are three types of configuration.
+So there are four types of configuration.
 
 ### Configuration Setup Type 1 Example
 
@@ -127,7 +126,6 @@ Set the Java system property `arin.rdapbootstrap.resource_files` to be `/var/rda
 
 In the `/var/rdap/resource_files.properties` file have the following:
 
-    default_bootstrap = /var/rdap/default_bootstrap.json
     as_bootstrap = /var/rdap/as_bootstrap.json
     domain_bootstrap = /var/rdap/domain_bootstrap.json
     v4_bootstrap = /var/rdap/v4_bootstrap.json
@@ -138,12 +136,26 @@ In the `/var/rdap/resource_files.properties` file have the following:
 
 Have the following Java system properties:
 
-    arin.rdapbootstrap.bootfile.default_bootstrap = /var/rdap/default_bootstrap.json
     arin.rdapbootstrap.bootfile.as_bootstrap = /var/rdap/as_bootstrap.json
     arin.rdapbootstrap.bootfile.domain_bootstrap = /var/rdap/domain_bootstrap.json
     arin.rdapbootstrap.bootfile.v4_bootstrap = /var/rdap/v4_bootstrap.json
     arin.rdapbootstrap.bootfile.v6_bootstrap = /var/rdap/v6_bootstrap.json
     arin.rdapbootstrap.bootfile.entity_bootstrap = /var/rdap/entity_bootstrap.json
+
+### Configuration Setup Type 4 Example
+
+Set the following Java system properties for the scheduler to periodically download bootstrap files from IANA:
+
+    arin.rdapbootstrap.download_bootstrap_files=true
+    arin.rdapbootstrap.download_directory=/var/rdap
+
+There are additional Java system properties with defaults that if needed could be tweaked for the scheduler:
+
+     arin.rdapbootstrap.download_interval=86400
+     arin.rdapbootstrap.download_asn_file_url=https://data.iana.org/rdap/asn.json
+     arin.rdapbootstrap.download_domain_file_url=https://data.iana.org/rdap/dns.json
+     arin.rdapbootstrap.download_ipv4_file_url=https://data.iana.org/rdap/ipv4.json
+     arin.rdapbootstrap.download_ipv6_file_url=https://data.iana.org/rdap/ipv6.json
     
 ## Updating Bootstrap Files
 
