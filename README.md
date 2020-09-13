@@ -257,28 +257,28 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
     System Property: arin.rdapbootstrap.download_asn_file_url
     Description: Download URL for the AS file
     Type: URL
-    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Required: No
     Default Value: https://data.iana.org/rdap/asn.json
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL
     System Property: arin.rdapbootstrap.download_domain_file_url
     Description: Download URL for the domain file
     Type: URL
-    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Required: No
     Default Value: https://data.iana.org/rdap/dns.json
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL
     System Property: arin.rdapbootstrap.download_ipv4_file_url
     Description: Download URL for the v4 file
     Type: URL
-    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Required: No
     Default Value: https://data.iana.org/rdap/ipv4.json
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL
     System Property: arin.rdapbootstrap.download_ipv6_file_url
     Description: Download URL for the v6 file
     Type: URL
-    Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
+    Required: No
     Default Value: https://data.iana.org/rdap/ipv6.json
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY
@@ -292,7 +292,7 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
     Description: Download interval in seconds
     Type: POSITIVE_LONG
     Required: No
-    Default Value: 86400 (a day)
+    Default Value: 86400
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.domain_bootstrap

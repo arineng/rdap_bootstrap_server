@@ -118,6 +118,8 @@ public class RedirectServlet extends HttpServlet
         try
         {
             LoadConfigTask loadConfigTask = new LoadConfigTask();
+
+            // Load data initially.
             loadConfigTask.loadData();
 
             if ( config != null )
@@ -549,8 +551,7 @@ public class RedirectServlet extends HttpServlet
                 }
                 catch ( Exception e )
                 {
-                    logger.error( "Problem loading config", e );
-                    System.exit( 1 );
+                    logger.warn( "Problem loading data", e );
                 }
             }
         }
@@ -595,8 +596,7 @@ public class RedirectServlet extends HttpServlet
             }
             catch ( IOException e )
             {
-                logger.error( "Problem downloading files from IANA RDAP Bootstrap registry", e );
-                System.exit( 1 );
+                logger.warn( "Problem downloading files from IANA RDAP Bootstrap registry", e );
             }
         }
 
