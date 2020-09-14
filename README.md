@@ -237,6 +237,8 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
 ## Environment Variables / System Properties Mapping
 
+The bootstrap server can be configured using environment variables and/or system properties. Here is how they map:
+
     Environment Variable: RDAPBOOTSTRAP_MATCH_SCHEME_ON_REDIRECT
     System Property: arin.rdapbootstrap.match_scheme_on_redirect
     Description: Keep the scheme (HTTP or HTTPS) for the redirect that was given in the query or not
@@ -255,7 +257,7 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL
     System Property: arin.rdapbootstrap.download_asn_file_url
-    Description: Download URL for the AS file
+    Description: Download URL for the ASN file
     Type: URL
     Required: No
     Default Value: https://data.iana.org/rdap/asn.json
@@ -269,14 +271,14 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL
     System Property: arin.rdapbootstrap.download_ipv4_file_url
-    Description: Download URL for the v4 file
+    Description: Download URL for the IPv4 file
     Type: URL
     Required: No
     Default Value: https://data.iana.org/rdap/ipv4.json
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL
     System Property: arin.rdapbootstrap.download_ipv6_file_url
-    Description: Download URL for the v6 file
+    Description: Download URL for the IPv6 file
     Type: URL
     Required: No
     Default Value: https://data.iana.org/rdap/ipv6.json
@@ -294,6 +296,12 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
     Required: No
     Default Value: 86400
 
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.as_bootstrap
+    Description: Location of the ASN file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
+
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.domain_bootstrap
     Description: Location of the domain file
@@ -302,19 +310,13 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V4_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.v4_bootstrap
-    Description: Location of the v4 file
+    Description: Location of the IPv4 file
     Type: FILE_PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V6_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.v6_bootstrap
-    Description: Location of the v6 file
-    Type: FILE_PATH
-    Required: Only if configuration setup type 3
-
-    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
-    System Property: arin.rdapbootstrap.bootfile.as_bootstrap
-    Description: Location of the AS file
+    Description: Location of the IPv6 file
     Type: FILE_PATH
     Required: Only if configuration setup type 3
 
@@ -326,7 +328,7 @@ HTTPS) for the redirect that was given in the query, this behavior can be set wi
 
     Environment Variable: RDAPBOOTSTRAP_LOG_LEVEL
     System Properties: logging.level.org.springframework.web, logging.level.net.arin.rdap_bootstrap
-    Description: Adjust the log level
+    Description: Adjust the server log level
     Type: LOG_LEVEL
     Required: No
     Default Value: INFO
@@ -361,22 +363,18 @@ For a system property, the `-D` option takes precedence over setting its environ
 
 Build a docker image using the Gradle `bootBuildImage` command:
 
-    ./gradlew clean build test bootBuildImage --imageName=harbor.arin.net/k8s/rdap-bootstrap-server --info
+    ./gradlew clean build test bootBuildImage --imageName=harbor.arin.net/dev/arin-rdap-bootstrap --info
 
 Run the docker image:
 
-    docker rm -f rdap-bootstrap-server;
+    docker rm -f arin-rdap-bootstrap;
     docker run -e "RDAPBOOTSTRAP_DOWNLOAD_BOOTSTRAP_FILES=true" \
-               -e "RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL=https://data.iana.org/rdap/asn.json" \
-               -e "RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL=https://data.iana.org/rdap/dns.json" \
-               -e "RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL=https://data.iana.org/rdap/ipv4.json" \
-               -e "RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL=https://data.iana.org/rdap/ipv6.json" \
                -e "RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY=/tmp/rdapbootstrap" \
                -e "RDAPBOOTSTRAP_DOWNLOAD_INTERVAL=120" \
                -e "TZ=America/New_York" \
                -p 8080:8080 \
-               --name rdap-bootstrap-server \
-               -ti harbor.arin.net/k8s/rdap-bootstrap-server
+               --name arin-rdap-bootstrap \
+               -ti harbor.arin.net/dev/arin-rdap-bootstrap:latest
 
 Test the docker container:
 
@@ -384,7 +382,7 @@ Test the docker container:
 
 Log into the docker container:
 
-     docker exec -ti --env COLUMNS=`tput cols` --env LINES=`tput lines` rdap-bootstrap-server /bin/bash
+     docker exec -ti --env COLUMNS=`tput cols` --env LINES=`tput lines` arin-rdap-bootstrap /bin/bash
 
 ### Sample Queries
 
@@ -414,13 +412,13 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
     http://localhost:8080/rdapbootstrap/ip/15.0.0.0/8 (302 to https://rdap.arin.net/registry)
     http://localhost:8080/rdapbootstrap/ip/2c00::/12 (302 to https://rdap.afrinic.net/rdap)
     http://localhost:8080/rdapbootstrap/ip/2c00::/13 (302 to https://rdap.afrinic.net/rdap)
-    http://localhost:8080/rdapbootstrap/ip/3c00::/12 (404 because non-existent in the IANA RDAP Bootstrap registry)
+    http://localhost:8080/rdapbootstrap/ip/3c00::/12 (404 because non-existent in the IANA RDAP Bootstrap Registry)
 
 #### /autnum
 
     http://localhost:8080/rdapbootstrap/autnum/1 (302 to https://rdap.arin.net/registry)
     http://localhost:8080/rdapbootstrap/autnum/272796 (302 to https://rdap.lacnic.net/rdap)
-    http://localhost:8080/rdapbootstrap/autnum/272797 (404 because non-existent in the IANA RDAP Bootstrap registry)
+    http://localhost:8080/rdapbootstrap/autnum/272797 (404 because non-existent in the IANA RDAP Bootstrap Registry)
 
 #### /entity
 
@@ -430,38 +428,5 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
 #### /help
 
     http://localhost:8080/rdapbootstrap/help (200 returning ARIN RDAP Bootstrap service statistics)
-
-### System Properties
-
-    arin.rdapbootstrap.match_scheme_on_redirect=false (default) | true
-    arin.rdapbootstrap.download_bootstrap_files=false (default) | true
-    arin.rdapbootstrap.download_asn_file_url=URL
-    arin.rdapbootstrap.download_domain_file_url=URL
-    arin.rdapbootstrap.download_ipv4_file_url=URL
-    arin.rdapbootstrap.download_ipv6_file_url=URL
-    arin.rdapbootstrap.download_directory=FULL_DIRECTORY_PATH
-    arin.rdapbootstrap.download_interval=86400 (default) | positive long (seconds)
-    arin.rdapbootstrap.bootfile.domain_bootstrap=FULL_FILE_PATH
-    arin.rdapbootstrap.bootfile.v4_bootstrap=FULL_FILE_PATH
-    arin.rdapbootstrap.bootfile.v6_bootstrap=FULL_FILE_PATH
-    arin.rdapbootstrap.bootfile.as_bootstrap=FULL_FILE_PATH
-    arin.rdapbootstrap.bootfile.entity_bootstrap=FULL_FILE_PATH
-
-### Environment Variables
-
-    RDAPBOOTSTRAP_MATCH_SCHEME_ON_REDIRECT=false | true
-    RDAPBOOTSTRAP_DOWNLOAD_BOOTSTRAP_FILES=false | true
-    RDAPBOOTSTRAP_DOWNLOAD_ASN_FILE_URL=URL
-    RDAPBOOTSTRAP_DOWNLOAD_DOMAIN_FILE_URL=URL
-    RDAPBOOTSTRAP_DOWNLOAD_IPV4_FILE_URL=URL
-    RDAPBOOTSTRAP_DOWNLOAD_IPV6_FILE_URL=URL
-    RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY=FULL_DIRECTORY_PATH
-    RDAPBOOTSTRAP_DOWNLOAD_INTERVAL=positive long (seconds)
-    RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP=FULL_FILE_PATH
-    RDAPBOOTSTRAP_BOOTFILE_V4_BOOTSTRAP=FULL_FILE_PATH
-    RDAPBOOTSTRAP_BOOTFILE_V6_BOOTSTRAP=FULL_FILE_PATH
-    RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP=FULL_FILE_PATH
-    RDAPBOOTSTRAP_BOOTFILE_ENTITY_BOOTSTRAP=FULL_FILE_PATH
-    RDAPBOOTSTRAP_LOG_LEVEL=TRACE | DEBUG | INFO | WARN | ERROR | FATAL
 
 [ / FOR ARIN INTERNAL EYES ONLY ]
