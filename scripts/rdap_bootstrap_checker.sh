@@ -38,8 +38,8 @@ query "$1/domain/15.in-addr.arpa" 302
 query "$1/domain/0.0.e.0.1.0.0.2.ip6.arpa" 302
 
 # /nameserver
-query "$1/nameserver/cnn.com" 302
-query "$1/nameserver/15.in-addr.arpa" 302
+query "$1/nameserver/ns1.cnn.com" 302
+query "$1/nameserver/ns1.15.in-addr.arpa" 404
 
 # /ip
 query "$1/ip/2.0.0.0/8" 302
