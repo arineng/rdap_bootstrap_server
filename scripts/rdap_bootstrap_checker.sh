@@ -2,6 +2,16 @@
 
 set -e
 
+function print_usage() {
+    echo 'This script checks the correctness of an RDAP Bootstrap service as per RFC 7484.'
+    echo
+    echo 'Usage:'
+    echo '  rdap_bootstrap_checker.sh RDAP_BOOTSTRAP_BASE_URL'
+    echo
+    echo 'Where:'
+    echo '  RDAP_BOOTSTRAP_BASE_URL    Base URL of the RDAP Bootstrap service (e.g. https://rdap.arin.net/bootstrap)'
+}
+
 function query() {
     echo
     echo -n "$1 - "
@@ -14,9 +24,14 @@ function query() {
     curl -s -I "$1"
 }
 
+if [[ $# -ne 1 ]]; then
+    print_usage
+    exit 1
+fi
+
 # /domain
 query "$1/domain/google.com" 302
-query "$1//domain/google.foo" 302
+query "$1/domain/google.foo" 302
 query "$1/domain/xn--flw351e" 302
 query "$1/domain/2.in-addr.arpa" 302
 query "$1/domain/15.in-addr.arpa" 302
