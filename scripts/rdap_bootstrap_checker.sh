@@ -54,5 +54,5 @@ query "$1/autnum/272796" 302
 query "$1/autnum/272797" 404
 
 # /entity
-query "$1/entity/ODIN19-ARIN" 302
+query "$1/entity/ARINN-ARIN" 302
 query "$1/entity/IRT-APNIC-AP" 302
