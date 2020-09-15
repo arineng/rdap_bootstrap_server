@@ -162,8 +162,8 @@ There are additional Java system properties with defaults that if needed could b
 The server checks every minute to see if a file has been modified, and if any of them have it will automatically reload
 all of them.
 
-The AS, v4, v6, and domain files are published periodically by IANA. You can set a cron or system process to fetch them,
-perhaps once a week, from the following places:
+The AS, v4, v6, and domain files are published periodically by IANA. You can set a cron or system process (see
+Configuration Setup Type 4 Example) to fetch them, perhaps once a week, from the following places:
 
     https://data.iana.org/rdap/asn.json
     https://data.iana.org/rdap/ipv4.json
@@ -422,7 +422,7 @@ entities. The `/help` query returns statistics for ARIN RDAP Bootstrap service.
 
 #### /entity
 
-    http://localhost:8080/rdapbootstrap/entity/ODIN19-ARIN (302 to https://rdap.arin.net/registry)
+    http://localhost:8080/rdapbootstrap/entity/ARINN-ARIN (302 to https://rdap.arin.net/registry)
     http://localhost:8080/rdapbootstrap/entity/IRT-APNIC-AP (302 to https://rdap.apnic.net)
 
 #### /help
