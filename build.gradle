@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java-library'
     id 'war'
+    id 'maven'
 }
 
 import org.gradle.internal.jvm.Jvm
@@ -33,6 +34,20 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     testImplementation group: 'junit', name: 'junit', version: '4.8.2'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        if (project.version.endsWith('SNAPSHOT')) {
+            snapshotRepository(url: project.properties.mavenRepository) {
+                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+            }
+        } else {
+            repository(url: project.properties.mavenRepository) {
+                authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+            }
+        }
+    }
 }
 
 bootJar {
