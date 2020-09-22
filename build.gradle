@@ -49,8 +49,8 @@ uploadArchives {
         }
     }
 
-    dependsOn bootJar
-    mustRunAfter bootJar
+    dependsOn bootBuildImage
+    mustRunAfter bootBuildImage
 }
 
 bootJar {
