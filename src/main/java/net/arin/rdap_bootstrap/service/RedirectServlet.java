@@ -156,11 +156,13 @@ public class RedirectServlet extends HttpServlet
                 }
                 statistics.getTotalHits().incrementAndGet();
                 resp.sendRedirect( redirectUrl );
+                logger.info( pathInfo + " " + resp.getStatus() + " " + redirectUrl );
             }
         }
         catch ( Exception e )
         {
             resp.sendError( HttpServletResponse.SC_BAD_REQUEST, e.getMessage() );
+            logger.info( pathInfo + " " + resp.getStatus() );
         }
     }
 
@@ -240,10 +242,12 @@ public class RedirectServlet extends HttpServlet
             {
                 resp.setContentType( "application/rdap+json" );
                 makeHelp( resp.getOutputStream() );
+                logger.info( pathInfo + " " + resp.getStatus() );
             }
             else
             {
                 resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                logger.info( pathInfo + " " + resp.getStatus() );
             }
         }
     }
