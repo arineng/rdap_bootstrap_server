@@ -3,7 +3,7 @@
 set -e
 
 function print_usage() {
-    echo 'This script walks through an RDAP Bootstrap service as per RFC 7484.'
+    echo 'This script checks the correctness of an RDAP Bootstrap service as per RFC 7484.'
     echo
     echo 'Usage:'
     echo '  rdap_bootstrap_checker.sh RDAP_BOOTSTRAP_BASE_URL'
@@ -14,7 +14,13 @@ function print_usage() {
 
 function query() {
     echo
-    echo "$1"
+    echo -n "$1 - "
+    status=$(curl -s -o /dev/null -w '%{http_code}' "$1")
+    if [[ $status -ne $2 ]]; then
+        echo "FAIL (expected $2)"
+    else
+        echo "PASS"
+    fi
     curl -s -I "$1"
 }
 
@@ -24,29 +30,29 @@ if [[ $# -ne 1 ]]; then
 fi
 
 # /domain
-query "$1/domain/google.com"
-query "$1/domain/google.foo"
-query "$1/domain/xn--flw351e"
-query "$1/domain/2.in-addr.arpa"
-query "$1/domain/15.in-addr.arpa"
-query "$1/domain/0.0.e.0.1.0.0.2.ip6.arpa"
+query "$1/domain/google.com" 302
+query "$1/domain/google.foo" 302
+query "$1/domain/xn--flw351e" 302
+query "$1/domain/2.in-addr.arpa" 302
+query "$1/domain/15.in-addr.arpa" 302
+query "$1/domain/0.0.e.0.1.0.0.2.ip6.arpa" 302
 
 # /nameserver
-query "$1/nameserver/ns1.cnn.com"
-query "$1/nameserver/ns1.15.in-addr.arpa"
+query "$1/nameserver/ns1.cnn.com" 302
+query "$1/nameserver/ns1.15.in-addr.arpa" 404
 
 # /ip
-query "$1/ip/2.0.0.0/8"
-query "$1/ip/15.0.0.0/8"
-query "$1/ip/2c00::/12"
-query "$1/ip/2c00::/13"
-query "$1/ip/3c00::/12"
+query "$1/ip/2.0.0.0/8" 302
+query "$1/ip/15.0.0.0/8" 302
+query "$1/ip/2c00::/12" 302
+query "$1/ip/2c00::/13" 302
+query "$1/ip/3c00::/12" 404
 
 # /autnum
-query "$1/autnum/1"
-query "$1/autnum/272796"
-query "$1/autnum/272797"
+query "$1/autnum/1" 302
+query "$1/autnum/272796" 302
+query "$1/autnum/272797" 404
 
 # /entity
-query "$1/entity/ARINN-ARIN"
-query "$1/entity/IRT-APNIC-AP"
+query "$1/entity/ARINN-ARIN" 302
+query "$1/entity/IRT-APNIC-AP" 302
