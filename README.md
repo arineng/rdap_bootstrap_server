@@ -363,7 +363,7 @@ For a system property, the `-D` option takes precedence over setting its environ
 
 Build a docker image using the Gradle `bootBuildImage` command:
 
-    ./gradlew clean build test bootBuildImage --imageName=harbor.arin.net/dev/arin-rdap-bootstrap --info
+    ./gradlew clean build test bootBuildImage --imageName=harbor.arin.net/k8s/arin-rdap-bootstrap --info
 
 Run the docker image:
 
@@ -374,7 +374,7 @@ Run the docker image:
                -e "TZ=America/New_York" \
                -p 8080:8080 \
                --name arin-rdap-bootstrap \
-               -ti harbor.arin.net/dev/arin-rdap-bootstrap:latest
+               -ti harbor.arin.net/k8s/arin-rdap-bootstrap:latest
 
 Test the docker container:
 
