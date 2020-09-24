@@ -2,6 +2,9 @@
 
 set -e
 
+pass=0
+fail=0
+
 function print_usage() {
     echo 'This script checks the correctness of an RDAP Bootstrap service as per RFC 7484.'
     echo
@@ -18,8 +21,10 @@ function query() {
     status=$(curl -s -o /dev/null -w '%{http_code}' "$1")
     if [[ $status -ne $2 ]]; then
         echo "FAIL (expected $2)"
+        ((fail+=1))
     else
         echo "PASS"
+        ((pass+=1))
     fi
     curl -s -I "$1"
 }
@@ -56,3 +61,5 @@ query "$1/autnum/272797" 404
 # /entity
 query "$1/entity/ARINN-ARIN" 302
 query "$1/entity/IRT-APNIC-AP" 302
+
+echo "PASS=$pass FAIL=$fail"
