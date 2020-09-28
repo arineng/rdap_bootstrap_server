@@ -145,6 +145,7 @@ public class RedirectServlet extends HttpServlet
             if ( urls == null )
             {
                 resp.sendError( HttpServletResponse.SC_NOT_FOUND );
+                logger.info( pathInfo + " " + resp.getStatus() );
                 statistics.getTotalMisses().incrementAndGet();
             }
             else
