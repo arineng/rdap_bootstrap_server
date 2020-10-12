@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.47'
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
