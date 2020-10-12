@@ -33,7 +33,7 @@ IANA files.
     - Can build a Docker image.
     - [A built-in timer to download IANA files](https://github.com/arineng/rdap_bootstrap_server/issues/1).
     - A new [rdap_bootstrap_checker](./scripts/rdap_bootstrap_checker.sh) script to check the correctness of an RDAP
-      Bootstrap service as per RFC 7484.
+      Bootstrap service as per [RFC 7484](https://tools.ietf.org/html/rfc7484).
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
