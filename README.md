@@ -24,7 +24,7 @@ become populated with useful data.
 IANA files.
 * 1.2.0 - Added `match_scheme_on_redirect` option.
 * 1.2.1 - Fix to using IANA bootstrapping files according to current RFCs.
-* 1.3.0
+* 2.0.0
     - Upgraded to build against Java 11 or higher.
     - Replaced default redirection with a `404` response for entries that do not exist in any of the bootstrap files.
     - Fixed IPv6 redirection for non-existent space.
