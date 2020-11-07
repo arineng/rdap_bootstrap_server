@@ -1,6 +1,6 @@
 {
   "description": "RDAP bootstrap file for Domain Name System registrations",
-  "publication": "2020-07-28T21:00:02Z",
+  "publication": "2020-11-04T22:00:04Z",
   "services": [
     [
       [
@@ -77,14 +77,6 @@
       ],
       [
         "https://rdap.afilias-srs.net/rdap/abbvie/"
-      ]
-    ],
-    [
-      [
-        "aco"
-      ],
-      [
-        "https://rdap.afilias-srs.net/rdap/aco/"
       ]
     ],
     [
@@ -473,14 +465,6 @@
     ],
     [
       [
-        "gea"
-      ],
-      [
-        "https://rdap.afilias-srs.net/rdap/gea/"
-      ]
-    ],
-    [
-      [
         "global"
       ],
       [
@@ -749,14 +733,6 @@
       ],
       [
         "https://rdap.afilias-srs.net/rdap/mckinsey/"
-      ]
-    ],
-    [
-      [
-        "metlife"
-      ],
-      [
-        "https://rdap.afilias-srs.net/rdap/metlife/"
       ]
     ],
     [
@@ -1697,6 +1673,14 @@
     ],
     [
       [
+        "hair"
+      ],
+      [
+        "https://rdap.centralnic.com/hair/"
+      ]
+    ],
+    [
+      [
         "host"
       ],
       [
@@ -1773,6 +1757,14 @@
       ],
       [
         "https://rdap.centralnic.com/lplfinancial/"
+      ]
+    ],
+    [
+      [
+        "makeup"
+      ],
+      [
+        "https://rdap.centralnic.com/makeup/"
       ]
     ],
     [
@@ -1933,6 +1925,14 @@
       ],
       [
         "https://rdap.centralnic.com/site/"
+      ]
+    ],
+    [
+      [
+        "skin"
+      ],
+      [
+        "https://rdap.centralnic.com/skin/"
       ]
     ],
     [
@@ -2491,6 +2491,14 @@
       ],
       [
         "https://rdap.nic.accountant/"
+      ]
+    ],
+    [
+      [
+        "aco"
+      ],
+      [
+        "https://rdap.nic.aco/"
       ]
     ],
     [
@@ -3183,6 +3191,14 @@
     ],
     [
       [
+        "gea"
+      ],
+      [
+        "https://rdap.nic.gea/"
+      ]
+    ],
+    [
+      [
         "giving"
       ],
       [
@@ -3323,14 +3339,6 @@
       ],
       [
         "https://rdap.nic.insurance/"
-      ]
-    ],
-    [
-      [
-        "intel"
-      ],
-      [
-        "https://rdap.nic.intel/"
       ]
     ],
     [
@@ -4623,14 +4631,6 @@
     ],
     [
       [
-        "yahoo"
-      ],
-      [
-        "https://rdap.nic.yahoo/"
-      ]
-    ],
-    [
-      [
         "yandex"
       ],
       [
@@ -5761,14 +5761,6 @@
     ],
     [
       [
-        "beauty"
-      ],
-      [
-        "https://tld-rdap.verisign.com/beauty/v1/"
-      ]
-    ],
-    [
-      [
         "bharti"
       ],
       [
@@ -6057,14 +6049,6 @@
     ],
     [
       [
-        "hair"
-      ],
-      [
-        "https://tld-rdap.verisign.com/hair/v1/"
-      ]
-    ],
-    [
-      [
         "hgtv"
       ],
       [
@@ -6237,14 +6221,6 @@
       ],
       [
         "https://tld-rdap.verisign.com/maif/v1/"
-      ]
-    ],
-    [
-      [
-        "makeup"
-      ],
-      [
-        "https://tld-rdap.verisign.com/makeup/v1/"
       ]
     ],
     [
@@ -6517,14 +6493,6 @@
       ],
       [
         "https://tld-rdap.verisign.com/shell/v1/"
-      ]
-    ],
-    [
-      [
-        "skin"
-      ],
-      [
-        "https://tld-rdap.verisign.com/skin/v1/"
       ]
     ],
     [
@@ -6813,6 +6781,14 @@
       ],
       [
         "https://tld-rdap.verisign.com/xn--w4rs40l/v1/"
+      ]
+    ],
+    [
+      [
+        "yahoo"
+      ],
+      [
+        "https://tld-rdap.verisign.com/yahoo/v1/"
       ]
     ],
     [
