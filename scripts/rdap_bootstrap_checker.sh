@@ -44,22 +44,23 @@ query "$1/domain/0.0.e.0.1.0.0.2.ip6.arpa" 302
 
 # /nameserver
 query "$1/nameserver/ns1.cnn.com" 302
-query "$1/nameserver/ns1.15.in-addr.arpa" 404
+query "$1/nameserver/ns1.15.in-addr.arpa" 302 # Default redirection
 
 # /ip
 query "$1/ip/2.0.0.0/8" 302
 query "$1/ip/15.0.0.0/8" 302
 query "$1/ip/2c00::/12" 302
 query "$1/ip/2c00::/13" 302
-query "$1/ip/3c00::/12" 404
+query "$1/ip/3c00::/12" 302 # Default redirection
 
 # /autnum
 query "$1/autnum/1" 302
 query "$1/autnum/272796" 302
-query "$1/autnum/272797" 404
+query "$1/autnum/272797" 302 # Default redirection
 
 # /entity
 query "$1/entity/ARINN-ARIN" 302
 query "$1/entity/IRT-APNIC-AP" 302
+query "$1/entity/ATTW" 302 # Default redirection
 
 echo "PASS=$pass FAIL=$fail"

@@ -26,7 +26,6 @@ IANA files.
 * 1.2.1 - Fix to using IANA bootstrapping files according to current RFCs.
 * 2.0.0
     - Upgraded to build against Java 11 or higher.
-    - Replaced default redirection with a `404` response for entries that do not exist in any of the bootstrap files.
     - Fixed IPv6 redirection for non-existent space.
     - Updated the default bootstrap files to the latest IANA files.
     - Can run as a Spring Boot application.
@@ -103,6 +102,7 @@ Bootstrap files may either be listed in a properties file pointed to by the syst
 `arin.rdapbootstrap.resource_files` or they may be listed using system properties directly or indirectly. Here is an
 example of a properties file pointed to by `arin.rdapbootstrap.resource_files`:
 
+    default_bootstrap = /default_bootstrap.json
     as_bootstrap = /as_bootstrap.json
     domain_bootstrap = /domain_bootstrap.json
     v4_bootstrap = /v4_bootstrap.json
@@ -128,6 +128,7 @@ Set the Java system property `arin.rdapbootstrap.resource_files` to be `/var/rda
 
 In the `/var/rdap/resource_files.properties` file have the following:
 
+    default_bootstrap = /var/rdap/default_bootstrap.json
     as_bootstrap = /var/rdap/as_bootstrap.json
     domain_bootstrap = /var/rdap/domain_bootstrap.json
     v4_bootstrap = /var/rdap/v4_bootstrap.json
@@ -138,6 +139,7 @@ In the `/var/rdap/resource_files.properties` file have the following:
 
 Have the following Java system properties:
 
+    arin.rdapbootstrap.bootfile.default_bootstrap = /var/rdap/default_bootstrap.json
     arin.rdapbootstrap.bootfile.as_bootstrap = /var/rdap/as_bootstrap.json
     arin.rdapbootstrap.bootfile.domain_bootstrap = /var/rdap/domain_bootstrap.json
     arin.rdapbootstrap.bootfile.v4_bootstrap = /var/rdap/v4_bootstrap.json
@@ -225,9 +227,46 @@ signifiers if present. Here is an example of an entity bootstrap file:
 }
 ```
 
-### Non-existent Entries
+### Default Bootstrap File
 
-The server responds with a `404` for entries that do not exist in any of the bootstrap files.
+The default bootstrap file is consulted when all the other bootstrap files have failed. It takes the following form:
+
+```json
+{
+  "version": "1.0",
+  "publication": "2020-08-21T11:51:00-0400",
+  "services": [
+    [
+      [
+        "ip",
+        "autnum",
+        "nameserver"
+      ],
+      [
+        "https://rdap.arin.net/registry/",
+        "http://rdap.arin.net/registry/"
+      ]
+    ],
+    [
+      [
+        "entity"
+      ],
+      [
+        "https://rdap.arin.net/registry/",
+        "http://rdap.arin.net/registry/"
+      ]
+    ],
+    [
+      [
+        "domain"
+      ],
+      [
+        "https://rdap.afilias.net/rdap/info/"
+      ]
+    ]
+  ]
+}
+```
 
 ## Redirect Scheme Matching
 
@@ -297,6 +336,12 @@ The bootstrap server can be configured using environment variables and/or system
     Type: POSITIVE_LONG
     Required: No
     Default Value: 86400
+
+    Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DEFAULT_BOOTSTRAP
+    System Property: arin.rdapbootstrap.bootfile.default_bootstrap
+    Description: Location of the default bootstrap file
+    Type: FILE_PATH
+    Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.as_bootstrap

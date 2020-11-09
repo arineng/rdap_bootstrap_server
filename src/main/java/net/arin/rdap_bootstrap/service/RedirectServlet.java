@@ -43,6 +43,7 @@ import net.arin.rdap_bootstrap.spring.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.json.Notice;
 import net.arin.rdap_bootstrap.json.Response;
+import net.arin.rdap_bootstrap.service.DefaultBootstrap.Type;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import net.arin.rdap_bootstrap.service.Statistics.UrlHits;
@@ -60,6 +61,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RedirectServlet extends HttpServlet
 {
+    private final DefaultBootstrap defaultBootstrap = new DefaultBootstrap();
     private final DomainBootstrap domainBootstrap = new DomainBootstrap();
     private final IpV6Bootstrap ipV6Bootstrap = new IpV6Bootstrap();
     private final IpV4Bootstrap ipV4Bootstrap = new IpV4Bootstrap();
@@ -135,13 +137,18 @@ public class RedirectServlet extends HttpServlet
         }
     }
 
-    protected void serve( UrlHits urlHits, BaseMaker baseMaker, String pathInfo, HttpServletRequest req,
-                          HttpServletResponse resp )
+    protected void serve( UrlHits urlHits, BaseMaker baseMaker, DefaultBootstrap.Type defaultType, String pathInfo,
+                          HttpServletRequest req, HttpServletResponse resp )
             throws IOException
     {
         try
         {
             ServiceUrls urls = baseMaker.makeBase( pathInfo );
+            if ( urls == null && defaultType != null )
+            {
+                urls = defaultBootstrap.getServiceUrls( defaultType );
+                urlHits = UrlHits.DEFAULTHITS;
+            }
             if ( urls == null )
             {
                 resp.sendError( HttpServletResponse.SC_NOT_FOUND );
@@ -217,26 +224,26 @@ public class RedirectServlet extends HttpServlet
             String pathInfo = req.getPathInfo();
             if ( pathInfo.startsWith( "/domain/" ) )
             {
-                serve( UrlHits.DOMAINHITS, new MakeDomainBase(), pathInfo, req, resp );
+                serve( UrlHits.DOMAINHITS, new MakeDomainBase(), Type.DOMAIN, pathInfo, req, resp );
             }
             // The /nameserver path leverages the domain bootstrap logic to provide redirection for the nameserver
             // queries.
             else if ( pathInfo.startsWith( "/nameserver/" ) )
             {
-                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), pathInfo, req, resp );
+                serve( UrlHits.NAMESERVERHITS, new MakeNameserverBase(), Type.NAMESERVER, pathInfo, req, resp );
             }
             else if ( pathInfo.startsWith( "/ip/" ) )
             {
-                serve( UrlHits.IPHITS, new MakeIpBase(), pathInfo, req, resp );
+                serve( UrlHits.IPHITS, new MakeIpBase(), Type.IP, pathInfo, req, resp );
             }
             else if ( pathInfo.startsWith( "/autnum/" ) )
             {
-                serve( UrlHits.ASHITS, new MakeAutnumBase(), pathInfo, req, resp );
+                serve( UrlHits.ASHITS, new MakeAutnumBase(), Type.AUTNUM, pathInfo, req, resp );
             }
             // The /entity path provides redirection for the RIR entity queries.
             else if ( pathInfo.startsWith( "/entity/" ) )
             {
-                serve( UrlHits.ENTITYHITS, new MakeEntityBase(), pathInfo, req, resp );
+                serve( UrlHits.ENTITYHITS, new MakeEntityBase(), Type.ENTITY, pathInfo, req, resp );
             }
             // The /help path returns statistics for ARIN's RDAP Bootstrap service.
             else if ( pathInfo.startsWith( "/help" ) )
@@ -489,6 +496,9 @@ public class RedirectServlet extends HttpServlet
         notices.add( notice );
 
         // Modified dates for various bootstrap files. Done this way so that Publication dates can be published as well.
+        notices.add( createPublicationDateNotice( "Default",
+                resourceFiles.getLastModified( BootFiles.DEFAULT.getKey() ),
+                defaultBootstrap.getPublication() ) );
         notices.add( createPublicationDateNotice( "Domain",
                 resourceFiles.getLastModified( BootFiles.DOMAIN.getKey() ),
                 domainBootstrap.getPublication() ) );
@@ -566,6 +576,7 @@ public class RedirectServlet extends HttpServlet
         {
             logger.info( "Loading resource files" );
             resourceFiles = new ResourceFiles();
+            defaultBootstrap.loadData( resourceFiles );
             domainBootstrap.loadData( resourceFiles );
             ipV4Bootstrap.loadData( resourceFiles );
             ipV6Bootstrap.loadData( resourceFiles );
