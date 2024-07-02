@@ -35,6 +35,7 @@ IANA files.
       Bootstrap service as per [RFC 7484](https://tools.ietf.org/html/rfc7484).
 * 2.0.2
     - Updated the `default_bootstrap.json` file for the domain entry.
+    - Updated the default bootstrap files to the latest IANA files.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
