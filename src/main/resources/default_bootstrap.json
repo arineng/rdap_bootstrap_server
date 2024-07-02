@@ -1,33 +1,18 @@
 {
   "version": "1.0",
-  "publication": "2020-08-21T11:51:00-0400",
+  "publication": "2024-07-02T12:15:00-0400",
   "services": [
     [
       [
         "ip",
         "autnum",
-        "nameserver"
-      ],
-      [
-        "https://rdap.arin.net/registry/",
-        "http://rdap.arin.net/registry/"
-      ]
-    ],
-    [
-      [
+        "domain",
+        "nameserver",
         "entity"
       ],
       [
         "https://rdap.arin.net/registry/",
         "http://rdap.arin.net/registry/"
-      ]
-    ],
-    [
-      [
-        "domain"
-      ],
-      [
-        "https://rdap.afilias.net/rdap/info/"
       ]
     ]
   ]
