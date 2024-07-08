@@ -42,7 +42,7 @@ dependencies {
 }
 
 springBoot {
-    mainClass = "net.arin.rdap_bootstrap.spring.RdapBootstrapApp"
+    mainClass = 'net.arin.rdap_bootstrap.spring.RdapBootstrapApp'
 }
 
 bootRun {
