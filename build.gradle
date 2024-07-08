@@ -25,7 +25,9 @@ repositories {
     maven { url 'https://repo.maven.apache.org/maven2' }
 }
 
-ext['logback.version'] = '1.2.13'
+ext {
+    logbackVersion = '1.2.13'
+}
 
 
 dependencies {
