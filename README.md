@@ -1,7 +1,7 @@
 # RDAP Bootstrap Server
 
 The Registration Data Access Protocol (RDAP) defines a bootstrapping process in
-[RFC 7484](https://tools.ietf.org/html/rfc7484). A bootstrap server aids clients by reading the
+[RFC 9224](https://tools.ietf.org/html/rfc9224). A bootstrap server aids clients by reading the
 [bootstrapping information published by IANA](https://data.iana.org/rdap/) and using it to send HTTP redirects to RDAP
 queries. Clients utilizing a bootstrap server will not need to conduct their own bootstrapping.
 
