@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2020-2024 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -33,7 +33,7 @@ public class TestConstants
     public final static String RIPE_HTTP = "http://rdap.db.ripe.net";
     public final static String RIPE_HTTPS = "https://rdap.db.ripe.net";
 
-    public static final String INFO_HTTPS = "https://rdap.afilias.net/rdap/info";
+    public static final String INFO_HTTPS = "https://rdap.identitydigital.services/rdap";
 
     public static final String EXAMPLE_HTTP = "http://example.com";
     public static final String EXAMPLE_HTTPS = "https://example.com";

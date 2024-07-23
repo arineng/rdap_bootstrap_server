@@ -1,7 +1,7 @@
 # RDAP Bootstrap Server
 
 The Registration Data Access Protocol (RDAP) defines a bootstrapping process in
-[RFC 7484](https://tools.ietf.org/html/rfc7484). A bootstrap server aids clients by reading the
+[RFC 9224](https://tools.ietf.org/html/rfc9224). A bootstrap server aids clients by reading the
 [bootstrapping information published by IANA](https://data.iana.org/rdap/) and using it to send HTTP redirects to RDAP
 queries. Clients utilizing a bootstrap server will not need to conduct their own bootstrapping.
 
@@ -33,6 +33,10 @@ IANA files.
     - [A built-in timer to download IANA files](https://github.com/arineng/rdap_bootstrap_server/issues/1).
     - A new [rdap_bootstrap_checker](./scripts/rdap_bootstrap_checker.sh) script to check the correctness of an RDAP
       Bootstrap service as per [RFC 7484](https://tools.ietf.org/html/rfc7484).
+* 2.0.2
+    - Updated the `default_bootstrap.json` file for the domain entry.
+    - Updated the default bootstrap files to the latest IANA files.
+    - Upgraded Gradle, Spring Boot, and JUnit.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
@@ -234,34 +238,19 @@ The default bootstrap file is consulted when all the other bootstrap files have 
 ```json
 {
   "version": "1.0",
-  "publication": "2020-08-21T11:51:00-0400",
+  "publication": "2024-07-02T12:15:00-0400",
   "services": [
     [
       [
         "ip",
         "autnum",
-        "nameserver"
-      ],
-      [
-        "https://rdap.arin.net/registry/",
-        "http://rdap.arin.net/registry/"
-      ]
-    ],
-    [
-      [
+        "domain",
+        "nameserver",
         "entity"
       ],
       [
         "https://rdap.arin.net/registry/",
         "http://rdap.arin.net/registry/"
-      ]
-    ],
-    [
-      [
-        "domain"
-      ],
-      [
-        "https://rdap.afilias.net/rdap/info/"
       ]
     ]
   ]
