@@ -15,7 +15,7 @@
  */
 package net.arin.rdap_bootstrap.spring;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;
