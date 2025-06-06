@@ -9,8 +9,6 @@ queries. Clients utilizing a bootstrap server will not need to conduct their own
 
 Any version containing the word `SNAPSHOT` is a development version. Versions are:
 
-* `1000.0-SNAPSHOT` reflects the `master` branch development version. It is set high at a major version number of `1000`
-so that the `master` branch is not re-versioned for every release.
 * [1.0.0](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.0.0) - First release. At the time of this
 release, the IANA bootstrap files are available but contain no usable content, and the embedded bootstrap files point to
 our best known locations for servers. Minor point release may occur to update the embedded files until the IANA files
@@ -37,6 +35,8 @@ IANA files.
     - Updated the `default_bootstrap.json` file for the domain entry.
     - Updated the default bootstrap files to the latest IANA files.
     - Upgraded Gradle, Spring Boot, and JUnit.
+* 2.0.3
+    - Use GitHub actions to perform builds
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
