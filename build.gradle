@@ -10,7 +10,7 @@ import org.gradle.internal.jvm.Jvm
 
 assert Jvm.current().javaVersion >= JavaVersion.VERSION_11: 'This project requires Java 11+'
 
-group = 'ARIN'
+group = 'net.arin'
 description = 'RDAP Bootstrap Server'
 
 version = '2.0.3-SNAPSHOT'
