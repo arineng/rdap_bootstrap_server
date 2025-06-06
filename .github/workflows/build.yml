@@ -23,15 +23,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Cache gradle dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
       - name: Compile java
         run: ./gradlew compileJava compileTestJava -i
 
