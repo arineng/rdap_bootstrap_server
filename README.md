@@ -36,7 +36,7 @@ IANA files.
     - Updated the default bootstrap files to the latest IANA files.
     - Upgraded Gradle, Spring Boot, and JUnit.
 * 2.0.3
-    - Use GitHub actions to perform builds
+    - Use GitHub actions to perform builds.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
@@ -160,6 +160,7 @@ Set the following Java system properties for the scheduler to periodically downl
 There are additional Java system properties with defaults that if needed could be tweaked for the scheduler:
 
      arin.rdapbootstrap.download_interval=86400
+     arin.rdapbootstrap.download_max_attempts=1
      arin.rdapbootstrap.download_asn_file_url=https://data.iana.org/rdap/asn.json
      arin.rdapbootstrap.download_domain_file_url=https://data.iana.org/rdap/dns.json
      arin.rdapbootstrap.download_ipv4_file_url=https://data.iana.org/rdap/ipv4.json
@@ -325,6 +326,13 @@ The bootstrap server can be configured using environment variables and/or system
     Type: POSITIVE_LONG
     Required: No
     Default Value: 86400
+
+    Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_MAX_ATTEMPTS
+    System Property: arin.rdapbootstrap.download_max_attempts
+    Description: Maximum number of attempts when downloading a file
+    Type: POSITIVE_INTEGER
+    Required: No
+    Default Value: 1
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DEFAULT_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.default_bootstrap
