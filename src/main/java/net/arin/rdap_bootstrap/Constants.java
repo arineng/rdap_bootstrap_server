@@ -30,4 +30,5 @@ public class Constants
     public final static String DOWNLOAD_IPV6_FILE_URL_PROPERTY = "arin.rdapbootstrap.download_ipv6_file_url";
     public final static String DOWNLOAD_DIRECTORY_PROPERTY = "arin.rdapbootstrap.download_directory";
     public final static String DOWNLOAD_INTERVAL_PROPERTY = "arin.rdapbootstrap.download_interval";
+    public final static String DOWNLOAD_MAX_ATTEMPTS_PROPERTY = "arin.rdapbootstrap.download_max_attempts";
 }
