@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2025 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -630,11 +630,15 @@ public class RedirectServlet extends HttpServlet
             Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
             Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
 
-            var success = false;
             var maxAttempts = AppProperties.lookupInteger(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY);
             if (maxAttempts <= 0) {
                 maxAttempts = 1;
             }
+            var nextAttemptWait = AppProperties.lookupInteger(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY);
+            if (nextAttemptWait <= 0) {
+                nextAttemptWait = 60;
+            }
+            var success = false;
             var attempts = 0;
             while (!success && attempts < maxAttempts) {
                 try {
@@ -650,7 +654,7 @@ public class RedirectServlet extends HttpServlet
                 }
 
                 if (!success) {
-                    Thread.sleep(60000L); // 1 minute wait before next attempt
+                    Thread.sleep(nextAttemptWait * 1000L); // wait before next attempt
                 }
             }
 
