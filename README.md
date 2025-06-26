@@ -37,6 +37,8 @@ IANA files.
     - Upgraded Gradle, Spring Boot, and JUnit.
 * 2.0.3
     - Use GitHub actions to perform builds.
+* 2.0.5-SNAPSHOT
+    - Ability to retry downloading a bootstrap file in case of a failure.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 11 or higher.
