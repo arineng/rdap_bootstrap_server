@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2015-2025 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -30,4 +30,6 @@ public class Constants
     public final static String DOWNLOAD_IPV6_FILE_URL_PROPERTY = "arin.rdapbootstrap.download_ipv6_file_url";
     public final static String DOWNLOAD_DIRECTORY_PROPERTY = "arin.rdapbootstrap.download_directory";
     public final static String DOWNLOAD_INTERVAL_PROPERTY = "arin.rdapbootstrap.download_interval";
+    public final static String DOWNLOAD_MAX_ATTEMPTS_PROPERTY = "arin.rdapbootstrap.download_max_attempts";
+    public final static String DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY = "arin.rdapbootstrap.download_next_attempt_wait";
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2025 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -611,14 +611,14 @@ public class RedirectServlet extends HttpServlet
                 downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_IPV4_FILE_URL_PROPERTY ), downloadDir );
                 downloadFileSafely( AppProperties.getProperty( Constants.DOWNLOAD_IPV6_FILE_URL_PROPERTY ), downloadDir );
             }
-            catch ( IOException e )
+            catch ( IOException | InterruptedException e )
             {
                 logger.warn( "Problem downloading files from IANA RDAP Bootstrap registry", e );
             }
         }
 
         private void downloadFileSafely( String downloadUrlStr, String downloadDir )
-                throws IOException
+                throws IOException, InterruptedException
         {
             logger.info( "Downloading " + downloadUrlStr );
 
@@ -630,7 +630,7 @@ public class RedirectServlet extends HttpServlet
             Path curFilePath = Paths.get( downloadDir + "/" + fileName + ".cur" );
             Path oldFilePath = Paths.get( downloadDir + "/" + fileName + ".old" );
 
-            FileUtils.copyURLToFile( downloadUrl, new File( newFilePathname ), 5000, 5000 ); // 10 seconds wait
+            downloadFile(downloadUrl, downloadUrlStr, newFilePathname);
 
             Files.deleteIfExists( oldFilePath );
 
@@ -644,6 +644,42 @@ public class RedirectServlet extends HttpServlet
             Files.copy( newFilePath, curFilePath, StandardCopyOption.REPLACE_EXISTING );
             Files.deleteIfExists( filePath );
             Files.createSymbolicLink( filePath, curFilePath );
+        }
+    }
+
+    private static void downloadFile(URL downloadUrl, String downloadUrlStr, String newFilePathname)
+            throws IOException, InterruptedException {
+        var maxAttempts = AppProperties.lookupInteger(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY);
+        if (maxAttempts <= 0) {
+            maxAttempts = 1;
+        }
+
+        var nextAttemptWait = AppProperties.lookupInteger(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY);
+        if (nextAttemptWait <= 0) {
+            nextAttemptWait = 60;
+        }
+
+        var success = false;
+        var attempts = 0;
+        while (!success && attempts < maxAttempts) {
+            try {
+                FileUtils.copyURLToFile(downloadUrl, new File(newFilePathname), 5000, 5000);
+                success = true;
+            } catch (IOException e) {
+                attempts++;
+                logger.warn("Attempt " + attempts + " to download " + downloadUrlStr + " failed");
+
+                if (attempts >= maxAttempts) {
+                    var message = "Failed to download " + downloadUrlStr + " after " + maxAttempts + " attempts";
+                    logger.warn(message);
+                    throw new IOException(message);
+                }
+            }
+
+            if (!success) {
+                logger.info("Retry downloading " + downloadUrlStr + " after waiting " + nextAttemptWait + " seconds");
+                Thread.sleep(nextAttemptWait * 1000L);
+            }
         }
     }
 
@@ -674,6 +710,12 @@ public class RedirectServlet extends HttpServlet
 
         logger.info( Constants.DOWNLOAD_INTERVAL_PROPERTY + "=" +
                 AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval ) );
+
+        logger.info(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY + "="
+                + AppProperties.lookupLong(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY));
+
+        logger.info(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY + "="
+                + AppProperties.lookupLong(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY));
 
         for ( BootFiles bootFiles : BootFiles.values() )
         {
