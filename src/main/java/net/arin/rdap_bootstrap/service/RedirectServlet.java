@@ -667,7 +667,7 @@ public class RedirectServlet extends HttpServlet
                 success = true;
             } catch (IOException e) {
                 attempts++;
-                logger.info("Attempt " + attempts + " to download " + downloadUrlStr + " failed");
+                logger.warn("Attempt " + attempts + " to download " + downloadUrlStr + " failed");
 
                 if (attempts >= maxAttempts) {
                     var message = "Failed to download " + downloadUrlStr + " after " + maxAttempts + " attempts";
