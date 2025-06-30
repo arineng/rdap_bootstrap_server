@@ -1,6 +1,6 @@
 {
   "description": "RDAP bootstrap file for IPv6 address allocations",
-  "publication": "2019-11-06T19:00:04Z",
+  "publication": "2024-11-01T22:00:01Z",
   "services": [
     [
       [
@@ -21,7 +21,8 @@
         "2001:b000::/20",
         "2001:c00::/23",
         "2001:e00::/23",
-        "2400::/12"
+        "2400::/12",
+        "2410::/12"
       ],
       [
         "https://rdap.apnic.net/"
