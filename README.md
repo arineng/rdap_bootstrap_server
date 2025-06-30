@@ -41,6 +41,7 @@ IANA files.
     - Ability to retry downloading a bootstrap file in case of a failure.
     - Upgraded to build against Java 17 or higher.
     - Upgraded Gradle and Spring Boot.
+    - Updated the default bootstrap files to the latest IANA files.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
 application, or as a Docker container. It should build against Java 17 or higher.
