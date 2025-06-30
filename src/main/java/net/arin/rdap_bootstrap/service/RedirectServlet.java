@@ -77,7 +77,7 @@ public class RedirectServlet extends HttpServlet
     Boolean downloadBootstrapFiles = Boolean.FALSE;
     long downloadInterval = 86400; // a day
     static final int DOWNLOAD_MAX_ATTEMPTS_DEFAULT = 1;
-    static final int DOWNLOAD_NEXT_ATTEMPT_WAIT_DEFAULT = 60;
+    static final int DOWNLOAD_NEXT_ATTEMPT_WAIT_DEFAULT = 60; // 1 minute
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
 
