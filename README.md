@@ -37,11 +37,13 @@ IANA files.
     - Upgraded Gradle, Spring Boot, and JUnit.
 * 2.0.3
     - Use GitHub actions to perform builds.
-* 2.0.5-SNAPSHOT
+* 3.0.0-SNAPSHOT
     - Ability to retry downloading a bootstrap file in case of a failure.
+    - Upgraded to build against Java 17 or higher.
+    - Upgraded Gradle and Spring Boot.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
-application, or as a Docker container. It should build against Java 11 or higher.
+application, or as a Docker container. It should build against Java 17 or higher.
 
 To build using Gradle:
 
@@ -50,13 +52,13 @@ To build using Gradle:
 This will produce a WAR file in `build/libs` after running the unit tests. The WAR can be directly run from the command
 line using either the `java` command or the Gradle `bootRun` command:
 
-    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.war
+    java -jar build/libs/rdap_bootstrap_server-<version>.war
     ./gradlew bootRun
 
 Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `java` command:
 
     ./gradlew bootJar
-    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
+    java -jar build/libs/rdap_bootstrap_server-<version>.jar
 
 System properties can be passed in as `-D` options and/or environment variables.
 
@@ -108,12 +110,12 @@ Bootstrap files may either be listed in a properties file pointed to by the syst
 `arin.rdapbootstrap.resource_files` or they may be listed using system properties directly or indirectly. Here is an
 example of a properties file pointed to by `arin.rdapbootstrap.resource_files`:
 
-    default_bootstrap = /default_bootstrap.json
-    as_bootstrap = /as_bootstrap.json
-    domain_bootstrap = /domain_bootstrap.json
-    v4_bootstrap = /v4_bootstrap.json
-    v6_bootstrap = /v6_bootstrap.json
-    entity_bootstrap = /entity_bootstrap.json
+    default_bootstrap=/default_bootstrap.json
+    domain_bootstrap=/domain_bootstrap.json
+    v4_bootstrap=/v4_bootstrap.json
+    v6_bootstrap=/v6_bootstrap.json
+    as_bootstrap=/as_bootstrap.json
+    entity_bootstrap=/entity_bootstrap.json
 
 The system properties directly listing these are the keys of the properties file prefixed with
 `arin.rdapbootstrap.bootfile.`. So the AS bootstrap would be `arin.rdapbootstrap.bootfile.as_bootstrap`, etc.
@@ -134,23 +136,23 @@ Set the Java system property `arin.rdapbootstrap.resource_files` to be `/var/rda
 
 In the `/var/rdap/resource_files.properties` file have the following:
 
-    default_bootstrap = /var/rdap/default_bootstrap.json
-    as_bootstrap = /var/rdap/as_bootstrap.json
-    domain_bootstrap = /var/rdap/domain_bootstrap.json
-    v4_bootstrap = /var/rdap/v4_bootstrap.json
-    v6_bootstrap = /var/rdap/v6_bootstrap.json
-    entity_bootstrap = /var/rdap/entity_bootstrap.json
+    default_bootstrap=/var/rdap/default_bootstrap.json
+    domain_bootstrap=/var/rdap/domain_bootstrap.json
+    v4_bootstrap=/var/rdap/v4_bootstrap.json
+    v6_bootstrap=/var/rdap/v6_bootstrap.json
+    as_bootstrap=/var/rdap/as_bootstrap.json
+    entity_bootstrap=/var/rdap/entity_bootstrap.json
 
 ### Configuration Setup Type 3 Example
 
 Have the following Java system properties:
 
-    arin.rdapbootstrap.bootfile.default_bootstrap = /var/rdap/default_bootstrap.json
-    arin.rdapbootstrap.bootfile.as_bootstrap = /var/rdap/as_bootstrap.json
-    arin.rdapbootstrap.bootfile.domain_bootstrap = /var/rdap/domain_bootstrap.json
-    arin.rdapbootstrap.bootfile.v4_bootstrap = /var/rdap/v4_bootstrap.json
-    arin.rdapbootstrap.bootfile.v6_bootstrap = /var/rdap/v6_bootstrap.json
-    arin.rdapbootstrap.bootfile.entity_bootstrap = /var/rdap/entity_bootstrap.json
+    arin.rdapbootstrap.bootfile.default_bootstrap=/var/rdap/default_bootstrap.json
+    arin.rdapbootstrap.bootfile.domain_bootstrap=/var/rdap/domain_bootstrap.json
+    arin.rdapbootstrap.bootfile.v4_bootstrap=/var/rdap/v4_bootstrap.json
+    arin.rdapbootstrap.bootfile.v6_bootstrap=/var/rdap/v6_bootstrap.json
+    arin.rdapbootstrap.bootfile.as_bootstrap=/var/rdap/as_bootstrap.json
+    arin.rdapbootstrap.bootfile.entity_bootstrap=/var/rdap/entity_bootstrap.json
 
 ### Configuration Setup Type 4 Example
 
@@ -188,7 +190,7 @@ bootstrap server.
 ### Entity Bootstrap File
 
 The entity bootstrap file is used to redirect queries for entities based on the last component of the entity handle or
-identifier. Some registries, most notably all of the RIRs, append a registry signifier such as `-ARIN`. While entity
+identifier. Some registries, most notably all the RIRs, append a registry signifier such as `-ARIN`. While entity
 bootstrapping is not officially part of the IETF specification, this server attempts to issue redirects based on those
 signifiers if present. Here is an example of an entity bootstrap file:
 

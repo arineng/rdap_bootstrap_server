@@ -1,25 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.owasp:dependency-check-gradle:9.0.9'
+    }
+}
+
 plugins {
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.4.6'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'java-library'
     id 'war'
     id 'maven-publish'
 }
+apply plugin: 'org.owasp.dependencycheck'
 
 import org.gradle.internal.jvm.Jvm
 
-assert Jvm.current().javaVersion >= JavaVersion.VERSION_11: 'This project requires Java 11+'
+assert Jvm.current().javaVersion >= JavaVersion.VERSION_17: 'This project requires Java 17+'
 
 group = 'net.arin'
 description = 'RDAP Bootstrap Server'
 
-version = '2.0.5-SNAPSHOT'
+version = '3.0.0-SNAPSHOT'
 if (project.hasProperty('artifactVersion')) {
     version = "${project.properties.artifactVersion}"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     maven { url 'https://repo.maven.apache.org/maven2' }
@@ -33,12 +43,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
-    implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.47'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.7'
+    implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.52'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
 }
 
 springBoot {
