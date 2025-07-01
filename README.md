@@ -1,28 +1,30 @@
 # RDAP Bootstrap Server
 
 The Registration Data Access Protocol (RDAP) defines a bootstrapping process in
-[RFC 9224](https://tools.ietf.org/html/rfc9224). A bootstrap server aids clients by reading the
-[bootstrapping information published by IANA](https://data.iana.org/rdap/) and using it to send HTTP redirects to RDAP
-queries. Clients utilizing a bootstrap server will not need to conduct their own bootstrapping.
+[RFC 9224](https://tools.ietf.org/html/rfc9224). An RDAP bootstrap server aids clients by reading the
+[bootstrapping information published by IANA](https://data.iana.org/rdap/) and using it to send HTTP redirects for RDAP
+queries. RDAP clients utilizing a bootstrap server will not need to conduct their own bootstrapping.
 
 ## Versioning, Building, and Runtime Requirements
 
 Any version containing the word `SNAPSHOT` is a development version. Versions are:
 
-* [1.0.0](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.0.0) - First release. At the time of this
-release, the IANA bootstrap files are available but contain no usable content, and the embedded bootstrap files point to
-our best known locations for servers. Minor point release may occur to update the embedded files until the IANA files
-become populated with useful data.
-* [1.1.0](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.1.0) - A few small things:
+* [1.0.0](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.0.0)
+    - First release. At the time of this release, the IANA bootstrap files are available but contain no usable content,
+      and the embedded bootstrap files point to our best known locations for servers. Minor point release may occur to
+      update the embedded files until the IANA files become populated with useful data.
+* [1.1.0](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.1.0)
     - IANA and AFRINIC have been taken out of the bootstrap files as they do not have servers ready yet.
     - `/help` now works instead of giving a `500`.
     - `/help` shows the dates of load and dates of the bootstrap files.
     - `/help` limits the URLs in the statistics to 100 per category.
-* [1.1.1](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.1.1) - Bugfixes to `/help` and to parsing of
-IANA files.
-* 1.2.0 - Added `match_scheme_on_redirect` option.
-* 1.2.1 - Fix to using IANA bootstrapping files according to current RFCs.
-* 2.0.1
+* [1.1.1](https://github.com/arineng/rdap_bootstrap_server/releases/tag/1.1.1)
+    - Bugfixes to `/help` and to parsing of IANA files.
+* 1.2.0
+    - Added `match_scheme_on_redirect` option.
+* 1.2.1
+    - Fix to using IANA bootstrapping files according to current RFCs.
+* [2.0.1](https://github.com/arineng/rdap_bootstrap_server/releases/tag/2.0.1)
     - Upgraded to build against Java 11 or higher.
     - Fixed IPv6 redirection for non-existent space.
     - Updated the default bootstrap files to the latest IANA files.
@@ -31,17 +33,20 @@ IANA files.
     - [A built-in timer to download IANA files](https://github.com/arineng/rdap_bootstrap_server/issues/1).
     - A new [rdap_bootstrap_checker](./scripts/rdap_bootstrap_checker.sh) script to check the correctness of an RDAP
       Bootstrap service as per [RFC 7484](https://tools.ietf.org/html/rfc7484).
-* 2.0.2
+* [2.0.2](https://github.com/arineng/rdap_bootstrap_server/releases/tag/2.0.2)
     - Updated the `default_bootstrap.json` file for the domain entry.
     - Updated the default bootstrap files to the latest IANA files.
     - Upgraded Gradle, Spring Boot, and JUnit.
-* 2.0.3
+* [2.0.3](https://github.com/arineng/rdap_bootstrap_server/releases/tag/2.0.3)
     - Use GitHub actions to perform builds.
-* 2.0.5-SNAPSHOT
+* 3.0.0-SNAPSHOT
     - Ability to retry downloading a bootstrap file in case of a failure.
+    - Upgraded to build against Java 17 or higher.
+    - Upgraded Gradle and Spring Boot.
+    - Updated the default bootstrap files to the latest IANA files.
 
 This server is written as a Java servlet and should run in any Java Servlet 3.0 container or higher, as a Spring Boot
-application, or as a Docker container. It should build against Java 11 or higher.
+application, or as a Docker container. It should build against Java 17 or higher.
 
 To build using Gradle:
 
@@ -50,13 +55,13 @@ To build using Gradle:
 This will produce a WAR file in `build/libs` after running the unit tests. The WAR can be directly run from the command
 line using either the `java` command or the Gradle `bootRun` command:
 
-    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.war
+    java -jar build/libs/rdap-bootstrap-server-<version>.war
     ./gradlew bootRun
 
 Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `java` command:
 
     ./gradlew bootJar
-    java -jar build/libs/rdap_bootstrap_server-1000.0-SNAPSHOT.jar
+    java -jar build/libs/rdap-bootstrap-server-<version>.jar
 
 System properties can be passed in as `-D` options and/or environment variables.
 
@@ -105,15 +110,15 @@ volume list).
 ## Properties and Bootstrap Files
 
 Bootstrap files may either be listed in a properties file pointed to by the system property
-`arin.rdapbootstrap.resource_files` or they may be listed using system properties directly or indirectly. Here is an
+`arin.rdapbootstrap.resource_files`, or they may be listed using system properties directly or indirectly. Here is an
 example of a properties file pointed to by `arin.rdapbootstrap.resource_files`:
 
-    default_bootstrap = /default_bootstrap.json
-    as_bootstrap = /as_bootstrap.json
-    domain_bootstrap = /domain_bootstrap.json
-    v4_bootstrap = /v4_bootstrap.json
-    v6_bootstrap = /v6_bootstrap.json
-    entity_bootstrap = /entity_bootstrap.json
+    default_bootstrap=/default_bootstrap.json
+    domain_bootstrap=/domain_bootstrap.json
+    v4_bootstrap=/v4_bootstrap.json
+    v6_bootstrap=/v6_bootstrap.json
+    as_bootstrap=/as_bootstrap.json
+    entity_bootstrap=/entity_bootstrap.json
 
 The system properties directly listing these are the keys of the properties file prefixed with
 `arin.rdapbootstrap.bootfile.`. So the AS bootstrap would be `arin.rdapbootstrap.bootfile.as_bootstrap`, etc.
@@ -122,7 +127,7 @@ The server ships with a properties file that points to a set of built-in bootstr
 useful for getting the server up and running, but ultimately will need to be replaced with files that are updated
 periodically from the IANA.
 
-So there are four types of configuration.
+So there are four types of configuration:
 
 ### Configuration Setup Type 1 Example
 
@@ -132,25 +137,25 @@ Do nothing and let the server use the bootstrap files that ship with it.
 
 Set the Java system property `arin.rdapbootstrap.resource_files` to be `/var/rdap/resource_files.properties`.
 
-In the `/var/rdap/resource_files.properties` file have the following:
+In the `/var/rdap/resource_files.properties` file, have the following:
 
-    default_bootstrap = /var/rdap/default_bootstrap.json
-    as_bootstrap = /var/rdap/as_bootstrap.json
-    domain_bootstrap = /var/rdap/domain_bootstrap.json
-    v4_bootstrap = /var/rdap/v4_bootstrap.json
-    v6_bootstrap = /var/rdap/v6_bootstrap.json
-    entity_bootstrap = /var/rdap/entity_bootstrap.json
+    default_bootstrap=/var/rdap/default_bootstrap.json
+    domain_bootstrap=/var/rdap/domain_bootstrap.json
+    v4_bootstrap=/var/rdap/v4_bootstrap.json
+    v6_bootstrap=/var/rdap/v6_bootstrap.json
+    as_bootstrap=/var/rdap/as_bootstrap.json
+    entity_bootstrap=/var/rdap/entity_bootstrap.json
 
 ### Configuration Setup Type 3 Example
 
 Have the following Java system properties:
 
-    arin.rdapbootstrap.bootfile.default_bootstrap = /var/rdap/default_bootstrap.json
-    arin.rdapbootstrap.bootfile.as_bootstrap = /var/rdap/as_bootstrap.json
-    arin.rdapbootstrap.bootfile.domain_bootstrap = /var/rdap/domain_bootstrap.json
-    arin.rdapbootstrap.bootfile.v4_bootstrap = /var/rdap/v4_bootstrap.json
-    arin.rdapbootstrap.bootfile.v6_bootstrap = /var/rdap/v6_bootstrap.json
-    arin.rdapbootstrap.bootfile.entity_bootstrap = /var/rdap/entity_bootstrap.json
+    arin.rdapbootstrap.bootfile.default_bootstrap=/var/rdap/default_bootstrap.json
+    arin.rdapbootstrap.bootfile.domain_bootstrap=/var/rdap/domain_bootstrap.json
+    arin.rdapbootstrap.bootfile.v4_bootstrap=/var/rdap/v4_bootstrap.json
+    arin.rdapbootstrap.bootfile.v6_bootstrap=/var/rdap/v6_bootstrap.json
+    arin.rdapbootstrap.bootfile.as_bootstrap=/var/rdap/as_bootstrap.json
+    arin.rdapbootstrap.bootfile.entity_bootstrap=/var/rdap/entity_bootstrap.json
 
 ### Configuration Setup Type 4 Example
 
@@ -175,7 +180,7 @@ The server checks every minute to see if a file has been modified, and if any of
 all of them.
 
 The AS, v4, v6, and domain files are published periodically by IANA. You can set a cron or system process (see
-Configuration Setup Type 4 Example) to fetch them, perhaps once a week, from the following places:
+Configuration Setup Type 4 Example) to fetch them, perhaps once a week, from the following locations:
 
     https://data.iana.org/rdap/asn.json
     https://data.iana.org/rdap/ipv4.json
@@ -188,7 +193,7 @@ bootstrap server.
 ### Entity Bootstrap File
 
 The entity bootstrap file is used to redirect queries for entities based on the last component of the entity handle or
-identifier. Some registries, most notably all of the RIRs, append a registry signifier such as `-ARIN`. While entity
+identifier. Some registries, most notably all the RIRs, append a registry signifier such as `-ARIN`. While entity
 bootstrapping is not officially part of the IETF specification, this server attempts to issue redirects based on those
 signifiers if present. Here is an example of an entity bootstrap file:
 
@@ -320,70 +325,74 @@ The bootstrap server can be configured using environment variables and/or system
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_DIRECTORY
     System Property: arin.rdapbootstrap.download_directory
     Description: Directory to download IANA files into
-    Type: DIRECTORY_PATH
+    Type: DIRECTORY PATH
     Required: Only if arin.rdapbootstrap.download_bootstrap_files is set to true
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_INTERVAL
     System Property: arin.rdapbootstrap.download_interval
     Description: Download interval in seconds
-    Type: POSITIVE_LONG
+    Type: POSITIVE LONG
     Required: No
     Default Value: 86400
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_MAX_ATTEMPTS
     System Property: arin.rdapbootstrap.download_max_attempts
     Description: Maximum number of attempts when downloading a file
-    Type: POSITIVE_INTEGER
+    Type: POSITIVE INTEGER
     Required: No
     Default Value: 1
 
     Environment Variable: RDAPBOOTSTRAP_DOWNLOAD_NEXT_ATTEMPT_WAIT
     System Property: arin.rdapbootstrap.download_next_attempt_wait
     Description: Wait time in seconds before the next attempt to download a file
-    Type: POSITIVE_INTEGER
+    Type: POSITIVE INTEGER
     Required: No
     Default Value: 60
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DEFAULT_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.default_bootstrap
     Description: Location of the default bootstrap file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_AS_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.as_bootstrap
     Description: Location of the ASN file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_DOMAIN_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.domain_bootstrap
     Description: Location of the domain file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V4_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.v4_bootstrap
     Description: Location of the IPv4 file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_V6_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.v6_bootstrap
     Description: Location of the IPv6 file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_BOOTFILE_ENTITY_BOOTSTRAP
     System Property: arin.rdapbootstrap.bootfile.entity_bootstrap
     Description: Location of the entity file
-    Type: FILE_PATH
+    Type: FILE PATH
     Required: Only if configuration setup type 3
 
     Environment Variable: RDAPBOOTSTRAP_LOG_LEVEL
     System Properties: logging.level.org.springframework.web, logging.level.net.arin.rdap_bootstrap
     Description: Adjust the server log level
-    Type: LOG_LEVEL
+    Type: LOG LEVEL
     Required: No
     Default Value: INFO
     Possible Values: TRACE | DEBUG | INFO | WARN | ERROR | FATAL
+
+## Acknowledgements
+
+Sean Smith contributed changes to update Java, Spring Boot, and Gradle for version `3.0.0`.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2020-2025 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,7 +15,7 @@
  */
 package net.arin.rdap_bootstrap.spring;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;

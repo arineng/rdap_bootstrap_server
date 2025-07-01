@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 American Registry for Internet Numbers (ARIN)
+ * Copyright (C) 2013-2025 American Registry for Internet Numbers (ARIN)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,11 +16,11 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import jakarta.servlet.ServletConfig;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.EXAMPLE_HTTP;
@@ -29,10 +29,14 @@ import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 public class RedirectServletTest
 {
+    ServletConfig servletConfig = mock(ServletConfig.class);
+
     @Test
     public void testGetRedirectUrlDefault() throws Exception
     {
@@ -43,7 +47,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -58,7 +62,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTP );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -73,7 +77,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -90,7 +94,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -109,7 +113,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -127,7 +131,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTP );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTP + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -145,7 +149,7 @@ public class RedirectServletTest
         urls.addUrl( EXAMPLE_HTTPS );
 
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "http", "/bar", urls ) );
         assertEquals( EXAMPLE_HTTPS + "/bar", servlet.getRedirectUrl( "https", "/bar", urls ) );
@@ -157,7 +161,7 @@ public class RedirectServletTest
     public void testMakeAutNumInt() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( ARIN_HTTP, servlet.makeAutnumBase( "/autnum/10" ).getHttpUrl() );
 
@@ -168,7 +172,7 @@ public class RedirectServletTest
     public void testMakeIpBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( ARIN_HTTP, servlet.makeIpBase( "/ip/7.0.0.0/8" ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeIpBase( "/ip/7.0.0.0/16" ).getHttpUrl() );
@@ -184,7 +188,7 @@ public class RedirectServletTest
     public void testMakeDomainBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa." ).getHttpUrl() );
         assertEquals( ARIN_HTTP, servlet.makeDomainBase( "/domain/0.0.0.7.in-addr.arpa" ).getHttpUrl() );
@@ -202,7 +206,7 @@ public class RedirectServletTest
     public void testMakeNameserverBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO" ).getHttpsUrl() );
         assertEquals( INFO_HTTPS, servlet.makeNameserverBase( "/nameserver/ns1.example.INFO." ).getHttpsUrl() );
@@ -214,7 +218,7 @@ public class RedirectServletTest
     public void testMakeEntityBase() throws Exception
     {
         RedirectServlet servlet = new RedirectServlet();
-        servlet.init( null );
+        servlet.init( servletConfig );
 
         assertEquals( APNIC_HTTPS, servlet.makeEntityBase( "/entity/ABC123-AP" ).getHttpsUrl() );
 

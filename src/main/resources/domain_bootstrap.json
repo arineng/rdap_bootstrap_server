@@ -1,6 +1,6 @@
 {
   "description": "RDAP bootstrap file for Domain Name System registrations",
-  "publication": "2024-06-20T18:00:02Z",
+  "publication": "2025-06-27T17:00:02Z",
   "services": [
     [
       [
@@ -12,82 +12,10 @@
     ],
     [
       [
-        "music"
+        "mg"
       ],
       [
-        "http://rdap.centralnic.com/music/"
-      ]
-    ],
-    [
-      [
-        "cpa"
-      ],
-      [
-        "http://rdap.nic.cpa/"
-      ]
-    ],
-    [
-      [
-        "merckmsd"
-      ],
-      [
-        "http://rdap.nic.merckmsd/"
-      ]
-    ],
-    [
-      [
-        "msd"
-      ],
-      [
-        "http://rdap.nic.msd/"
-      ]
-    ],
-    [
-      [
-        "tattoo"
-      ],
-      [
-        "http://rdap.nic.tattoo/"
-      ]
-    ],
-    [
-      [
-        "nowruz"
-      ],
-      [
-        "https://api.rdap.nic.nowruz/"
-      ]
-    ],
-    [
-      [
-        "pars"
-      ],
-      [
-        "https://api.rdap.nic.pars/"
-      ]
-    ],
-    [
-      [
-        "shia"
-      ],
-      [
-        "https://api.rdap.nic.shia/"
-      ]
-    ],
-    [
-      [
-        "tci"
-      ],
-      [
-        "https://api.rdap.nic.tci/"
-      ]
-    ],
-    [
-      [
-        "xn--mgbt3dhd"
-      ],
-      [
-        "https://api.rdap.nic.xn--mgbt3dhd/"
+        "http://rdap.nic.mg/"
       ]
     ],
     [
@@ -100,18 +28,10 @@
     ],
     [
       [
-        "moscow"
+        "na"
       ],
       [
-        "https://flexireg.net/moscow/rdap/"
-      ]
-    ],
-    [
-      [
-        "xn--80adxhks"
-      ],
-      [
-        "https://flexireg.net/xn--80adxhks/rdap/"
+        "https://keetmans.omadhina.co.na/"
       ]
     ],
     [
@@ -120,31 +40,68 @@
         "xn--cg4bki"
       ],
       [
-        "https://nic.samsung:8443/rdap/"
+        "https://nic.samsung/rdap/"
       ]
     ],
     [
       [
-        "ally"
+        "ads",
+        "android",
+        "app",
+        "boo",
+        "cal",
+        "channel",
+        "chrome",
+        "dad",
+        "day",
+        "dclk",
+        "dev",
+        "docs",
+        "drive",
+        "eat",
+        "esq",
+        "fly",
+        "foo",
+        "gbiz",
+        "gle",
+        "gmail",
+        "goog",
+        "google",
+        "guge",
+        "hangout",
+        "here",
+        "how",
+        "ing",
+        "map",
+        "meet",
+        "meme",
+        "mov",
+        "new",
+        "nexus",
+        "page",
+        "phd",
+        "play",
+        "prod",
+        "prof",
+        "rsvp",
+        "search",
+        "soy",
+        "xn--flw351e",
+        "xn--q9jyb4c",
+        "xn--qcka1pmc",
+        "youtube",
+        "zip"
       ],
       [
-        "https://rdap.afilias-srs.net/rdap/ally/"
+        "https://pubapi.registry.google/rdap/"
       ]
     ],
     [
       [
-        "shaw"
+        "blog"
       ],
       [
-        "https://rdap.afilias-srs.net/rdap/shaw/"
-      ]
-    ],
-    [
-      [
-        "tvs"
-      ],
-      [
-        "https://rdap.afilias-srs.net/rdap/tvs/"
+        "https://rdap.blog.fury.ca/rdap/"
       ]
     ],
     [
@@ -213,14 +170,6 @@
     ],
     [
       [
-        "basketball"
-      ],
-      [
-        "https://rdap.centralnic.com/basketball/"
-      ]
-    ],
-    [
-      [
         "beauty"
       ],
       [
@@ -233,14 +182,6 @@
       ],
       [
         "https://rdap.centralnic.com/best/"
-      ]
-    ],
-    [
-      [
-        "blog"
-      ],
-      [
-        "https://rdap.centralnic.com/blog/"
       ]
     ],
     [
@@ -405,14 +346,6 @@
     ],
     [
       [
-        "feedback"
-      ],
-      [
-        "https://rdap.centralnic.com/feedback/"
-      ]
-    ],
-    [
-      [
         "flowers"
       ],
       [
@@ -433,14 +366,6 @@
       ],
       [
         "https://rdap.centralnic.com/fo/"
-      ]
-    ],
-    [
-      [
-        "forum"
-      ],
-      [
-        "https://rdap.centralnic.com/forum/"
       ]
     ],
     [
@@ -717,14 +642,6 @@
     ],
     [
       [
-        "pid"
-      ],
-      [
-        "https://rdap.centralnic.com/pid/"
-      ]
-    ],
-    [
-      [
         "pohl"
       ],
       [
@@ -785,14 +702,6 @@
       ],
       [
         "https://rdap.centralnic.com/rent/"
-      ]
-    ],
-    [
-      [
-        "rugby"
-      ],
-      [
-        "https://rdap.centralnic.com/rugby/"
       ]
     ],
     [
@@ -1037,6 +946,14 @@
     ],
     [
       [
+        "jnj"
+      ],
+      [
+        "https://rdap.centralnicregistry.com/jnj/"
+      ]
+    ],
+    [
+      [
         "xn--55qw42g",
         "xn--zfr164b"
       ],
@@ -1054,10 +971,10 @@
     ],
     [
       [
-        "xn--5tzm5g"
+        "pl"
       ],
       [
-        "https://rdap.donuts.co/rdap/"
+        "https://rdap.dns.pl/"
       ]
     ],
     [
@@ -1074,6 +991,15 @@
       ],
       [
         "https://rdap.fi/rdap/rdap/"
+      ]
+    ],
+    [
+      [
+        "moscow",
+        "xn--80adxhks"
+      ],
+      [
+        "https://rdap.flexireg.net/"
       ]
     ],
     [
@@ -1162,6 +1088,7 @@
       [
         "abb",
         "abbott",
+        "abc",
         "academy",
         "accenture",
         "accountants",
@@ -1170,6 +1097,8 @@
         "aero",
         "agakhan",
         "agency",
+        "ai",
+        "airbus",
         "airforce",
         "akdn",
         "alibaba",
@@ -1254,13 +1183,13 @@
         "contact",
         "contractors",
         "cool",
+        "coupon",
         "coupons",
         "credit",
         "creditcard",
         "crs",
         "cruise",
         "cruises",
-        "dabur",
         "dance",
         "data",
         "dating",
@@ -1276,6 +1205,7 @@
         "direct",
         "directory",
         "discount",
+        "discover",
         "dish",
         "doctor",
         "dog",
@@ -1329,7 +1259,6 @@
         "gallup",
         "games",
         "genting",
-        "george",
         "gifts",
         "glass",
         "global",
@@ -1341,7 +1270,6 @@
         "gratis",
         "green",
         "gripe",
-        "grocery",
         "group",
         "guide",
         "guru",
@@ -1384,7 +1312,6 @@
         "juniper",
         "kaufen",
         "kerryhotels",
-        "kerrylogistics",
         "kerryproperties",
         "kids",
         "kim",
@@ -1402,16 +1329,15 @@
         "lease",
         "lefrak",
         "legal",
+        "lego",
         "lgbt",
         "life",
         "lighting",
         "limited",
         "limo",
-        "lipsy",
         "live",
         "llc",
         "loans",
-        "locker",
         "lotto",
         "ltd",
         "ltda",
@@ -1435,6 +1361,7 @@
         "mormon",
         "mortgage",
         "movie",
+        "mu",
         "nab",
         "navy",
         "network",
@@ -1498,9 +1425,9 @@
         "rocks",
         "rogers",
         "run",
+        "rwe",
         "sale",
         "salon",
-        "samsclub",
         "sanofi",
         "sarl",
         "saxo",
@@ -1508,6 +1435,7 @@
         "scholarships",
         "school",
         "schule",
+        "sener",
         "services",
         "sew",
         "shangrila",
@@ -1524,6 +1452,7 @@
         "software",
         "solar",
         "solutions",
+        "song",
         "spa",
         "srl",
         "stada",
@@ -1563,6 +1492,7 @@
         "travelers",
         "travelersinsurance",
         "trv",
+        "tvs",
         "ubank",
         "ubs",
         "university",
@@ -1578,14 +1508,15 @@
         "viking",
         "villas",
         "vin",
+        "visa",
         "vision",
         "volvo",
         "vote",
         "voto",
         "voyage",
-        "walmart",
         "watch",
         "watches",
+        "weber",
         "weibo",
         "weir",
         "wine",
@@ -1594,15 +1525,27 @@
         "world",
         "wtf",
         "xin",
+        "xn--1ck2e1b",
+        "xn--5tzm5g",
         "xn--6frz82g",
         "xn--9krt00a",
         "xn--b4w605ferd",
+        "xn--bck1b9a5dre4c",
+        "xn--cck2b3b",
         "xn--czrs0t",
+        "xn--eckvdtc9d",
+        "xn--fct429k",
         "xn--fjq720a",
         "xn--fzys8d69uvgm",
+        "xn--gckr3f0f",
+        "xn--gk3at1e",
+        "xn--jvr189m",
+        "xn--rovu88b",
         "xn--unup4y",
         "xn--vhquv",
+        "yahoo",
         "zara",
+        "zero",
         "zone"
       ],
       [
@@ -1615,6 +1558,14 @@
       ],
       [
         "https://rdap.isnic.is/rdap/"
+      ]
+    ],
+    [
+      [
+        "ke"
+      ],
+      [
+        "https://rdap.kenic.or.ke/"
       ]
     ],
     [
@@ -1647,6 +1598,14 @@
       ],
       [
         "https://rdap.nic.aaa/"
+      ]
+    ],
+    [
+      [
+        "aarp"
+      ],
+      [
+        "https://rdap.nic.aarp/"
       ]
     ],
     [
@@ -1691,6 +1650,14 @@
     ],
     [
       [
+        "ad"
+      ],
+      [
+        "https://rdap.nic.ad/"
+      ]
+    ],
+    [
+      [
         "adult"
       ],
       [
@@ -1731,6 +1698,14 @@
     ],
     [
       [
+        "ally"
+      ],
+      [
+        "https://rdap.nic.ally/"
+      ]
+    ],
+    [
+      [
         "alsace"
       ],
       [
@@ -1755,10 +1730,26 @@
     ],
     [
       [
+        "americanfamily"
+      ],
+      [
+        "https://rdap.nic.americanfamily/"
+      ]
+    ],
+    [
+      [
         "amex"
       ],
       [
         "https://rdap.nic.amex/"
+      ]
+    ],
+    [
+      [
+        "amfam"
+      ],
+      [
+        "https://rdap.nic.amfam/"
       ]
     ],
     [
@@ -1879,6 +1870,14 @@
       ],
       [
         "https://rdap.nic.baseball/"
+      ]
+    ],
+    [
+      [
+        "basketball"
+      ],
+      [
+        "https://rdap.nic.basketball/"
       ]
     ],
     [
@@ -2147,18 +2146,18 @@
     ],
     [
       [
-        "coupon"
-      ],
-      [
-        "https://rdap.nic.coupon/"
-      ]
-    ],
-    [
-      [
         "courses"
       ],
       [
         "https://rdap.nic.courses/"
+      ]
+    ],
+    [
+      [
+        "cpa"
+      ],
+      [
+        "https://rdap.nic.cpa/"
       ]
     ],
     [
@@ -2243,10 +2242,10 @@
     ],
     [
       [
-        "discover"
+        "diy"
       ],
       [
-        "https://rdap.nic.discover/"
+        "https://rdap.nic.diy/rdap/"
       ]
     ],
     [
@@ -2339,6 +2338,14 @@
     ],
     [
       [
+        "feedback"
+      ],
+      [
+        "https://rdap.nic.feedback/rdap/"
+      ]
+    ],
+    [
+      [
         "ferrero"
       ],
       [
@@ -2395,10 +2402,26 @@
     ],
     [
       [
+        "food"
+      ],
+      [
+        "https://rdap.nic.food/rdap/"
+      ]
+    ],
+    [
+      [
         "ford"
       ],
       [
         "https://rdap.nic.ford/"
+      ]
+    ],
+    [
+      [
+        "forum"
+      ],
+      [
+        "https://rdap.nic.forum/rdap/"
       ]
     ],
     [
@@ -2483,6 +2506,14 @@
     ],
     [
       [
+        "george"
+      ],
+      [
+        "https://rdap.nic.george/"
+      ]
+    ],
+    [
+      [
         "gmx"
       ],
       [
@@ -2503,6 +2534,14 @@
       ],
       [
         "https://rdap.nic.grainger/"
+      ]
+    ],
+    [
+      [
+        "grocery"
+      ],
+      [
+        "https://rdap.nic.grocery/"
       ]
     ],
     [
@@ -2535,6 +2574,14 @@
       ],
       [
         "https://rdap.nic.health/"
+      ]
+    ],
+    [
+      [
+        "hn"
+      ],
+      [
+        "https://rdap.nic.hn/"
       ]
     ],
     [
@@ -2575,6 +2622,14 @@
       ],
       [
         "https://rdap.nic.hsbc/"
+      ]
+    ],
+    [
+      [
+        "ht"
+      ],
+      [
+        "https://rdap.nic.ht/"
       ]
     ],
     [
@@ -2659,14 +2714,6 @@
     ],
     [
       [
-        "jnj"
-      ],
-      [
-        "https://rdap.nic.jnj/"
-      ]
-    ],
-    [
-      [
         "joburg"
       ],
       [
@@ -2715,14 +2762,6 @@
     ],
     [
       [
-        "lancaster"
-      ],
-      [
-        "https://rdap.nic.lancaster/"
-      ]
-    ],
-    [
-      [
         "lanxess"
       ],
       [
@@ -2763,6 +2802,14 @@
     ],
     [
       [
+        "lifestyle"
+      ],
+      [
+        "https://rdap.nic.lifestyle/rdap/"
+      ]
+    ],
+    [
+      [
         "lilly"
       ],
       [
@@ -2779,6 +2826,14 @@
     ],
     [
       [
+        "living"
+      ],
+      [
+        "https://rdap.nic.living/rdap/"
+      ]
+    ],
+    [
+      [
         "loan"
       ],
       [
@@ -2787,10 +2842,26 @@
     ],
     [
       [
+        "locker"
+      ],
+      [
+        "https://rdap.nic.locker/rdap/"
+      ]
+    ],
+    [
+      [
         "luxe"
       ],
       [
         "https://rdap.nic.luxe/"
+      ]
+    ],
+    [
+      [
+        "ly"
+      ],
+      [
+        "https://rdap.nic.ly/"
       ]
     ],
     [
@@ -2859,6 +2930,14 @@
     ],
     [
       [
+        "merckmsd"
+      ],
+      [
+        "https://rdap.nic.merckmsd/"
+      ]
+    ],
+    [
+      [
         "miami"
       ],
       [
@@ -2871,6 +2950,14 @@
       ],
       [
         "https://rdap.nic.mint/"
+      ]
+    ],
+    [
+      [
+        "ml"
+      ],
+      [
+        "https://rdap.nic.ml/"
       ]
     ],
     [
@@ -2919,6 +3006,14 @@
       ],
       [
         "https://rdap.nic.ms/"
+      ]
+    ],
+    [
+      [
+        "msd"
+      ],
+      [
+        "https://rdap.nic.msd/"
       ]
     ],
     [
@@ -3011,14 +3106,6 @@
     ],
     [
       [
-        "office"
-      ],
-      [
-        "https://rdap.nic.office/"
-      ]
-    ],
-    [
-      [
         "olayan"
       ],
       [
@@ -3091,6 +3178,14 @@
     ],
     [
       [
+        "pg"
+      ],
+      [
+        "https://rdap.nic.pg/"
+      ]
+    ],
+    [
+      [
         "philips"
       ],
       [
@@ -3111,6 +3206,14 @@
       ],
       [
         "https://rdap.nic.physio/"
+      ]
+    ],
+    [
+      [
+        "pid"
+      ],
+      [
+        "https://rdap.nic.pid/rdap/"
       ]
     ],
     [
@@ -3143,14 +3246,6 @@
       ],
       [
         "https://rdap.nic.porn/"
-      ]
-    ],
-    [
-      [
-        "pramerica"
-      ],
-      [
-        "https://rdap.nic.pramerica/"
       ]
     ],
     [
@@ -3227,6 +3322,14 @@
     ],
     [
       [
+        "rugby"
+      ],
+      [
+        "https://rdap.nic.rugby/"
+      ]
+    ],
+    [
+      [
         "safety"
       ],
       [
@@ -3239,6 +3342,14 @@
       ],
       [
         "https://rdap.nic.sakura/rdap/"
+      ]
+    ],
+    [
+      [
+        "samsclub"
+      ],
+      [
+        "https://rdap.nic.samsclub/"
       ]
     ],
     [
@@ -3363,26 +3474,10 @@
     ],
     [
       [
-        "skype"
-      ],
-      [
-        "https://rdap.nic.skype/"
-      ]
-    ],
-    [
-      [
         "sncf"
       ],
       [
         "https://rdap.nic.sncf/"
-      ]
-    ],
-    [
-      [
-        "song"
-      ],
-      [
-        "https://rdap.nic.song/"
       ]
     ],
     [
@@ -3491,6 +3586,14 @@
     ],
     [
       [
+        "tattoo"
+      ],
+      [
+        "https://rdap.nic.tattoo/"
+      ]
+    ],
+    [
+      [
         "tdk"
       ],
       [
@@ -3579,6 +3682,14 @@
     ],
     [
       [
+        "vana"
+      ],
+      [
+        "https://rdap.nic.vana/rdap/"
+      ]
+    ],
+    [
+      [
         "versicherung"
       ],
       [
@@ -3631,6 +3742,14 @@
       ],
       [
         "https://rdap.nic.voting/"
+      ]
+    ],
+    [
+      [
+        "walmart"
+      ],
+      [
+        "https://rdap.nic.walmart/"
       ]
     ],
     [
@@ -3755,14 +3874,6 @@
     ],
     [
       [
-        "xn--1ck2e1b"
-      ],
-      [
-        "https://rdap.nic.xn--1ck2e1b/"
-      ]
-    ],
-    [
-      [
         "xn--80aqecdr1a"
       ],
       [
@@ -3787,66 +3898,10 @@
     ],
     [
       [
-        "xn--bck1b9a5dre4c"
-      ],
-      [
-        "https://rdap.nic.xn--bck1b9a5dre4c/"
-      ]
-    ],
-    [
-      [
-        "xn--cck2b3b"
-      ],
-      [
-        "https://rdap.nic.xn--cck2b3b/"
-      ]
-    ],
-    [
-      [
-        "xn--eckvdtc9d"
-      ],
-      [
-        "https://rdap.nic.xn--eckvdtc9d/"
-      ]
-    ],
-    [
-      [
-        "xn--fct429k"
-      ],
-      [
-        "https://rdap.nic.xn--fct429k/"
-      ]
-    ],
-    [
-      [
         "xn--g2xx48c"
       ],
       [
         "https://rdap.nic.xn--g2xx48c/"
-      ]
-    ],
-    [
-      [
-        "xn--gckr3f0f"
-      ],
-      [
-        "https://rdap.nic.xn--gckr3f0f/"
-      ]
-    ],
-    [
-      [
-        "xn--gk3at1e"
-      ],
-      [
-        "https://rdap.nic.xn--gk3at1e/"
-      ]
-    ],
-    [
-      [
-        "xn--jvr189m"
-      ],
-      [
-        "https://rdap.nic.xn--jvr189m/"
       ]
     ],
     [
@@ -3915,14 +3970,6 @@
     ],
     [
       [
-        "xn--rovu88b"
-      ],
-      [
-        "https://rdap.nic.xn--rovu88b/"
-      ]
-    ],
-    [
-      [
         "xn--tiq49xqyj"
       ],
       [
@@ -3942,7 +3989,7 @@
         "yandex"
       ],
       [
-        "https://rdap.nic.yandex/"
+        "https://rdap.nic.yandex/rdap/"
       ]
     ],
     [
@@ -3963,18 +4010,18 @@
     ],
     [
       [
-        "zero"
-      ],
-      [
-        "https://rdap.nic.zero/"
-      ]
-    ],
-    [
-      [
         "zm"
       ],
       [
         "https://rdap.nic.zm/"
+      ]
+    ],
+    [
+      [
+        "in"
+      ],
+      [
+        "https://rdap.nixiregistry.in/rdap/"
       ]
     ],
     [
@@ -4039,14 +4086,6 @@
       ],
       [
         "https://rdap.nominet.uk/bbva/"
-      ]
-    ],
-    [
-      [
-        "bentley"
-      ],
-      [
-        "https://rdap.nominet.uk/bentley/"
       ]
     ],
     [
@@ -4315,6 +4354,38 @@
     ],
     [
       [
+        "nowruz"
+      ],
+      [
+        "https://rdap.nominet.uk/nowruz/"
+      ]
+    ],
+    [
+      [
+        "office"
+      ],
+      [
+        "https://rdap.nominet.uk/office/"
+      ]
+    ],
+    [
+      [
+        "omega"
+      ],
+      [
+        "https://rdap.nominet.uk/omega/"
+      ]
+    ],
+    [
+      [
+        "pars"
+      ],
+      [
+        "https://rdap.nominet.uk/pars/"
+      ]
+    ],
+    [
+      [
         "pay"
       ],
       [
@@ -4419,6 +4490,22 @@
     ],
     [
       [
+        "shell"
+      ],
+      [
+        "https://rdap.nominet.uk/shell/"
+      ]
+    ],
+    [
+      [
+        "shia"
+      ],
+      [
+        "https://rdap.nominet.uk/shia/"
+      ]
+    ],
+    [
+      [
         "silk"
       ],
       [
@@ -4431,6 +4518,14 @@
       ],
       [
         "https://rdap.nominet.uk/sky/"
+      ]
+    ],
+    [
+      [
+        "skype"
+      ],
+      [
+        "https://rdap.nominet.uk/skype/"
       ]
     ],
     [
@@ -4451,10 +4546,26 @@
     ],
     [
       [
+        "swatch"
+      ],
+      [
+        "https://rdap.nominet.uk/swatch/"
+      ]
+    ],
+    [
+      [
         "talk"
       ],
       [
         "https://rdap.nominet.uk/talk/"
+      ]
+    ],
+    [
+      [
+        "tci"
+      ],
+      [
+        "https://rdap.nominet.uk/tci/"
       ]
     ],
     [
@@ -4551,6 +4662,14 @@
       ],
       [
         "https://rdap.nominet.uk/xn--jlq480n2rg/"
+      ]
+    ],
+    [
+      [
+        "xn--mgbt3dhd"
+      ],
+      [
+        "https://rdap.nominet.uk/xn--mgbt3dhd/"
       ]
     ],
     [
@@ -4672,6 +4791,14 @@
     ],
     [
       [
+        "gy"
+      ],
+      [
+        "https://rdap.registry.gy/"
+      ]
+    ],
+    [
+      [
         "hiphop"
       ],
       [
@@ -4684,6 +4811,22 @@
       ],
       [
         "https://rdap.registry.love/rdap/"
+      ]
+    ],
+    [
+      [
+        "music"
+      ],
+      [
+        "https://rdap.registryservices.music/rdap/"
+      ]
+    ],
+    [
+      [
+        "rw"
+      ],
+      [
+        "https://rdap.ricta.org.rw/"
       ]
     ],
     [
@@ -4759,6 +4902,15 @@
     ],
     [
       [
+        "th",
+        "xn--o3cw4h"
+      ],
+      [
+        "https://rdap.thains.co.th/"
+      ]
+    ],
+    [
+      [
         "xn--mxtq1m"
       ],
       [
@@ -4783,10 +4935,10 @@
     ],
     [
       [
-        "ai"
+        "ye"
       ],
       [
-        "https://rdap.whois.ai/"
+        "https://rdap.y.net.ye/"
       ]
     ],
     [
@@ -4986,50 +5138,10 @@
     ],
     [
       [
-        "aarp"
-      ],
-      [
-        "https://tld-rdap.verisign.com/aarp/v1/"
-      ]
-    ],
-    [
-      [
-        "abc"
-      ],
-      [
-        "https://tld-rdap.verisign.com/abc/v1/"
-      ]
-    ],
-    [
-      [
-        "airbus"
-      ],
-      [
-        "https://tld-rdap.verisign.com/airbus/v1/"
-      ]
-    ],
-    [
-      [
         "airtel"
       ],
       [
         "https://tld-rdap.verisign.com/airtel/v1/"
-      ]
-    ],
-    [
-      [
-        "americanfamily"
-      ],
-      [
-        "https://tld-rdap.verisign.com/americanfamily/v1/"
-      ]
-    ],
-    [
-      [
-        "amfam"
-      ],
-      [
-        "https://tld-rdap.verisign.com/amfam/v1/"
       ]
     ],
     [
@@ -5066,46 +5178,6 @@
     ],
     [
       [
-        "diy"
-      ],
-      [
-        "https://tld-rdap.verisign.com/diy/v1/"
-      ]
-    ],
-    [
-      [
-        "food"
-      ],
-      [
-        "https://tld-rdap.verisign.com/food/v1/"
-      ]
-    ],
-    [
-      [
-        "lego"
-      ],
-      [
-        "https://tld-rdap.verisign.com/lego/v1/"
-      ]
-    ],
-    [
-      [
-        "lifestyle"
-      ],
-      [
-        "https://tld-rdap.verisign.com/lifestyle/v1/"
-      ]
-    ],
-    [
-      [
-        "living"
-      ],
-      [
-        "https://tld-rdap.verisign.com/living/v1/"
-      ]
-    ],
-    [
-      [
         "name"
       ],
       [
@@ -5130,74 +5202,10 @@
     ],
     [
       [
-        "omega"
-      ],
-      [
-        "https://tld-rdap.verisign.com/omega/v1/"
-      ]
-    ],
-    [
-      [
-        "rwe"
-      ],
-      [
-        "https://tld-rdap.verisign.com/rwe/v1/"
-      ]
-    ],
-    [
-      [
-        "sener"
-      ],
-      [
-        "https://tld-rdap.verisign.com/sener/v1/"
-      ]
-    ],
-    [
-      [
-        "shell"
-      ],
-      [
-        "https://tld-rdap.verisign.com/shell/v1/"
-      ]
-    ],
-    [
-      [
-        "swatch"
-      ],
-      [
-        "https://tld-rdap.verisign.com/swatch/v1/"
-      ]
-    ],
-    [
-      [
-        "vana"
-      ],
-      [
-        "https://tld-rdap.verisign.com/vana/v1/"
-      ]
-    ],
-    [
-      [
         "verisign"
       ],
       [
         "https://tld-rdap.verisign.com/verisign/v1/"
-      ]
-    ],
-    [
-      [
-        "visa"
-      ],
-      [
-        "https://tld-rdap.verisign.com/visa/v1/"
-      ]
-    ],
-    [
-      [
-        "weber"
-      ],
-      [
-        "https://tld-rdap.verisign.com/weber/v1/"
       ]
     ],
     [
@@ -5314,14 +5322,6 @@
     ],
     [
       [
-        "yahoo"
-      ],
-      [
-        "https://tld-rdap.verisign.com/yahoo/v1/"
-      ]
-    ],
-    [
-      [
         "ky"
       ],
       [
@@ -5354,6 +5354,14 @@
     ],
     [
       [
+        "sr"
+      ],
+      [
+        "https://whois.sr/rdap/"
+      ]
+    ],
+    [
+      [
         "tz"
       ],
       [
@@ -5378,55 +5386,10 @@
     ],
     [
       [
-        "ads",
-        "android",
-        "app",
-        "boo",
-        "cal",
-        "channel",
-        "chrome",
-        "dad",
-        "day",
-        "dclk",
-        "dev",
-        "docs",
-        "drive",
-        "eat",
-        "esq",
-        "fly",
-        "foo",
-        "gbiz",
-        "gle",
-        "gmail",
-        "goog",
-        "google",
-        "guge",
-        "hangout",
-        "here",
-        "how",
-        "ing",
-        "map",
-        "meet",
-        "meme",
-        "mov",
-        "new",
-        "nexus",
-        "page",
-        "phd",
-        "play",
-        "prod",
-        "prof",
-        "rsvp",
-        "search",
-        "soy",
-        "xn--flw351e",
-        "xn--q9jyb4c",
-        "xn--qcka1pmc",
-        "youtube",
-        "zip"
+        "fj"
       ],
       [
-        "https://www.registry.google/rdap/"
+        "https://www.rdap.fj/"
       ]
     ]
   ],

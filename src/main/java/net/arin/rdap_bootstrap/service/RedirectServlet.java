@@ -33,11 +33,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import net.arin.rdap_bootstrap.spring.AppProperties;
 import net.arin.rdap_bootstrap.Constants;
@@ -76,6 +76,8 @@ public class RedirectServlet extends HttpServlet
     Boolean matchSchemeOnRedirect = Boolean.FALSE;
     Boolean downloadBootstrapFiles = Boolean.FALSE;
     long downloadInterval = 86400; // a day
+    static final int DOWNLOAD_MAX_ATTEMPTS_DEFAULT = 1;
+    static final int DOWNLOAD_NEXT_ATTEMPT_WAIT_DEFAULT = 60; // 1 minute
 
     private static final long CHECK_CONFIG_FILES = 60000L; // every 1 minute
 
@@ -108,7 +110,9 @@ public class RedirectServlet extends HttpServlet
                     timer.schedule( downloadBootstrapFilesTask, 0L, downloadInterval * 1000L );
                 }
 
-                // Pause for the download to complete before loading the config.
+                // Pause for the download to complete before loading the config. The pause duration might not be
+                // sufficient when a file download is retried because of some failure. That could cause the initial data
+                // load to not succeed. But, it should be acceptable to fail fast initially.
                 Thread.sleep( 10000L ); // 10 seconds
             }
             catch ( Exception e )
@@ -649,12 +653,14 @@ public class RedirectServlet extends HttpServlet
 
     private static void downloadFile(URL downloadUrl, String downloadUrlStr, String newFilePathname)
             throws IOException, InterruptedException {
-        var maxAttempts = AppProperties.lookupInteger(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY);
+        var maxAttempts = AppProperties.lookupInteger(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY,
+                DOWNLOAD_MAX_ATTEMPTS_DEFAULT);
         if (maxAttempts <= 0) {
             maxAttempts = 1;
         }
 
-        var nextAttemptWait = AppProperties.lookupInteger(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY);
+        var nextAttemptWait = AppProperties.lookupInteger(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY,
+                DOWNLOAD_NEXT_ATTEMPT_WAIT_DEFAULT);
         if (nextAttemptWait <= 0) {
             nextAttemptWait = 60;
         }
@@ -712,10 +718,11 @@ public class RedirectServlet extends HttpServlet
                 AppProperties.lookupLong( Constants.DOWNLOAD_INTERVAL_PROPERTY, downloadInterval ) );
 
         logger.info(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY + "="
-                + AppProperties.lookupLong(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY));
+                + AppProperties.lookupLong(Constants.DOWNLOAD_MAX_ATTEMPTS_PROPERTY, DOWNLOAD_MAX_ATTEMPTS_DEFAULT));
 
         logger.info(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY + "="
-                + AppProperties.lookupLong(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY));
+                + AppProperties.lookupLong(Constants.DOWNLOAD_NEXT_ATTEMPT_WAIT_PROPERTY,
+                DOWNLOAD_NEXT_ATTEMPT_WAIT_DEFAULT));
 
         for ( BootFiles bootFiles : BootFiles.values() )
         {
