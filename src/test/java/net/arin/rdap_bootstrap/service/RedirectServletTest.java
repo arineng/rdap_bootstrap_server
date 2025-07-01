@@ -17,11 +17,9 @@
 package net.arin.rdap_bootstrap.service;
 
 import jakarta.servlet.ServletConfig;
-import jakarta.servlet.http.HttpServlet;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import org.junit.Test;
-import org.junit.Before;
 
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
@@ -34,16 +32,10 @@ import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class RedirectServletTest
 {
     ServletConfig servletConfig = mock(ServletConfig.class);
-
-    @Before
-    public void init() {
-        when(servletConfig.getInitParameter(HttpServlet.LEGACY_DO_HEAD)).thenReturn("false");
-    }
 
     @Test
     public void testGetRedirectUrlDefault() throws Exception
