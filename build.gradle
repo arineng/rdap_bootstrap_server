@@ -3,12 +3,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.owasp:dependency-check-gradle:9.0.9'
+        classpath 'org.owasp:dependency-check-gradle:10.0.3'
     }
 }
 
 plugins {
-    id 'org.springframework.boot' version '3.4.6'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java-library'
     id 'war'
@@ -36,7 +36,7 @@ repositories {
 }
 
 ext {
-    logbackVersion = '1.2.13'
+    logbackVersion = '1.5.6'
 }
 
 dependencies {
@@ -44,7 +44,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.52'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
