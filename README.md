@@ -390,3 +390,7 @@ The bootstrap server can be configured using environment variables and/or system
     Required: No
     Default Value: INFO
     Possible Values: TRACE | DEBUG | INFO | WARN | ERROR | FATAL
+
+## Acknowledgements
+
+Sean Smith contributed changes to update Java, Spring Boot, and Gradle for version `3.0.0`.
