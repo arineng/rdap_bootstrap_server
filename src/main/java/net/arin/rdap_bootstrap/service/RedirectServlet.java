@@ -111,7 +111,8 @@ public class RedirectServlet extends HttpServlet
                 }
 
                 // Pause for the download to complete before loading the config. The pause duration might not be
-                // sufficient when a file download is retried. However, it should be acceptable to fail fast initially.
+                // sufficient when a file download is retried because of some failure. That could cause the initial data
+                // load to not succeed. But, it should be acceptable to fail fast initially.
                 Thread.sleep( 10000L ); // 10 seconds
             }
             catch ( Exception e )
