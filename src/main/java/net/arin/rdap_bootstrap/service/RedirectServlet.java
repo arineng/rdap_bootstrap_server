@@ -110,7 +110,8 @@ public class RedirectServlet extends HttpServlet
                     timer.schedule( downloadBootstrapFilesTask, 0L, downloadInterval * 1000L );
                 }
 
-                // Pause for the download to complete before loading the config.
+                // Pause for the download to complete before loading the config. The pause duration might not be
+                // sufficient when a file download is retried. However, it should be acceptable to fail fast initially.
                 Thread.sleep( 10000L ); // 10 seconds
             }
             catch ( Exception e )
