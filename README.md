@@ -39,7 +39,7 @@ Any version containing the word `SNAPSHOT` is a development version. Versions ar
     - Upgraded Gradle, Spring Boot, and JUnit.
 * [2.0.3](https://github.com/arineng/rdap_bootstrap_server/releases/tag/2.0.3)
     - Use GitHub actions to perform builds.
-* 3.0.0-SNAPSHOT
+* 3.0.0
     - Ability to retry downloading a bootstrap file in case of a failure.
     - Upgraded to build against Java 17 or higher.
     - Upgraded Gradle and Spring Boot.

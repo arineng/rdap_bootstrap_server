@@ -23,7 +23,7 @@ assert Jvm.current().javaVersion >= JavaVersion.VERSION_17: 'This project requir
 group = 'net.arin'
 description = 'RDAP Bootstrap Server'
 
-version = '3.0.0-SNAPSHOT'
+version = '3.0.0'
 if (project.hasProperty('artifactVersion')) {
     version = "${project.properties.artifactVersion}"
 }
