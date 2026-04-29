@@ -49,9 +49,9 @@ import net.arin.rdap_bootstrap.service.ResourceFiles.BootFiles;
 import net.arin.rdap_bootstrap.service.Statistics.UrlHits;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 import org.apache.commons.io.FileUtils;
@@ -521,9 +521,11 @@ public class RedirectServlet extends HttpServlet
 
         response.setNotices( notices );
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion( Include.NON_EMPTY );
-        ObjectWriter writer = mapper.writer( new DefaultPrettyPrinter() );
+        ObjectMapper mapper = JsonMapper.builder()
+          .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion( Include.NON_NULL ))
+          .changeDefaultPropertyInclusion(incl -> incl.withContentInclusion( Include.NON_NULL ))
+          .build();
+        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         writer.writeValue( outputStream, response );
     }
 

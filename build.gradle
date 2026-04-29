@@ -8,12 +8,12 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '3.5.3'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '4.0.6'
     id 'java-library'
     id 'war'
     id 'maven-publish'
 }
+
 apply plugin: 'org.owasp.dependencycheck'
 
 import org.gradle.internal.jvm.Jvm
@@ -35,21 +35,24 @@ repositories {
     maven { url 'https://repo.maven.apache.org/maven2' }
 }
 
-ext {
-    logbackVersion = '1.5.6'
-}
-
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation platform(group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: '4.0.6')
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.52'
     implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
 
-    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter'
+    testImplementation group: 'org.mockito', name: 'mockito-core'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 springBoot {

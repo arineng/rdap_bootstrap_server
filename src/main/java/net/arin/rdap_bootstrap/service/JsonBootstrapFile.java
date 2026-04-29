@@ -16,9 +16,9 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import tools.jackson.core.json.JsonFactory;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -123,8 +123,8 @@ public class JsonBootstrapFile
         // else
         while ( jsonParser.nextToken() != JsonToken.END_OBJECT )
         {
-            if ( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                    jsonParser.getCurrentName().equals( "version" ) )
+            if ( jsonParser.currentToken() == JsonToken.PROPERTY_NAME &&
+                    jsonParser.currentName().equals( "version" ) )
             {
                 if ( jsonParser.nextToken() != JsonToken.VALUE_STRING )
                 {
@@ -137,8 +137,8 @@ public class JsonBootstrapFile
                     throw new RuntimeException( "'version' is not '1.0'" );
                 }
             }
-            else if ( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                    jsonParser.getCurrentName().equals( "publication" ) )
+            else if ( jsonParser.currentToken() == JsonToken.PROPERTY_NAME &&
+                    jsonParser.currentName().equals( "publication" ) )
             {
                 // These are dates but since we're outputting them as Strings anyway and not really doing anything
                 // else with them, leaving them as Strings should be okay.
@@ -149,8 +149,8 @@ public class JsonBootstrapFile
 
                 handler.setPublication( jsonParser.getValueAsString() );
             }
-            else if ( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                    jsonParser.getCurrentName().equals( "description" ) )
+            else if ( jsonParser.currentToken() == JsonToken.PROPERTY_NAME &&
+                    jsonParser.currentName().equals( "description" ) )
             {
                 if ( jsonParser.nextToken() != JsonToken.VALUE_STRING )
                 {
@@ -159,8 +159,8 @@ public class JsonBootstrapFile
 
                 handler.setDescription( jsonParser.getValueAsString() );
             }
-            else if ( jsonParser.getCurrentToken() == JsonToken.FIELD_NAME &&
-                    jsonParser.getCurrentName().equals( "services" ) )
+            else if ( jsonParser.currentToken() == JsonToken.PROPERTY_NAME &&
+                    jsonParser.currentName().equals( "services" ) )
             {
                 if ( jsonParser.nextToken() != JsonToken.START_ARRAY )
                 {
@@ -170,40 +170,40 @@ public class JsonBootstrapFile
                 handler.startServices();
                 while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
                 {
-                    if ( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
+                    if ( jsonParser.currentToken() != JsonToken.START_ARRAY )
                     {
-                        throw new RuntimeException( "Expected array at " + jsonParser.getCurrentLocation() );
+                        throw new RuntimeException( "Expected array at " + jsonParser.currentLocation() );
                     }
                     // else
                     handler.startService();
                     while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
                     {
-                        if ( jsonParser.getCurrentToken() != JsonToken.START_ARRAY )
+                        if ( jsonParser.currentToken() != JsonToken.START_ARRAY )
                         {
-                            throw new RuntimeException( "Expected array at " + jsonParser.getCurrentLocation() );
+                            throw new RuntimeException( "Expected array at " + jsonParser.currentLocation() );
                         }
                         // else
                         while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
                         {
-                            if ( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                            if ( jsonParser.currentToken() != JsonToken.VALUE_STRING )
                             {
                                 throw new RuntimeException( "Service entry at " +
-                                        jsonParser.getCurrentLocation() + " is not a string" );
+                                        jsonParser.currentLocation() + " is not a string" );
                             }
                             // else
                             handler.addServiceEntry( jsonParser.getValueAsString() );
                         }
                         if ( jsonParser.nextToken() != JsonToken.START_ARRAY )
                         {
-                            throw new RuntimeException( "Expected array at " + jsonParser.getCurrentLocation() );
+                            throw new RuntimeException( "Expected array at " + jsonParser.currentLocation() );
                         }
                         // else
                         while ( jsonParser.nextToken() != JsonToken.END_ARRAY )
                         {
-                            if ( jsonParser.getCurrentToken() != JsonToken.VALUE_STRING )
+                            if ( jsonParser.currentToken() != JsonToken.VALUE_STRING )
                             {
                                 throw new RuntimeException( "Service URL at " +
-                                        jsonParser.getCurrentLocation() + " is not a string" );
+                                        jsonParser.currentLocation() + " is not a string" );
                             }
                             // else
                             handler.addServiceUrl( jsonParser.getValueAsString() );

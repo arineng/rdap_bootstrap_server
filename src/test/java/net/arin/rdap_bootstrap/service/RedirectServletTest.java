@@ -19,7 +19,7 @@ package net.arin.rdap_bootstrap.service;
 import jakarta.servlet.ServletConfig;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
@@ -29,8 +29,8 @@ import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
 public class RedirectServletTest
