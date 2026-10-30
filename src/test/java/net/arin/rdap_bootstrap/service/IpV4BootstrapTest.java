@@ -16,14 +16,14 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static net.arin.rdap_bootstrap.service.TestConstants.AFRINIC_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class IpV4BootstrapTest
 {

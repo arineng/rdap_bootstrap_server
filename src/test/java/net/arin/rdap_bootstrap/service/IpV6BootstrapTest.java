@@ -18,15 +18,15 @@ package net.arin.rdap_bootstrap.service;
 
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static net.arin.rdap_bootstrap.service.TestConstants.AFRINIC_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.ARIN_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class IpV6BootstrapTest
 {

@@ -65,6 +65,18 @@ Beside a WAR, build a JAR using the Gradle `bootJar` task and run it using the `
 
 System properties can be passed in as `-D` options and/or environment variables.
 
+### Jackson dependency alignment
+
+The build uses native Gradle platforms for Spring Boot and Jackson. Keep Jackson core, databind, and annotations
+aligned through the Jackson BOM rather than overriding individual modules. Jackson 3 uses `tools.jackson` for core
+and databind but still shares `com.fasterxml.jackson.annotation` annotations. `build.gradle` is the source of truth
+for dependency versions.
+
+When updating these platforms, run `RedirectServletTest` to check bootstrap initialization and `/help` serialization,
+and inspect the resolved runtime versions with:
+
+    ./gradlew dependencyInsight --configuration runtimeClasspath --dependency jackson
+
 ## Deploying and Testing
 
 Deploying the WAR file depends on the Servlet container/server you are using. It is usually as simple as copying the WAR
