@@ -16,9 +16,9 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static net.arin.rdap_bootstrap.service.TestConstants.GOOGLE_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.INFO_HTTPS;
 

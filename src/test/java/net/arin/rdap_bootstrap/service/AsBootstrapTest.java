@@ -16,10 +16,10 @@
  */
 package net.arin.rdap_bootstrap.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static net.arin.rdap_bootstrap.service.TestConstants.AFRINIC_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.AFRINIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.APNIC_HTTPS;
