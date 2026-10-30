@@ -16,7 +16,15 @@
  */
 package net.arin.rdap_bootstrap.service;
 
+import java.io.ByteArrayOutputStream;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import net.arin.rdap_bootstrap.Constants;
 import net.arin.rdap_bootstrap.service.JsonBootstrapFile.ServiceUrls;
 import org.junit.jupiter.api.Test;
@@ -30,12 +38,74 @@ import static net.arin.rdap_bootstrap.service.TestConstants.LACNIC_HTTPS;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTP;
 import static net.arin.rdap_bootstrap.service.TestConstants.RIPE_HTTPS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class RedirectServletTest
 {
     ServletConfig servletConfig = mock(ServletConfig.class);
+
+    @Test
+    public void testServiceHelpSerializesRdapResponse() throws Exception
+    {
+        RedirectServlet servlet = new RedirectServlet();
+        servlet.init( servletConfig );
+
+        ByteArrayOutputStream body = new ByteArrayOutputStream();
+        ServletOutputStream outputStream = new ServletOutputStream()
+        {
+            @Override
+            public void write( int value )
+            {
+                body.write( value );
+            }
+
+            @Override
+            public boolean isReady()
+            {
+                return true;
+            }
+
+            @Override
+            public void setWriteListener( WriteListener listener )
+            {
+                throw new UnsupportedOperationException( "Non-blocking writes are not supported by this test" );
+            }
+        };
+        HttpServletRequest request = mock( HttpServletRequest.class );
+        HttpServletResponse response = mock( HttpServletResponse.class );
+        when( request.getPathInfo() ).thenReturn( "/help" );
+        when( response.getOutputStream() ).thenReturn( outputStream );
+
+        servlet.service( request, response );
+
+        verify( response ).setContentType( "application/rdap+json" );
+        JsonNode json = JsonMapper.builder().build().readTree( body.toByteArray() );
+        assertEquals( "rdap_level_0", json.path( "rdapConformance" ).path( 0 ).asText() );
+        JsonNode notices = json.path( "notices" );
+        assertTrue( notices.isArray() );
+        assertEquals( Statistics.UrlHits.values().length + 1 + ResourceFiles.BootFiles.values().length,
+                notices.size() );
+        for ( Statistics.UrlHits hits : Statistics.UrlHits.values() )
+        {
+            assertEquals( hits.getTitle(), notices.path( hits.ordinal() ).path( "title" ).asText() );
+        }
+        JsonNode totals = notices.path( Statistics.UrlHits.values().length );
+        assertEquals( "Totals", totals.path( "title" ).asText() );
+        assertEquals( "Hits   =     0", totals.path( "description" ).path( 0 ).asText() );
+        assertEquals( "Misses =     0", totals.path( "description" ).path( 1 ).asText() );
+        for ( JsonNode notice : notices )
+        {
+            assertFalse( notice.path( "title" ).asText().isEmpty() );
+            assertTrue( notice.path( "description" ).isArray() );
+            assertTrue( notice.path( "description" ).size() > 0 );
+            assertFalse( notice.has( "links" ) );
+        }
+    }
 
     @Test
     public void testGetRedirectUrlDefault() throws Exception

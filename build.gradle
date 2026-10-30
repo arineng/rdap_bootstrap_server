@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '4.0.6'
+    id 'org.springframework.boot' version '4.1.2'
     id 'java-library'
     id 'war'
     id 'maven-publish'
@@ -36,14 +36,16 @@ repositories {
 }
 
 dependencies {
-    implementation platform(group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: '4.0.6')
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    implementation platform(group: 'tools.jackson', name: 'jackson-bom', version: '3.2.4')
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'com.googlecode.java-ipv6', name: 'java-ipv6', version: '0.17'
     implementation group: 'net.ripe.ipresource', name: 'ipresource', version: '1.52'
     implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
+    providedRuntime platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter'
